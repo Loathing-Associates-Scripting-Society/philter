@@ -138,9 +138,13 @@ asshat	MALL	0
 astral badger	KEEP	0		
 astral mushroom	MALL	0		
 Atomic Pop	MALL	0		
+Aura Libre	MALL	0		
 Autobiography Of Dynamite Superman Jones (used)	KEEP	0		
 awful poetry journal	MALL	0		
 Ax of L'rose	CLST	0		
+Aye Aye	MALL	0		
+Aye Aye, Captain	MALL	0		
+Aye Aye, Tooth Tooth	MALL	0		
 baby killer bee	MALL	0		
 baconstone	KEEP	0		
 baconstone bracelet	KEEP	0		
@@ -251,6 +255,7 @@ black forest cake	MALL	0
 black forest ham	MALL	0		
 black greaves	MALL	0		
 black helmet	MALL	0		
+Black Hole	MALL	0		
 black kettle drum	MALL	0		
 Black No. 2	MALL	0		
 black paisley oyster egg	MALL	0		
@@ -318,6 +323,7 @@ bottle of Calcutta Emerald	MALL	0
 bottle of cooking sherry	MALL	0		
 bottle of gin	MALL	0		
 bottle of Goldschn&ouml;ckered	CLST	0		
+bottle of goofballs	KEEP	0		
 bottle of Monsieur Bubble	MALL	4		
 bottle of Mystic Shell	MALL	0		
 bottle of Pete's Sake	MALL	0		
@@ -412,12 +418,14 @@ burrowgrub hive	KEEP	0
 burst hellseal brain	DISC	0		
 BURT	KEEP	0		
 bus pass	MALL	0		
+Buttery Knob	MALL	0		
 C.A.R.N.I.V.O.R.E. button	MALL	3		
 C.B.F.G.	CLST	0		
 C.H.U.M. chum	MALL	0		
 C.H.U.M. knife	MALL	0		
 cactus fruit	MALL	0		
 caipifruta	MALL	0		
+Caipiranha	MALL	0		
 calavera concertina	MALL	0		
 calle de miel	MALL	0		
 calm attention-deficit demon	KEEP	0		
@@ -435,7 +443,9 @@ Can-Can skirt	MALL	1
 can-can-in-a-can	MALL	0		
 can-shaped gelatinous cranberry sauce	MALL	0		
 can-you-dig-it?	CLST	0		
+Candicaine	MALL	0		
 candied yams	MALL	0		
+Candy Alexander	MALL	0		
 candy cane	MALL	0		
 candy cornucopia	KEEP	0		
 cane-mail pants	MALL	1		
@@ -455,7 +465,9 @@ casino pass	AUTO	1
 cast	MALL	0		
 cat appendix	MALL	0		
 catgut	MALL	0		
+Cement Mixer	MALL	0		
 centipede eggs	MALL	0		
+Chakra Libre	MALL	0		
 chamoisole	MALL	1		
 chaos butterfly	MALL	0		
 chaos popcorn	MALL	0		
@@ -584,6 +596,7 @@ crappy brain	MALL	0
 crayon shavings	MALL	0		
 crazy bastard sword	KEEP	0		
 crazy little Turkish delight	MALL	0		
+Crazymaker	MALL	0		
 cream stout	MALL	0		
 creamsicle	MALL	0		
 creepy voodoo doll	MALL	1		
@@ -638,6 +651,7 @@ Dallas Dynasty Falcon Crest shield	KEEP	0
 dance card	MALL	0		
 dandy lion cub	KEEP	0		
 dangerous jerkcicle	MALL	0		
+Dark & Starry	MALL	0		
 Dark Jill-O-Lantern	KEEP	0		
 dark potion	MALL	0		
 das boot	KEEP	0		
@@ -730,9 +744,11 @@ double-barreled sling	MALL	0
 double-ice box	KEEP	0		
 double-ice britches	KEEP	0		
 double-ice cap	KEEP	0		
+Doublepunchplanter	MALL	0		
 Dr. Hobo's map	USE	0		
 Dr. Hobo's scalpel	MALL	0		
 drab sonata	MALL	0		
+Drac & Tan	MALL	0		
 draggin' ball hat	MALL	0		
 dragon snaps	MALL	0		
 Dramatic&trade; range	AUTO	0		
@@ -741,6 +757,9 @@ dried face	MALL	0
 drone self-destruct chip	MALL	0		
 Drowsy Sword	KEEP	0		
 drum machine	MALL	0		
+Drunken Astrophysicist	MALL	0		
+Drunken Neurologist	MALL	0		
+Drunken Philosopher	MALL	0		
 dry noodles	KEEP	0		
 drywall axe	MALL	0		
 ducha de oro	MALL	0		
@@ -751,6 +770,7 @@ duct tape fedora	CLST	0
 duct tape shirt	KEEP	0		
 duct tape sword	CLST	0		
 dull fish scale	MALL	0		
+Dump Truck	MALL	0		
 dungeoneer's dungarees	MALL	0		
 dusty bottle of Marsala	MALL	0		
 dusty bottle of Merlot	MALL	0		
@@ -766,6 +786,8 @@ dwarvish war kilt	CLST	0
 dwarvish war mattock	CLST	0		
 Dyspepsi-Cola	MALL	0		
 Dyspepsi-Cola helmet	MALL	0		
+Earth and Firewater	MALL	0		
+Earth, Wind and Firewater	MALL	0		
 easter egg balloon	KEEP	0		
 Eau de Guaneau	MALL	0		
 ectoplasmic paste	MALL	0		
@@ -820,6 +842,7 @@ Ent cider	MALL	0
 epic wad	KEEP	0		
 escargotsicle	MALL	0		
 especially salty dog	MALL	0		
+Event Horizon	MALL	0		
 evil flaming eyeball pendant	KEEP	0		
 evil golden arch	MAKE	0	evil golden arches	false
 evil golden arches	MALL	0		
@@ -830,6 +853,7 @@ exploding hacky-sack	MALL	0
 extra-greasy slider	KEEP	0		
 extra-potent gremlin mutagen	MALL	0		
 extra-see-thru nightie	MALL	1		
+Extra-slimy Slimosa	MALL	0		
 extra-strength strongness elixir	AUTO	0		
 eXtreme Bi-Polar Fleece Vest	MALL	0		
 eXtreme mittens	MALL	0		
@@ -851,6 +875,7 @@ fancy seashell necklace	CLST	0
 fancy tophat	CLST	0		
 fancy tuxedo pants	CLST	0		
 farfalle bow tie	MALL	1		
+Fauna Libre	MALL	0		
 FDKOL commendation	KEEP	0		
 felt	MALL	0		
 Feng Shui for Big Dumb Idiots	MALL	0		
@@ -876,6 +901,7 @@ fine wine	MALL	0
 finger cymbals	MALL	0		
 fire flower	MALL	0		
 fire poi	MALL	0		
+Firewater	MALL	0		
 fish juice box	MALL	0		
 fish-liver oil	MALL	0		
 fishy fish casserole	MALL	0		
@@ -884,13 +910,17 @@ fishy wand	MALL	1
 fistful of ashes	KEEP	0		
 fixed-gear bicycle	MALL	1		
 fizzy potion	MALL	0		
+Flaming Caipiranha	MALL	0		
 flaming crutch	MALL	0		
 flaming familiar doppelg&auml;nger	KEEP	0		
 flaming feather	MALL	0		
 flaming glowsticks	MALL	0		
 flaming juggler's balls	KEEP	0		
+Flaming Knob	MALL	0		
+Flaming Mohobo	MALL	0		
 flaming mushroom	MALL	0		
 flaming pink shirt	KEEP	0		
+Flaming Sazerorc	MALL	0		
 flaming talons	MALL	0		
 flange	MALL	0		
 flaregun	MALL	0		
@@ -909,6 +939,7 @@ fluorescent lightbulb	MALL	0
 flute of flat champagne	KEEP	0		
 Fly-By-Knight Heraldry form	KEEP	0		
 flyest of shirts	CLST	0		
+Flying Caipiranha	MALL	0		
 flytrap pellet	MALL	0		
 foam dart	KBAY	0	50	Tasteful Gifts
 foolscap fool's cap	MALL	0		
@@ -954,6 +985,7 @@ fuzzbump	MALL	0
 Fuzzby	KEEP	0		
 fuzzy busby	KEEP	0		
 fuzzy dice	CLST	0		
+Fuzzy Tentacle	MALL	0		
 ga-ga radio	MALL	0		
 Gaia beads	MALL	0		
 Galapagosian Cuisses	CLST	0		
@@ -1032,9 +1064,9 @@ goblin hunting spear	MALL	0
 goblin paste	MALL	0		
 gold lam&eacute; pants	MALL	0		
 gold toothbrush	MALL	0		
+Golden Mean	MALL	0		
 good brain	MALL	0		
 gooey paste	MALL	0		
-goofballs	KEEP	0		
 googly eye	MALL	0		
 goth kid t-shirt	MALL	1		
 GOTO	MALL	0		
@@ -1043,6 +1075,7 @@ gr8ps	MALL	0
 grape troll doll	KEEP	0		
 grapefruit	AUTO	0		
 grapes	AUTO	0		
+Grasshopper	MALL	0		
 grassy cutlass	MALL	0		
 Grateful Undead T-shirt	MALL	0		
 grave robbing shovel	MALL	0		
@@ -1050,16 +1083,20 @@ graveyard snowglobe	MALL	0
 Gravyskin Belt of the Sauceblob	KEEP	0		
 greasy paste	MALL	0		
 Great Ball of Frozen Fire	KEEP	0		
+Great Old Fashioned	MALL	0		
 Greatest American Pants	KEEP	0		
 green beer	KEEP	0		
 Green Burlap	MALL	0		
 green candy heart	MALL	0		
 Green Clover of Justice	KEEP	0		
 green eggnog	MALL	0		
+Green Giant	MALL	0		
 green hamhock	MALL	0		
+Green Muslin	MALL	0		
 green pixel	MALL	0		
 green pixel potion	MALL	4		
 green smoke bomb	MALL	0		
+Green Velvet	MALL	0		
 green-frosted astral cupcake	MALL	0		
 gremlin juice	MALL	0		
 gremlin mutagen	MALL	0		
@@ -1118,6 +1155,7 @@ hardened slime hat	KEEP	0
 hardened slime pants	KEEP	0		
 harem girl t-shirt	MALL	0		
 Hatorade	AUTO	0		
+Haymaker	MALL	0		
 headhunter necktie	MALL	0		
 heart necklace	TODO	0	WoK trades 6000 meat each	
 heart of dark chocolate	KEEP	0		
@@ -1139,6 +1177,9 @@ herb brownies	MALL	0
 herbal stuffing	MALL	0		
 herbs	AUTO	0		
 hermit permit	AUTO	1		
+Herring Daiquiri	MALL	0		
+Herring Wallbanger	MALL	0		
+Herringtini	MALL	0		
 hideous egg	MALL	0		
 high-pressure seltzer bottle	MALL	1		
 hill of beans	MALL	0		
@@ -1190,6 +1231,7 @@ hot-ass club	CLST	0
 huge pumpkin	MALL	0		
 huge spoon	MALL	0		
 Huggler Radio	KEEP	0		
+Humanitini	MALL	0		
 hungover chauvinist pig	KEEP	0		
 hyperinflated seal lung	KEEP	0		
 hypnodisk	KEEP	0		
@@ -1243,6 +1285,7 @@ jaba&ntilde;ero-flavored chewing gum	AUTO	0
 jack flapper	MALL	0		
 Jack-in-the-box	KBAY	0	9000	Found under the Crimbo Tree
 Jackass Plumber home game	KEEP	0		
+Jackhammer	MALL	0		
 jalape&ntilde;o slices	MALL	1		
 janglin' bones	MALL	0		
 jar full of wind	MALL	0		
@@ -1389,7 +1432,9 @@ Loathing Legion tattoo needle	KEEP	0
 Loathing Legion universal screwdriver	KEEP	0		
 Lobos Mints	MALL	0		
 Lockenstock&trade; sandals	MALL	0		
+Locust	MALL	0		
 lollipop cufflinks	KEEP	0		
+Lollipop Drop	MALL	0		
 long pork	MALL	0		
 long pork casserole	MALL	0		
 long pork chop sandwiches	MALL	0		
@@ -1506,6 +1551,7 @@ Mint-in-box Moonthril Longbow	KEEP	0
 Missing Eye Simulation Device	MALL	0		
 mixed wildflower greens	MALL	0		
 Mohawk wig	MALL	0		
+Mohobo	MALL	0		
 moist sailor's cap	MALL	0		
 mojo filter	MALL	0		
 mole skin notebook	MALL	0		
@@ -1519,6 +1565,8 @@ monster pants	MALL	0
 monstrous monocle	KEEP	0		
 Moon Pie	KEEP	0		
 moonglasses	MALL	1		
+Moonshine Mohobo	MALL	0		
+More Humanitini than Humanitini	MALL	0		
 Mortimer's nostrum	MALL	0		
 Morto Moreto	MALL	0		
 mother's little helper	MALL	0		
@@ -1562,6 +1610,7 @@ ninja crampons	MALL	0
 ninja hot pants	MALL	0		
 ninja mop	MALL	0		
 ninja rope	MALL	0		
+none	MALL	0		
 not-a-pipe	MALL	0		
 notbig laminated card	AUTO	0		
 Notes from the Elfpocalypse, Chapter I	MALL	0		
@@ -1580,6 +1629,7 @@ occult jelly donut	MALL	0
 ocean motion	MALL	0		
 octopus's spade	MALL	2		
 off-white polka-dot oyster egg	MALL	0		
+Oh, the Humanitini	MALL	0		
 Oil of Parrrlay	MALL	0		
 oil-filled donut	MALL	0		
 oily mushroom wine	MALL	0		
@@ -1713,6 +1763,7 @@ pirate cream pie	MALL	0
 pirate paste	MALL	0		
 pirate pelvis	MALL	0		
 pitchfork	MALL	0		
+Plague of Locusts	MALL	0		
 plain brown wrapper	KEEP	0		
 plastic bib	MALL	1		
 plastic guitar	MALL	0		
@@ -1800,6 +1851,7 @@ pulled porquoise earring	KEEP	0
 pumpkin	MALL	0		
 pumpkin beer	MALL	0		
 pumpkin juice	MALL	0		
+Punchplanter	MALL	0		
 purple corpsel	MALL	0		
 purple prose pen	MALL	0		
 purple-frosted astral cupcake	MALL	0		
@@ -1921,6 +1973,8 @@ saucepan	MALL	1
 sausage bomb	MALL	0		
 savoy truffle	MALL	0		
 sawblade shield	KEEP	0		
+Sazerorc	MALL	0		
+Sazuruk-hai	MALL	0		
 Scalp of Gorgolok	CLST	0		
 scented massage oil	MALL	0		
 Schmalz's First Prize Beer	KEEP	0		
@@ -2009,6 +2063,7 @@ single-serving herbal stuffing	MALL	0
 six pack of Mountain Stream	MALL	0		
 six-rainbow shield	MALL	1		
 sizzling seal fat	KEEP	0		
+Sizzling Sinner	MALL	0		
 sk8board	MALL	0		
 skate blade	MALL	0		
 skate board	MALL	0		
@@ -2037,10 +2092,14 @@ slime convention swag bag	MALL	0
 slime-covered necklace	KEEP	0		
 slime-covered shovel	KEEP	0		
 slime-covered speargun	KEEP	0		
+Slimebite	MALL	0		
+Slimosa	MALL	0		
 slimy chest	MALL	0		
 slimy paste	MALL	0		
 slimy sweetbreads	MALL	0		
 slip 'n' slide	MALL	0		
+Slippery Knob	MALL	0		
+Sloe Comfortable Zoo	MALL	0		
 Sloe Comfortable Zoo on Fire	MALL	0		
 Slow Talkin' Elliot's dogtags	MALL	1		
 slug of rum	MALL	0		
@@ -2226,6 +2285,7 @@ sucker bucket	CLST	0
 sucker hakama	CLST	0		
 sucker kabuto	CLST	0		
 sucker tachi	CLST	0		
+Suffering Sinner	MALL	0		
 sugar chapeau	KEEP	0		
 sugar shard	MALL	0		
 sugar sheet	MALL	0		
@@ -2239,6 +2299,7 @@ Superhero Reboots	KEEP	0
 Supernova Champagne	MALL	0		
 support cummerbund	MALL	1		
 supportive bra	MALL	0		
+Suppurating Sinner	MALL	0		
 sushi-rolling mat	KEEP	0		
 suspicious stocking	KEEP	0		
 Swabbie&trade; swab	MALL	0		
@@ -2364,6 +2425,7 @@ toy ray gun	MALL	2
 toy six-seater hovercraft	MALL	1		
 toy space helmet	MALL	1		
 transporter transponder	MALL	0		
+Transylvania Sling	MALL	0		
 Travels with Jerry	MALL	1		
 Travoltan trousers	KEEP	0		
 Trivial Avocations board game	KEEP	0		
@@ -2425,7 +2487,6 @@ useless powder	KEEP	0
 UV monocular	KEEP	0		
 V for Vivala mask	KEEP	0		
 valuable trinket	MALL	0		
-vampire cape	MALL	0		
 vampire glitter	CLST	0		
 vampire pearl	MALL	0		
 Van der Graaf helmet	MALL	0		
@@ -2547,4 +2608,5 @@ zen motorcycle	MALL	1
 Zim Merman's guitar	MALL	0		
 zombie hollandaise	MALL	0		
 Zombo's skull ring	KEEP	0		
+Zoodriver	MALL	0		
 Zu Mannk&auml;se Dienen (used)	KEEP	0		
