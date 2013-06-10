@@ -6,14 +6,8 @@ string thread = "http://kolmafia.us/showthread.php?1818-OCD-Inventory-control&p=
 string scriptname = "Bales's OCD dB Manager";
 string title = "<a class='version' href='"+thread+"' target='_blank'>"+scriptname+"</a> v"+thisver+", by <a href='showplayer.php?who=754005'>Bale</a>";
 
-record OCDdata {
-	string action;	// What to do
-	int q;			// How many of them to keep
-	string info;	// Extra information (whom to send the gift or price of kBay auction)
-	string message; // Message to send with a gift (or message with kBay auction)
-};
-OCDdata [item] OCD;
-OCDdata [item] OCDefault;
+OCDinfo [item] OCD;
+OCDinfo [item] OCDefault;
 file_to_map("OCDefault.txt", OCDefault);
 
 // kBay info
@@ -257,15 +251,6 @@ void load_OCD() {
 		print("All item information is corrupted or missing. Either you have not yet saved any item data or you lost it.", "red");
 	if((!file_to_map("OCDstock_"+vars["BaleOCD_StockFile"]+".txt", stock) || count(stock) == 0) && vars["BaleOCD_Stock"] == "1")
 		print("All item stocking information is corrupted or missing. Either you have not yet saved any item stocking data or you lost it.", "red");
-}
-
-void add_defaults() {
-	OCDdata [item] OCDdefault;
-	if(!file_to_map("http://zachbardon.com/mafiatools/autoupdate.php?f=OCDdata&act=getmap", OCDdefault) || count(OCDdefault) == 0)
-		print("Error loading OCDstock.txt from the Map Manager.","red");
-	foreach it in OCDdefault
-		if(!(OCD contains it))
-			OCD[it] = OCDdefault[it];
 }
 
 boolean is_pulverizable(item it) {
@@ -660,9 +645,8 @@ void stock_items() {
 	writeln("<table border=0 cellpadding=1><tr><td align=right>");
 	if(write_button("stocknew", " New ")) {
 		clear(stock);
-		if(!file_to_map("http://zachbardon.com/mafiatools/autoupdate.php?f=OCDstock&act=getmap", stock) || count(stock) == 0)
-			print("Error loading OCDstock.txt from the Map Manager.","red");
-		else map_to_file(stock, "OCDstock_"+vars["BaleOCD_StockFile"]+".txt");
+		if(!file_to_map("OCDstock.txt", stock) || count(stock) == 0)
+			print("Error loading default stock data.","red");
 	}
 	write("</td><td>Create a default stock list for softcore pulls!</td></tr>");
 	if(count(stock) > 0) {
