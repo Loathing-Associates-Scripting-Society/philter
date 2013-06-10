@@ -31,6 +31,13 @@ if(svn_exists("bale-ocd") && get_property("_svnUpdated") == "false" && get_prope
 	set_property("_ocdUpdated", "true");
 }
 
+record OCDinfo {
+	string action;	// What to do
+	int q;			// How many of them to keep
+	string info;	// Extra information (whom to send the gift)
+	string message; // Message to send with a gift
+};
+
 boolean is_OCDable(item it) {
 	if(is_displayable(it)) return true;
 	switch(it) {
@@ -77,12 +84,6 @@ int full_amount(item it) {
 int ocd_control(boolean StopForMissingItems, string extraData) {
 	int FinalSale;
 
-	record OCDinfo {
-		string action;	// What to do
-		int q;			// How many of them to keep
-		string info;	// Extra information (whom to send the gift)
-		string message; // Message to send with a gift
-	};
 	OCDinfo [item] OCD;
 
 	record {
