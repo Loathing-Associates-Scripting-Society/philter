@@ -1,0 +1,162 @@
+30669 scroll	Orc Chasm	5	basic
+5-Alarm Saucepan	Buffing Weapons	1	basic
+64067 scroll	Orc Chasm	1	basic
+668 scroll	Orc Chasm	10	basic
+7-Foot Dwarven mattock	Tr4pz0r Quest	1	
+adder bladder	Tower Entrance	1	basic
+antique hand mirror	Quest Helpers	1	
+asbestos ore	Tr4pz0r Quest	3	basic
+awful poetry journal	Level 10 Quest	1	basic
+barbed-wire fence	Tower Items	2	basic
+bartender-in-the-box	Quest Helpers	1	basic
+baseball	Tower Items	2	basic
+beer helmet	Outfit: Frat Warrior	1	basic
+bejeweled pledge pin	Outfit: Frat Warrior	1	basic
+Black No. 2	Tower Entrance	1	basic
+black pepper	Tower Items	2	basic
+bone rattle	Tower Entrance	1	basic
+Boris's key lime pie	Key Pie	1	basic
+bowl of rye sprouts	Consumables	2	basic
+briefcase	Infiltrationist	1	basic
+bronzed locust	Tower Items	2	basic
+brown sugar cane	Consumables	2	basic
+bubbly potion	Tower Entrance	2	basic
+bullet-proof corduroys	Outfit: War Hippy	1	basic
+bunch of square grapes	Consumables	2	basic
+cactus fruit	Consumables	2	basic
+chaos butterfly	Tower Items	2	basic
+chef-in-the-box	Quest Helpers	1	basic
+chrome ore	Tr4pz0r Quest	3	basic
+chunk of rock salt	Quest Helpers	4	basic
+clockwork maid	Maid/Car	1	basic
+cloudy potion	Tower Entrance	2	basic
+cob of corn	Consumables	2	basic
+corpse on the beach	Consumables	2	basic
+corpsedriver	Consumables	2	basic
+corpsetini	Consumables	2	basic
+crystal skull	Quest Helpers	5	
+cyclops eyedrops	Quest Helpers	4	basic
+dark potion	Tower Entrance	2	basic
+digital key lime pie	Key Pie	6	basic
+dingy planks	Maid/Car	1	basic
+disassembled clover	Quest Helpers	10	basic
+disease	Tower Items	2	basic
+distressed denim pants	Outfit: Frat Warrior	1	basic
+divine champagne popper	Quest Helpers	5	
+dope wheels	Maid/Car	1	basic
+double-ice britches	Fancypants Scarecrow	1	
+drum machine	McGuffin Quest	2	basic
+dusty bottle of Marsala	McGuffin Quest	1	basic
+dusty bottle of Merlot	McGuffin Quest	1	basic
+dusty bottle of Muscat	McGuffin Quest	1	basic
+dusty bottle of Pinot Noir	McGuffin Quest	1	basic
+dusty bottle of Port	McGuffin Quest	1	basic
+dusty bottle of Zinfandel	McGuffin Quest	1	basic
+effervescent potion	Tower Entrance	2	basic
+enchanted bean	Level 10 Quest	1	basic
+eyepatch	Outfit: Swashbuckling	1	basic
+fancy bath salts	Tower Items	2	basic
+fancy but probably evil chocolate	Emergency Supplies	2	basic
+filthy corduroys	Outfit: Filthy Hippy Disguise	1	
+filthy knitted dread sack	Outfit: Filthy Hippy Disguise	1	
+fizzy potion	Tower Entrance	3	basic
+flaregun	Quest Helpers	1	
+frigid ninja stars	Tower Items	2	basic
+frilly skirt	Infiltrationist	1	basic
+furry fur	Level 10 Quest	1	basic
+giant needle	Level 10 Quest	1	basic
+gimlet	Consumables	3	basic
+glass of goat's milk	Consumables	2	basic
+goat cheese	Tr4pz0r Quest	6	basic
+gremlin juice	Tower Entrance	1	basic
+handful of pine needles	Quest Helpers	4	basic
+handsomeness potion	Tower Entrance	1	basic
+heavy metal thunderrr guitarrr	Tr4pz0r Quest	1	basic
+homoerotic frat-paddle	Infiltrationist	1	basic
+hot wing	Infiltrationist	3	basic
+inkwell	Tower Items	2	basic
+jaba&ntilde;ero-flavored chewing gum	Tower Entrance	1	basic
+Jarlsberg's key lime pie	Key Pie	1	basic
+juniper berries	Consumables	2	basic
+ketchup hound	McGuffin Quest	1	basic
+Knob Goblin elite helm	Outfit: KGE	1	basic
+Knob Goblin elite pants	Outfit: KGE	1	basic
+Knob Goblin elite polearm	Outfit: KGE	1	basic
+Knob Goblin firecracker	Tower Items	2	basic
+Knob Goblin harem pants	Outfit: Knob Harem	1	basic
+Knob Goblin harem veil	Outfit: Knob Harem	1	basic
+Knob Goblin perfume	Outfit: Knob Harem	2	basic
+large box	Tower Entrance	10	basic
+leftovers of indeterminate origin	Tower Items	2	basic
+lime-and-chile-flavored chewing gum	Tower Entrance	1	basic
+line	Star Gear	10	basic
+linoleum ore	Tr4pz0r Quest	3	basic
+llama lama gong	Consumables	5	basic
+Mace of the Tortoise	Buffing Weapons	1	basic
+mariachi G-string	Tower Items	2	basic
+marzipan skull	Tower Entrance	1	basic
+meat vortex	Tower Items	2	basic
+Meleegra&trade; pills	Tower Entrance	1	basic
+Mick's IcyVapoHotness Inhaler	Quest Helpers	2	basic
+Mick's IcyVapoHotness Rub	Tower Entrance	1	basic
+milk of magnesium	Consumables	4	basic
+milky potion	Tower Entrance	2	basic
+miner's helmet	Tr4pz0r Quest	1	
+miner's pants	Tr4pz0r Quest	1	
+Mon Tiki	Consumables	3	basic
+monster bait	Quest Helpers	1	basic
+mullet wig	Infiltrationist	1	basic
+murky potion	Tower Entrance	2	basic
+NG	Tower Items	2	basic
+oily mushroom wine	Consumables	4	basic
+Orcish baseball cap	Infiltrationist	1	basic
+Orcish cargo shorts	Infiltrationist	1	basic
+peppermint crook	Quest Helpers	3	
+peppermint parasol	Quest Helpers	2	
+photoprotoneutron torpedo	Tower Items	2	basic
+pickle-flavored chewing gum	Tower Entrance	1	basic
+plot hole	Tower Items	2	basic
+pool cue	Quest Helpers	1	basic
+powdered organs	Tower Items	2	basic
+prussian cathouse	Consumables	3	basic
+pygmy blowgun	Tower Items	2	basic
+pygmy pygment	Tower Entrance	1	basic
+razor-sharp can lid	Tower Items	2	basic
+reinforced beaded headband	Outfit: War Hippy	1	basic
+ring of conflict	Quest Helpers	1	basic
+ring of teleportation	Tower Entrance	1	
+Rock and Roll Legend	Buffing Weapons	1	basic
+round purple sunglasses	Outfit: War Hippy	1	basic
+scroll of ancient forbidden unspeakable evil	Quest Helpers	2	basic
+skeleton key	Tower Entrance	6	basic
+smoky potion	Tower Entrance	2	basic
+Sneaky Pete's key lime pie	Key Pie	3	basic
+soft green echo eyedrop antidote	Emergency Supplies	10	basic
+sonar-in-a-biscuit	Tower Items	5	basic
+spangly mariachi pants	Fancypants Scarecrow	1	
+spider web	Tower Items	2	basic
+Spooky-Gro fertilizer	McGuffin Quest	1	
+star	Star Gear	10	basic
+star chart	Star Gear	2	basic
+star crossbow	Star Gear	1	basic
+star hat	Star Gear	1	basic
+star key lime pie	Key Pie	6	basic
+stick of dynamite	Tower Items	2	basic
+stuffed shoulder parrot	Outfit: Swashbuckling	1	basic
+stunt nuts	McGuffin Quest	1	basic
+super-spiky hair gel	Tower Entrance	1	basic
+swashbuckling pants	Outfit: Swashbuckling	1	basic
+swirly potion	Tower Entrance	2	basic
+tamarind-flavored chewing gum	Tower Entrance	1	basic
+ten-leaf clover	Quest Helpers	10	basic
+thin black candle	Quest Helpers	8	basic
+time halo	Quest Helpers	1	
+tiny bottle of absinthe	Consumables	5	basic
+tofu chow mein	Consumables	4	basic
+tomb ratchet	McGuffin Quest	11	basic
+tropical orchid	Tower Items	2	basic
+vitachoconutriment capsule	Emergency Supplies	2	basic
+Wand of Nagamar	Tower Items	1	basic
+wang	Tower Items	2	basic
+wet stew	McGuffin Quest	1	basic
+wussiness potion	Tower Entrance	1	basic
