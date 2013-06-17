@@ -286,7 +286,7 @@ boolean discard_bait(item it) {
 
 item item_name(string doodad) {
 	if(doodad.to_item() != $item[none]) return doodad.to_item();
-	matcher find_item = create_matcher("([A-Za-z0-9 ]+)(\\(\\d+\\))?" , doodad);
+	matcher find_item = create_matcher("([A-Za-z0-9' ]+)(\\(\\d+\\))?" , doodad);
 	if(find_item.find())
 		return find_item.group(1).to_item();
 	return $item[none];
