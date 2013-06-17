@@ -246,6 +246,7 @@ bejeweled cufflinks	KEEP	0
 bejeweled pledge pin	MALL	0		
 bellhop bell	MALL	0		
 Belt of Howling Anger	KEEP	0		
+Belt of Loathing	KEEP	0		
 Ben-Gal&trade; Balm	AUTO	0		
 Benetton's Medley of Diversity	MALL	1		
 berries of suffering	MALL	0		
@@ -1209,6 +1210,7 @@ gob of wet hair	MALL	99
 goblin autoblowgun	MALL	0		
 goblin hunting spear	MALL	0		
 goblin paste	MALL	0		
+Goggles of Loathing	KEEP	0		
 gold crown	MALL	0		
 gold lam&eacute; pants	MALL	0		
 gold star	MALL	0		
@@ -1295,6 +1297,8 @@ hammerus	MALL	0
 hand grenegg	MALL	0		
 hand turkey outline	KEEP	0		
 hand-carved bokken	KEEP	0		
+hand-carved bow	KEEP	0		
+hand-carved staff	KEEP	0		
 handful of confetti	CLST	0		
 handful of drink tickets	MALL	0		
 handful of hand chalk	MALL	0		
@@ -1469,6 +1473,7 @@ Jarlsberg's key	MAKE	0	Jarlsberg's key lime pie	false
 Jarlsberg's key lime pie	MALL	0		
 Jarlsberg's pan	KEEP	0		
 Jarlsberg's pan (Cosmic portal mode)	KEEP	0		
+Jeans of Loathing	KEEP	0		
 Jekyllin hide belt	KEEP	0		
 jewel-eyed wizard hat	KEEP	0		
 jewelry-making pliers	AUTO	1		
@@ -2062,6 +2067,7 @@ PlexiPips	MALL	0
 plot hole	MALL	0		
 plum	AUTO	0		
 plump juicy grub	MALL	0		
+Pocket Square of Loathing	KEEP	0		
 pocket theremin	MALL	0		
 pointed stick	MALL	0		
 pointy mushroom	MALL	0		
@@ -2144,6 +2150,7 @@ pumpkin	MALL	0
 pumpkin beer	MALL	0		
 pumpkin juice	MALL	0		
 Punchplanter	MALL	0		
+punk rock jacket	MALL	0		
 purple corpsel	MALL	0		
 purple prose pen	MALL	0		
 purple-frosted astral cupcake	MALL	0		
@@ -2287,6 +2294,7 @@ Sazuruk-hai	MALL	0
 scale-mail underwear	MALL	1		
 Scalp of Gorgolok	CLST	0		
 scented massage oil	MALL	0		
+Scepter of Loathing	KEEP	0		
 Schmalz's First Prize Beer	KEEP	0		
 scintillating powder	CLST	0		
 scorpion whip	MALL	1		
@@ -2574,6 +2582,7 @@ steel sword	MALL	0
 stench nuggets	MALL	0		
 stench wad	MALL	0		
 stick of dynamite	MALL	0		
+Stick-Knife of Loathing	KEEP	0		
 stick-on eyebrow piercing	KBAY	0	50	Tasteful Gifts
 stick-on mini solar panels	MALL	1		
 sticky gloves	MALL	1		
@@ -2812,6 +2821,7 @@ transporter transponder	MALL	0
 Transylvania Sling	MALL	0		
 Travels with Jerry	MALL	1		
 Travoltan trousers	KEEP	0		
+Treads of Loathing	KEEP	0		
 triad summoning scroll	MALL	0		
 Trivial Avocations board game	KEEP	0		
 Trivial Avocations Card: What?	MALL	0		
@@ -2994,6 +3004,7 @@ Ye Olde Meade	MALL	0
 Ye Olde Medieval Insult	MALL	0		
 Ye Olde Navy Fleece	MALL	0		
 Ye Wizard's Shack snack voucher	MALL	0		
+yellow brick road	MALL	0		
 yellow candy heart	MALL	0		
 yellow candygram	KEEP	0		
 Yellow Moon of Compassion	KEEP	0		

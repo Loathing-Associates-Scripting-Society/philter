@@ -169,11 +169,13 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		if(OCD[it].action == "KEEP") return 0;
 		int full = full_amount(it);
 		// Unequip familiar gear from terrarium if necessary to OCD it.
-		if(terrarium_amount(it) > 0 && full > OCD[it].q)
+		if(full > OCD[it].q && terrarium_amount(it) > 0)
 			retrieve_item(min(full - OCD[it].q, available_amount(it)), it);
+		// Don't OCD items that are part of stock. Stock can always be satisfied by closet.
+		int keep = max(ocd[it].q, stock[it].q - (get_property("autoSatisfyWithCloset") == "false"? 0: closet_amount(it)));
 		// OCD is limited by available_amount(it) since we don't want to purchase anything and closeted items
 		// may be off-limit, but if there's something in the closet, it counts against the amount you own.
-		return min(full - OCD[it].q, available_amount(it));
+		return min(full - keep, available_amount(it));
 	}
 	
 	boolean AskUser = true;  // Once this has been set false, it will be false for all successive calls to the function
@@ -386,17 +388,21 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		boolean getit(int q, item it) {
 			if(first) first = !vprint("Stocking up on required items!", "blue", 3);
 			boolean autoSatisfyWithCloset = get_property("autoSatisfyWithCloset").to_boolean();
-			if(autoSatisfyWithCloset && closet_amount(it) > 0)
-				set_property("autoSatisfyWithCloset", "false");
 			boolean autoSatisfyWithStorage = get_property("autoSatisfyWithStorage").to_boolean();
-			if(autoSatisfyWithStorage && storage_amount(it) > 0)
-				set_property("autoSatisfyWithStorage", "false");
-			q = q - closet_amount(it) - storage_amount(it) - equipped_amount(it);
-			boolean gotit = retrieve_item(q, it);
-			if(autoSatisfyWithCloset && !get_property("autoSatisfyWithCloset").to_boolean())
-				set_property("autoSatisfyWithCloset", "true");
-			if(autoSatisfyWithStorage && !get_property("autoSatisfyWithStorage").to_boolean())
-				set_property("autoSatisfyWithStorage", "true");
+			boolean gotit;
+			try {
+				if(autoSatisfyWithCloset && closet_amount(it) > 0)
+					set_property("autoSatisfyWithCloset", "false");
+				if(autoSatisfyWithStorage && storage_amount(it) > 0)
+					set_property("autoSatisfyWithStorage", "false");
+				q = q - closet_amount(it) - storage_amount(it) - equipped_amount(it);
+				gotit = retrieve_item(q, it);
+			} finally { // Ensure properties are restored, even if the user aborted execution
+				if(autoSatisfyWithCloset && !get_property("autoSatisfyWithCloset").to_boolean())
+					set_property("autoSatisfyWithCloset", "true");
+				if(autoSatisfyWithStorage && !get_property("autoSatisfyWithStorage").to_boolean())
+					set_property("autoSatisfyWithStorage", "true");
+			}
 			return gotit;
 		}
 		
@@ -715,12 +721,6 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			return false;
 		}
 		
-		// Add stock list as quantity to keep.
-		if(vars["BaleOCD_Stock"].to_int() > 0)
-			foreach it in stock
-				if(OCD contains it)
-					OCD[it].q = max(OCD[it].q, stock[it].q - closet_amount(it));
-		
 		if(!check_inventory(StopForMissingItems)) return false;
 		if(act_cat(brak, "BREAK", "") && !check_inventory(StopForMissingItems))
 			return false;
@@ -778,7 +778,6 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	
 	// Save outfit information
 	string outfit = "familiar "+my_familiar();
-	#cli_execute("outfit save Rollover");
 	foreach s in $slots[hat, weapon, off-hand, back, shirt, pants, acc1, acc2, acc3, familiar]
 		if(equipped_item(s) == $item[none])
 			outfit += "; unequip "+s;
@@ -809,14 +808,9 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 
 	boolean success;
 	try {
-		// Now strip if this is first run this ascension, so I can dispose of EVERYTHING
-		if(remove_outfit) {
+		// Now strip if this is first run this ascension, so I can dispose of EVERYTHING. Equipped familiars can be accounted in terrarium_amount()
+		if(remove_outfit)
 			outfit("birthday suit");
-			// Get all familiars naked also.
-			#matcher unequip = create_matcher("<a href='(familiar.php\\?pwd=.+?&action=unequip&famid=.+?)'>\\[unequip\\]", visit_url("familiar.php"));
-			#while(unequip.find())
-			#	visit_url(unequip.group(1));
-		}
 		
 		// Yay! Get rid of the excess inventory!
 		success = ocd_inventory(StopForMissingItems && !vars["BaleOCD_MallDangerously"].to_boolean());
