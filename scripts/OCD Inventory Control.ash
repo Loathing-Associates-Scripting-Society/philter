@@ -11,14 +11,13 @@ setvar("BaleOCD_MultiMessage", "Mall multi dump");
 setvar("BaleOCD_DataFile", my_name());     // The name of the file that holds OCD data for this character.
 setvar("BaleOCD_StockFile", my_name());    // The name of the file that holds OCD stocking data for this character.
 setvar("BaleOCD_Stock", 0);                // Should items be acquired for stock
+setvar("BaleOCD_kBay", 1);                 // Enable items for kBay. If 0, then kBay is temporarily disabled
 setvar("BaleOCD_Pricing", "auto");         // How to handle mall pricing. "auto" will use mall_price(). "max" will price at maximum.
 setvar("BaleOCD_Sim", FALSE);              // If you set this to true, it won't actually do anything. It'll only inform you.
 setvar("BaleOCD_EmptyCloset", 0);          // Should the closet be emptied and its contents disposed of?
 setvar("BaleOCD_EmptyHangks", 0);          // Should Hangk's Storange be emptied?
-setvar("BaleOCD_RemoveOutfit", 0);         // Should the outfit be removed before disposing of inventory?
-setvar("BaleOCD_Ascension", -1);           // Leave this alone!
 setvar("BaleOCD_MallDangerously", FALSE);  // If this set to TRUE, any uncategorized items will be malled instead of kept! OH NOES!
-	// This last one can only be set by editing the vars file. It's too dangerous to make it easily accessible.
+	// This last one can only be set by editing the vars file. It's too dangerous to make it easily accessible. Exists for backwards compatibility.
 
 // Check version! This will check both scripts and data files.
 // This code is at base level so that the relay script's importation will automatically cause it to be run.
@@ -164,13 +163,32 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		return total;
 	}
 
+	boolean getit(int q, item it) {
+		boolean autoSatisfyWithCloset = get_property("autoSatisfyWithCloset").to_boolean();
+		boolean autoSatisfyWithStorage = get_property("autoSatisfyWithStorage").to_boolean();
+		boolean gotit;
+		try {
+			if(autoSatisfyWithCloset && closet_amount(it) > 0)
+				set_property("autoSatisfyWithCloset", "false");
+			if(autoSatisfyWithStorage && storage_amount(it) > 0)
+				set_property("autoSatisfyWithStorage", "false");
+			gotit = retrieve_item(q, it);
+		} finally { // Ensure properties are restored, even if the user aborted execution
+			if(autoSatisfyWithCloset && !get_property("autoSatisfyWithCloset").to_boolean())
+				set_property("autoSatisfyWithCloset", "true");
+			if(autoSatisfyWithStorage && !get_property("autoSatisfyWithStorage").to_boolean())
+				set_property("autoSatisfyWithStorage", "true");
+		}
+		return gotit;
+	}
+
 	// Amount to OCD. Consider equipment in terrarium (but not equipped) as OCDable.
 	int ocd_amount(item it) {
 		if(OCD[it].action == "KEEP") return 0;
 		int full = full_amount(it);
-		// Unequip familiar gear from terrarium if necessary to OCD it.
-		if(full > OCD[it].q && terrarium_amount(it) > 0)
-			retrieve_item(min(full - OCD[it].q, available_amount(it)), it);
+		// Unequip item from terrarium or equipment if necessary to OCD it.
+		if(full > OCD[it].q && available_amount(it) > item_amount(it))
+			getit(min(full - OCD[it].q, available_amount(it)), it);
 		// Don't OCD items that are part of stock. Stock can always be satisfied by closet.
 		int keep = max(ocd[it].q, stock[it].q - (get_property("autoSatisfyWithCloset") == "false"? 0: closet_amount(it)));
 		// OCD is limited by available_amount(it) since we don't want to purchase anything and closeted items
@@ -385,25 +403,11 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	boolean stock() {
 		boolean success = true;
 		boolean first = true;
-		boolean getit(int q, item it) {
+		boolean stockit(int q, item it) {
+			q = q - closet_amount(it) - storage_amount(it) - equipped_amount(it);
+			if(q < 1) return true;
 			if(first) first = !vprint("Stocking up on required items!", "blue", 3);
-			boolean autoSatisfyWithCloset = get_property("autoSatisfyWithCloset").to_boolean();
-			boolean autoSatisfyWithStorage = get_property("autoSatisfyWithStorage").to_boolean();
-			boolean gotit;
-			try {
-				if(autoSatisfyWithCloset && closet_amount(it) > 0)
-					set_property("autoSatisfyWithCloset", "false");
-				if(autoSatisfyWithStorage && storage_amount(it) > 0)
-					set_property("autoSatisfyWithStorage", "false");
-				q = q - closet_amount(it) - storage_amount(it) - equipped_amount(it);
-				gotit = retrieve_item(q, it);
-			} finally { // Ensure properties are restored, even if the user aborted execution
-				if(autoSatisfyWithCloset && !get_property("autoSatisfyWithCloset").to_boolean())
-					set_property("autoSatisfyWithCloset", "true");
-				if(autoSatisfyWithStorage && !get_property("autoSatisfyWithStorage").to_boolean())
-					set_property("autoSatisfyWithStorage", "true");
-			}
-			return gotit;
+			return getit(q, it);
 		}
 		
 		load_OCD();
@@ -414,7 +418,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			   && clovers_needed() > 0)
 				cli_execute("cheapest ten-leaf clover, disassembled clover; acquire "
 				  + to_string(clovers_needed() - available_amount(it)) +" it");
-			if(full_amount(it) < stock[it].q && !getit(stock[it].q, it)) {
+			if(full_amount(it) < stock[it].q && !stockit(stock[it].q, it)) {
 				success = false;
 				print("Failed to stock "+(stock[it].q > 1? stock[it].q + " "+ it.plural: "a "+it), "red");
 			}
@@ -595,6 +599,8 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 
 	// Break kBay into separate auctions because 100 meat needs to be sent with each.
 	boolean kBayStuff(string group, int [item] cat) {
+		// If kBaying has been disabled, don't do this
+		if(vars["BaleOCD_kBay"] == "0") return true;
 		int [item] goodies;
 		int kBid;
 		boolean auction() {
@@ -765,63 +771,19 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 
 // *******  Finally, here is the main for ocd_control()
 // int ocd_control(boolean StopForMissingItems) {
-	boolean first_run = vars["BaleOCD_Ascension"] != my_ascensions();
-	boolean remove_outfit = (vars["BaleOCD_RemoveOutfit"] == "0" && first_run) || vars["BaleOCD_RemoveOutfit"] == "1";
 	
-	// Empty closet before emptying out Hangks
+	// Empty closet before emptying out Hangks, otherwise it may interfere with which Hangk's items go to closet
 	if(to_int(vars["BaleOCD_EmptyCloset"]) >= 0 && get_property("lastEmptiedStorage").to_int() != my_ascensions() 
 	  && vars["BaleOCD_Sim"] == "false")
 		empty_closet();
+	
 	// Empty out Hangks, so it can be accounted for by what follows.
 	if(get_property("lastEmptiedStorage").to_int() != my_ascensions())
 		 visit_url("storage.php?action=pullall&pwd");
 	
-	// Save outfit information
-	string outfit = "familiar "+my_familiar();
-	foreach s in $slots[hat, weapon, off-hand, back, shirt, pants, acc1, acc2, acc3, familiar]
-		if(equipped_item(s) == $item[none])
-			outfit += "; unequip "+s;
-		else outfit += "; equip "+ s +" "+ equipped_item(s);
-	
-	// Execute each part separately in case one fails. This will also keep the equip command from acquiring anything
-	void equip_outfit(string o) {
-		// (familiar|equip|unequip)\s+(([^\s;]+)\s?([^;]+)?)(?:;|$)
-		matcher com = create_matcher("(familiar|equip|unequip)\\s+(([^\\s;]+)\\s?([^;]+)?)(?:;|$)", o);
-		while(find(com)) {
-			item it = $item[none];
-			switch(com.group(1)) {
-			case "familiar":
-				if(have_familiar(com.group(2).to_familiar()))
-					use_familiar(com.group(2).to_familiar());
-				break;
-			case "equip":
-				it = com.group(4).to_item();
-				if(item_amount(it) + equipped_amount(it) < 1)
-					it = $item[none];
-			case "unequip":
-				if(equipped_item(com.group(3).to_slot()) != it)
-					equip(com.group(3).to_slot(), it);
-				break;
-			}
-		}
-	}
-
 	boolean success;
-	try {
-		// Now strip if this is first run this ascension, so I can dispose of EVERYTHING. Equipped familiars can be accounted in terrarium_amount()
-		if(remove_outfit)
-			outfit("birthday suit");
-		
-		// Yay! Get rid of the excess inventory!
-		success = ocd_inventory(StopForMissingItems && !vars["BaleOCD_MallDangerously"].to_boolean());
-	} finally {
-		if(remove_outfit)
-			equip_outfit(outfit);
-		if(first_run && success && vars["BaleOCD_Sim"] == "false") {
-			vars["BaleOCD_Ascension"] = my_ascensions();
-			updatevars();
-		}
-	}
+	// Yay! Get rid of the excess inventory!
+	success = ocd_inventory(StopForMissingItems && !vars["BaleOCD_MallDangerously"].to_boolean());
 	print("");
 	return success? FinalSale: -1;
 }

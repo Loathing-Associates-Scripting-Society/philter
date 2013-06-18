@@ -509,6 +509,11 @@ void edit_items(string act) {
 				map_to_file(OCD, "OCDdata_"+vars["BaleOCD_DataFile"]+".txt");
 			}
 			write("</tr></table>");
+			write("<table class='zlib' border=0 cellpadding=1><tr><td align=right>kBay Status: </td><td>");
+			if(vars["BaleOCD_kBay"] != "0" && vars["BaleOCD_kBay"] != "1") vars["BaleOCD_kBay"] = 1;
+			vars["BaleOCD_kBay"] = write_radio(vars["BaleOCD_kBay"], "EnableKBay", "Send Items to kBay,", 1);
+			write_radio(vars["BaleOCD_kBay"], "EnableKBay", "Hold kBay items in inventory", 0);
+			write("</td></tr></table>");
 		}
 		writeln("<table border=0 cellpadding=1>");
 		write("<tr><th colspan=2>Item</th>");
@@ -751,14 +756,15 @@ void set_cats() {
 void zlib_vars() {
 	writeln("<fieldset><legend>Configure Character Settings</legend>"); // write_box()
 	
-	write("<table class='zlib' border=0 cellpadding=1><tr><td align=right>Remove Outfit First: </td><td>");
-	vars["BaleOCD_RemoveOutfit"] = write_radio(vars["BaleOCD_RemoveOutfit"], "RemoveOutfit", "Never,", -1);
-	write_radio(vars["BaleOCD_RemoveOutfit"], "RemoveOutfit", "Only once per ascension,", 0);
-	write_radio(vars["BaleOCD_RemoveOutfit"], "RemoveOutfit", "Every time.", 1);
-	write("</td></tr><tr><td align=right>Empty Closet First: </td><td>");
+	write("<table class='zlib' border=0 cellpadding=1>");
+	write("<tr><td align=right>Empty Closet First: </td><td>");
 	if(vars["BaleOCD_EmptyCloset"] != "-1" && vars["BaleOCD_EmptyCloset"] != "0") vars["BaleOCD_EmptyCloset"] = 0;
 	vars["BaleOCD_EmptyCloset"] = write_radio(vars["BaleOCD_EmptyCloset"], "EmptyCloset", "Never,", -1);
 	write_radio(vars["BaleOCD_EmptyCloset"], "EmptyCloset", "Before Emptying Hangk's (recommended)", 0);
+	write("<tr><td align=right>kBay Status: </td><td>");
+	if(vars["BaleOCD_kBay"] != "0" && vars["BaleOCD_kBay"] != "1") vars["BaleOCD_kBay"] = 1;
+	vars["BaleOCD_kBay"] = write_radio(vars["BaleOCD_kBay"], "EnableKBay", "Send Items to kBay,", 1);
+	write_radio(vars["BaleOCD_kBay"], "EnableKBay", "Hold kBay items in inventory", 0);
 	write("</td></tr><tr><td align=right>Mall Pricing: </td><td>");
 	vars["BaleOCD_Pricing"] = write_radio(vars["BaleOCD_Pricing"], "Pricing", "Automatic,", "auto");
 	write_radio(vars["BaleOCD_Pricing"], "Pricing", "999,999,999 meat.", "max");
