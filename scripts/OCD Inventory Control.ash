@@ -763,13 +763,15 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		empty_closet();
 	
 	// Empty out Hangks, so it can be accounted for by what follows.
-	if(get_property("lastEmptiedStorage").to_int() != my_ascensions())
+	if(autoSatisfyWithStorage && get_property("lastEmptiedStorage").to_int() != my_ascensions())
 		 visit_url("storage.php?action=pullall&pwd");
 	
 	boolean success;
 	try {
-		if(autoSatisfyWithCloset)  set_property("autoSatisfyWithCloset", "false");
-		if(autoSatisfyWithStorage) set_property("autoSatisfyWithStorage", "false");
+		if(autoSatisfyWithCloset)
+			set_property("autoSatisfyWithCloset", "false");
+		if(autoSatisfyWithStorage && get_property("lastEmptiedStorage").to_int() != my_ascensions())
+			set_property("autoSatisfyWithStorage", "false");
 		// Yay! Get rid of the excess inventory!
 		success = ocd_inventory(StopForMissingItems && !vars["BaleOCD_MallDangerously"].to_boolean());
 	} finally { // Ensure properties are restored, even if the user aborted execution
