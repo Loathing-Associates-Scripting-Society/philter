@@ -122,6 +122,10 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	command ["GIFT"] = "send gift to ";
 	command ["KBAY"] = "kBay ";
 	
+	// Save these so they can be screwed with safely
+	boolean autoSatisfyWithCloset = get_property("autoSatisfyWithCloset").to_boolean();
+	boolean autoSatisfyWithStorage = get_property("autoSatisfyWithStorage").to_boolean();
+	
 	boolean use_multi = vars["BaleOCD_MallMulti"] != "" && to_boolean(vars["BaleOCD_UseMallMulti"]);
 	if(use_multi)
 		command ["MALL"] = "send to mallmulti "+ vars["BaleOCD_MallMulti"] + ": ";
@@ -163,37 +167,18 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		return total;
 	}
 
-	boolean getit(int q, item it) {
-		boolean autoSatisfyWithCloset = get_property("autoSatisfyWithCloset").to_boolean();
-		boolean autoSatisfyWithStorage = get_property("autoSatisfyWithStorage").to_boolean();
-		boolean gotit;
-		try {
-			if(autoSatisfyWithCloset && closet_amount(it) > 0)
-				set_property("autoSatisfyWithCloset", "false");
-			if(autoSatisfyWithStorage && storage_amount(it) > 0)
-				set_property("autoSatisfyWithStorage", "false");
-			gotit = retrieve_item(q, it);
-		} finally { // Ensure properties are restored, even if the user aborted execution
-			if(autoSatisfyWithCloset && !get_property("autoSatisfyWithCloset").to_boolean())
-				set_property("autoSatisfyWithCloset", "true");
-			if(autoSatisfyWithStorage && !get_property("autoSatisfyWithStorage").to_boolean())
-				set_property("autoSatisfyWithStorage", "true");
-		}
-		return gotit;
-	}
-
 	// Amount to OCD. Consider equipment in terrarium (but not equipped) as OCDable.
 	int ocd_amount(item it) {
 		if(OCD[it].action == "KEEP") return 0;
 		int full = full_amount(it);
 		// Unequip item from terrarium or equipment if necessary to OCD it.
 		if(full > OCD[it].q && available_amount(it) > item_amount(it))
-			getit(min(full - OCD[it].q, available_amount(it)), it);
+			retrieve_item(min(full - OCD[it].q, available_amount(it)), it);
 		// Don't OCD items that are part of stock. Stock can always be satisfied by closet.
 		int keep = max(ocd[it].q, stock[it].q - (get_property("autoSatisfyWithCloset") == "false"? 0: closet_amount(it)));
-		// OCD is limited by available_amount(it) since we don't want to purchase anything and closeted items
+		// OCD is limited by item_amount(it) since we don't want to purchase anything and closeted items
 		// may be off-limit, but if there's something in the closet, it counts against the amount you own.
-		return min(full - keep, available_amount(it));
+		return min(full - keep, item_amount(it));
 	}
 	
 	boolean AskUser = true;  // Once this has been set false, it will be false for all successive calls to the function
@@ -407,7 +392,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			q = q - closet_amount(it) - storage_amount(it) - equipped_amount(it);
 			if(q < 1) return true;
 			if(first) first = !vprint("Stocking up on required items!", "blue", 3);
-			return getit(q, it);
+			return retrieve_item(q, it);
 		}
 		
 		load_OCD();
@@ -782,8 +767,15 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		 visit_url("storage.php?action=pullall&pwd");
 	
 	boolean success;
-	// Yay! Get rid of the excess inventory!
-	success = ocd_inventory(StopForMissingItems && !vars["BaleOCD_MallDangerously"].to_boolean());
+	try {
+		if(autoSatisfyWithCloset)  set_property("autoSatisfyWithCloset", "false");
+		if(autoSatisfyWithStorage) set_property("autoSatisfyWithStorage", "false");
+		// Yay! Get rid of the excess inventory!
+		success = ocd_inventory(StopForMissingItems && !vars["BaleOCD_MallDangerously"].to_boolean());
+	} finally { // Ensure properties are restored, even if the user aborted execution
+		if(autoSatisfyWithCloset)  set_property("autoSatisfyWithCloset", "true");
+		if(autoSatisfyWithStorage) set_property("autoSatisfyWithStorage", "true");
+	}
 	print("");
 	return success? FinalSale: -1;
 }
