@@ -210,10 +210,10 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 							break;
 						}
 						make[doodad] = excess;
-						if(make_q[doodad] != 1)
+						if(make_q[doodad] > 1)
 							make[doodad] = make[doodad] - (make[doodad] % make_q[doodad]);
 						if(to_boolean(OCD[doodad].message))
-							make[doodad] = min(make[doodad], creatable_amount(to_item(ocd[doodad].info)));
+							make[doodad] = min(make[doodad], creatable_amount(to_item(ocd[doodad].info)) * make_q[doodad]);
 						if(make[doodad] == 0) remove make[doodad];
 						break;
 					case "UNTN":
