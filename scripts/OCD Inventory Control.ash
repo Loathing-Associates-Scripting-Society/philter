@@ -60,6 +60,19 @@ boolean is_OCDable(item it) {
 	return false;
 }
 
+boolean is_wadable(item it) {
+	if(it.to_int() >= 1438 && it.to_int() <=1449) // twinkly powder to sleaze nuggets
+		return true;
+	switch(it) {
+	case $item[sewer nugget]:
+	case $item[floaty sand]:
+	case $item[floaty pebbles]: 
+	case $item[floaty gravel]:
+		return true;
+	}
+	return false;
+}
+
 // This is the amount equipped on unequipped familiars in the terrarium
 int terrarium_amount(item it) {
 	return available_amount(it) - equipped_amount(it) - item_amount(it)
@@ -416,18 +429,6 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		}
 		batch_close();
 		return success;
-	}
-
-	boolean is_wadable(item it) {
-		if(it.to_int() > 1437 && it.to_int() < 1450)
-			return true;
-		switch(it) {
-		case $item[sewer nugget]:
-		case $item[floaty pebbles]: 
-		case $item[floaty gravel]:
-			return true;
-		}
-		return false;
 	}
 
 	boolean wadbot(int [item] pulverize) {
