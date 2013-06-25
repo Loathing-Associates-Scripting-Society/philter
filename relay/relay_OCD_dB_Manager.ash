@@ -259,15 +259,7 @@ boolean is_pulverizable(item it) {
 		return false;
 	if(count(pulvy) > 0)
 		return true;
-	if(it.to_int() >= 1438 && it.to_int() <=1449)
-		return true;
-	switch(it) {
-	case $item[sewer nugget]:
-	case $item[floaty pebbles]: 
-	case $item[floaty gravel]:
-		return true;
-	}
-	return false;
+	return is_wadable(it);
 }
 
 boolean is_breakable(item it) {

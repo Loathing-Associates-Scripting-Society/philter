@@ -443,7 +443,7 @@ bubblewrap bottlecap turtleban	MALL	3
 bubblewrap ore	MALL	0		
 bubblewrap sword	MALL	2		
 bubblin' crude	MALL	0		
-bubbling tempura batter	MALL	0	tempura air	
+bubbling tempura batter	MALL	0		
 bubbly potion	MALL	0		
 bucket of anniversary lard	CLST	0		
 bucket of honey	MALL	0		
@@ -602,7 +602,8 @@ clown wig	MALL	0
 clownskin belt	MALL	1		
 clownskin buckler	MALL	0		
 clownskin harness	MALL	1		
-club necklace	TODO	0	Bluelazer trades 4000 meat each	
+club necklace	TODO	0	i_eat_food trades 3k meat each	
+
 club sandwich	KEEP	0		
 clumsiness bark	MALL	0		
 cob of corn	AUTO	0		
@@ -1060,7 +1061,7 @@ floral-print skirt	MALL	0
 flower petal pie	KEEP	0		
 flowing hippy skirt	MALL	0		
 fluorescent lightbulb	MALL	0		
-flute of flat champagne	KEEP	0		
+flute of flat champagne	MALL	0		
 Fly-By-Knight Heraldry form	KEEP	0		
 flyest of shirts	CLST	0		
 Flying Caipiranha	MALL	0		
@@ -1124,6 +1125,7 @@ Gaia beads	MALL	0
 Galapagosian Cuisses	KEEP	0		
 Game Grid ticket	MALL	0		
 Game Grid token	MALL	10		
+GameInformPowerDailyPro magazine	MALL	1		
 ganger bandana	MALL	0		
 garish pinky ring	KEEP	0		
 Garter of the Turtle Poacher	KEEP	0		
@@ -1321,7 +1323,7 @@ harem girl t-shirt	MALL	0
 Hatorade	AUTO	0		
 Haymaker	MALL	0		
 headhunter necktie	MALL	0		
-heart necklace	TODO	0	WoK trades 6000 meat each	
+heart necklace	TODO	0	i_eat_food trades 3k meat each	
 heart of dark chocolate	KEEP	0		
 heart of the volcano	KEEP	0		
 heavy D	MALL	0		
@@ -1421,7 +1423,6 @@ Iiti Kitty phone charm	MALL	0
 imbued seal-blubber candle	KEEP	0		
 imitation crab crate	MALL	0		
 imitation whetstone	MALL	1		
-immense cyborg hand	CLST	0		
 imp air	MALL	0		
 Imp Ale	MALL	0		
 imp unity ring	MALL	0		
@@ -1856,6 +1857,7 @@ Necrotelicomnicon	MALL	1
 nervous tick egg	KEEP	0		
 Neuromancer	MALL	0		
 neurostim pill	MALL	0		
+New Cloaca-Cola	MALL	1		
 Newbiesport&trade; tent	AUTO	0		
 Newman's Own Trousers	KEEP	0		
 NG	MALL	0		
@@ -2050,7 +2052,6 @@ pixel energy tank	MALL	3
 pixel grappling hook	MALL	1		
 pixel power cell	MALL	0		
 Plague of Locusts	MALL	0		
-plain brown wrapper	KEEP	0		
 plastic bib	MALL	1		
 plastic guitar	MALL	0		
 plastic passion fruit	MALL	0		
@@ -2112,11 +2113,6 @@ potion of the captain's hammer	MALL	0
 potion of the field gar	MALL	0		
 potion of the litterbox	MALL	0		
 potion of X-ray vision	MALL	0		
-pottery club	MALL	1		
-pottery hat	MALL	1		
-pottery shield	MALL	1		
-pottery training pants	MALL	1		
-pottery yo-yo	MALL	1		
 poultrygeist	MALL	0		
 poutine	MALL	0		
 powdered donut	MALL	0		
@@ -2127,7 +2123,7 @@ pr0n legs	MALL	0
 Prelude of Precision	MALL	1		
 pretty flower	MALL	0	500	
 pretty pink bow	MALL	1		
-prismatic wad	MALL	11		
+prismatic wad	KEEP	0		
 Private Pepper's Lonely Hearts Club Jacket	MALL	0		
 probability potion	MALL	0		
 procrastination potion	MALL	0		
@@ -2248,9 +2244,9 @@ royal jelly	MALL	0
 rubber band gun	MALL	0		
 rubber emo roe	KEEP	0		
 rubber gloves	MALL	0		
-rubber WWBD? bracelet	TODO	0	Bluelazer trades 2000 meat each	
-rubber WWJD? bracelet	TODO	0	Bluelazer trades 2000 meat each	
-rubber WWSPD? bracelet	TODO	0	Bluelazer trades 2000 meat each	
+rubber WWBD? bracelet	TODO	0	Bluelazer trades 2k meat each	
+rubber WWJD? bracelet	TODO	0	Bluelazer trades 2k meat each	
+rubber WWSPD? bracelet	TODO	0	Bluelazer trades 2k meat each	
 rubber WWtNSD? bracelet	GIFT	0	Veracity	For making KoLmafia so good
 ruby W	MALL	0		
 rum and cola	MALL	0		
@@ -2500,7 +2496,7 @@ space marine flash grenade	MALL	0
 Space Tourist Phaser	MALL	0		
 Space Tours Tripple	MALL	0		
 Space Trip safety headphones	KEEP	0		
-spade necklace	TODO	0	Bluelazer trades 4000 meat each	
+spade necklace	TODO	0	i_eat_food trades 3k meat each	
 spaghetti con calaveras	MALL	0		
 spaghetti cult mask	MALL	0		
 spaghetti cult rosary	MALL	0		
@@ -2574,6 +2570,7 @@ star chart	MALL	0
 star crossbow	MALL	0		
 star hat	MALL	0		
 star key lime pie	MALL	0		
+Star Spawn	MALL	0		
 star staff	MALL	0		
 star sword	MALL	0		
 Steal This Candy	MALL	0		
@@ -2618,7 +2615,7 @@ studded leather boxer shorts	AUTO	0
 stuffed angry cow	KBAY	0	300	Stuffies
 stuffed astral badger	KBAY	0	300	Stuffies
 stuffed baby gravy fairy	KBAY	0	300	Stuffies
-stuffed Baron von Ratsworth	TODO	0	Plus4 trades 2000 meat each	
+stuffed Baron von Ratsworth	TODO	0	Plus4 trades 2k meat each	
 stuffed Cheshire bitten	KBAY	0	300	Stuffies
 stuffed cocoabo	GIFT	0	Holatuwol	Thanks for creating KoLmafia
 stuffed crazy bastard sword	KBAY	0	2000	VIP Klaw Stuffies
@@ -2883,7 +2880,7 @@ unusual disco ball	CLST	0
 unwound cymbal-playing monkey	KEEP	0		
 Ur-Donut	MALL	0		
 useless powder	KEEP	0		
-UV monocular	KEEP	0		
+UV monocular	CLST	0		
 V for Vivala mask	KEEP	0		
 valuable trinket	MALL	0		
 vampire collar	MALL	0		
