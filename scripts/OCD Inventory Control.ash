@@ -64,7 +64,7 @@ boolean is_wadable(item it) {
 	if(it.to_int() >= 1438 && it.to_int() <=1449) // twinkly powder to sleaze nuggets
 		return true;
 	switch(it) {
-	case $item[sewer nugget]:
+	case $item[sewer nuggets]:
 	case $item[floaty sand]:
 	case $item[floaty pebbles]: 
 	case $item[floaty gravel]:
