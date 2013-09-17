@@ -359,7 +359,7 @@ string action_drop(string act, item doodad) {
 
 string image(item doodad) {
 	return "<a title = \"KoL Pop-Up\" href=\"javascript:descitem('" + doodad.descid
-		+ "');\"><img src=\"http://images.kingdomofloathing.com/itemimages/" + doodad.image + "\" height=30 width=30></a>";
+		+ "');\"><img src=\"/images/itemimages/" + doodad.smallimage + "\" height=30 width=30></a>";
 }
 
 string desc(item doodad) {
