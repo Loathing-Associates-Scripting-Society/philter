@@ -301,7 +301,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		if(count(cat) < 1) return;
 		int len, total, linevalue;
 		buffer queue;
-		int [item] kBayCount;
+		int [item] kBayCount, kBayClear;
 		string com = command[act];
 		if(act == "GIFT") com = com + to + ": ";
 		else if(act == "KBAY") com = com + "\""+ to + "\" ";
@@ -323,8 +323,8 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		}
 		boolean kBayClear() {
 			vprint("Waiting for more items to "+com + queue, "gray", 3);
-			foreach key in kBayCount
-				remove kbay [to][key];
+			foreach key, i in kBayCount
+				kBayClear [key] = i;
 			clear(kBayCount);
 			linevalue = 0;
 			return true;
@@ -375,6 +375,8 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		}
 		if(len > 0)
 			print_line();
+		foreach key in kBayClear
+			remove kbay [to][key];
 
 		if(act == "MALL") {
 			if(!use_multi)
