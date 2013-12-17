@@ -38,7 +38,6 @@ record OCDinfo {
 };
 
 boolean is_OCDable(item it) {
-	if(is_displayable(it)) return true;
 	switch(it) {
 	case $item[Boris's key]:
 	case $item[Jarlsberg's key]:
@@ -56,7 +55,11 @@ boolean is_OCDable(item it) {
 	case $item[vial of squid ink]:
 	case $item[potion of fishy speed]:
 		return true;
+	case $item[DNOTC Box]: // Let these hide in your inventory until it is time for them to strike!
+		if(substring(today_to_string(), 4, 6) == "12" && substring(today_to_string(), 6, 8).to_int() < 25) return false;
+		break;
 	}
+	if(is_displayable(it)) return true;
 	return false;
 }
 
@@ -138,6 +141,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	// Save these so they can be screwed with safely
 	boolean autoSatisfyWithCloset = get_property("autoSatisfyWithCloset").to_boolean();
 	boolean autoSatisfyWithStorage = get_property("autoSatisfyWithStorage").to_boolean();
+	boolean autoSatisfyWithStash = get_property("autoSatisfyWithStash").to_boolean();
 	
 	boolean use_multi = vars["BaleOCD_MallMulti"] != "" && to_boolean(vars["BaleOCD_UseMallMulti"]);
 	if(use_multi)
@@ -773,6 +777,8 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	try {
 		if(autoSatisfyWithCloset)
 			set_property("autoSatisfyWithCloset", "false");
+		if(autoSatisfyWithStash)
+			set_property("autoSatisfyWithStash", "false");
 		if(autoSatisfyWithStorage && get_property("lastEmptiedStorage").to_int() != my_ascensions())
 			set_property("autoSatisfyWithStorage", "false");
 		// Yay! Get rid of the excess inventory!
@@ -780,6 +786,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	} finally { // Ensure properties are restored, even if the user aborted execution
 		if(autoSatisfyWithCloset)  set_property("autoSatisfyWithCloset", "true");
 		if(autoSatisfyWithStorage) set_property("autoSatisfyWithStorage", "true");
+		if(autoSatisfyWithStash) set_property("autoSatisfyWithStash", "true");
 	}
 	print("");
 	return success? FinalSale: -1;
