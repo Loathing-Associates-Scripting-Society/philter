@@ -29,6 +29,7 @@ A Crimbo Carol, Ch. 3 (used)	KEEP	0
 A Crimbo Carol, Ch. 4 (used)	KEEP	0		
 A Crimbo Carol, Ch. 5 (used)	KEEP	0		
 A Crimbo Carol, Ch. 6 (used)	KEEP	0		
+A Light that Never Goes Out	MALL	1		
 a little sump'm sump'm	MALL	0		
 A muse-bouche	MALL	0		
 A. W. O. L. commendation	KEEP	0		
@@ -130,6 +131,7 @@ ant rake	MALL	1
 ant sickle	MALL	1		
 anti-anti-antidote	AUTO	31		
 anticheese	MALL	0		
+antimatter wad	MALL	10		
 antique accordion	AUTO	1		
 antique greaves	MALL	0		
 antique hand mirror	MALL	1		
@@ -445,6 +447,7 @@ brass Dreadsylvanian flask	KEEP	0
 brass gear	MALL	0		
 brazen bracelet	KEEP	0		
 breaded beer	MALL	0		
+breakfast mess	MALL	0		
 breath mint	MALL	0		
 brick	KEEP	0		
 BRICKO brick	MALL	0		
@@ -471,6 +474,7 @@ broken clock	MALL	0
 broken glass grenade	MALL	0		
 broken skull	MALL	0		
 broken sword	MALL	0		
+broken warbear gyrocopter	MALL	0		
 bronze breastplate	MALL	0		
 bronzed locust	MALL	0		
 brown felt tophat	MALL	0		
@@ -627,6 +631,7 @@ Climate Colada	MALL	0
 clingfilm cap	CLST	0		
 clingfilm slippers	CLST	0		
 clingfilm trousers	CLST	0		
+Cloaca Cola Polar	MALL	0		
 Cloaca grenade	MALL	0		
 Cloaca-Cola	MALL	0		
 Cloaca-Cola c-rations	MALL	0		
@@ -1089,6 +1094,7 @@ felt	MALL	0
 Feng Shui for Big Dumb Idiots	MALL	0		
 fermenting powder	AUTO	0		
 ferret bait	MALL	0		
+festive warbear bank	KEEP	0		
 fetid feather	MALL	0		
 fettucini &eacute;pines Inconnu	MALL	0		
 fettucini Inconnu	MALL	0		
@@ -1108,7 +1114,7 @@ filthy corduroys	MALL	1
 filthy knitted dread sack	MALL	1		
 filthy lucre	KEEP	0		
 filthy pestle	MALL	0		
-filthy poultice	MALL	0		
+filthy poultice	MALL	24		
 fine aged cheddarwurst	MALL	0		
 fine wine	MALL	0		
 finger cuffs	KEEP	0		
@@ -1266,7 +1272,7 @@ Garter of the Turtle Poacher	KEEP	0
 gas balloon	MALL	0		
 gator skin	MALL	0		
 Gauntlets of the Blood Moon	KEEP	0		
-gauze garter	MALL	0		
+gauze garter	MALL	24		
 gazely stare	MALL	0		
 Gazpacho's Glacial Grimoire	AUTO	1		
 gearbox necklace	KEEP	0		
@@ -1908,6 +1914,7 @@ meat paste	AUTO	0
 meat stack	AUTO	0		
 Meat Tenderizer is Murder	MALL	1		
 meat vortex	MALL	0		
+Meatcleaver	KEEP	0		
 Medallion of the Ventrilo Prince	KEEP	0		
 Medicinal Herb's medicinal herbs	KEEP	0		
 medium slimy cyst	MALL	0		
@@ -2085,6 +2092,7 @@ ninja crampons	MALL	0
 ninja hot pants	MALL	0		
 ninja mop	MALL	0		
 ninja rope	MALL	0		
+nosy nose ringy ring	MALL	1		
 not-a-pipe	MALL	0		
 notbig laminated card	AUTO	0		
 Notes from the Elfpocalypse, Chapter I	MALL	0		
@@ -2445,6 +2453,7 @@ recording of Donho's Bubbly Ballad	MALL	0
 recording of Elron's Explosive Etude	MALL	0		
 recording of Inigo's Incantation of Inspiration	MALL	0		
 recording of Prelude of Precision	MALL	0		
+recording of Rolando's Rondo of Resisto	MALL	0		
 recording of The Ballad of Richie Thingfinder	MALL	0		
 Red Dwarf	MALL	0		
 red pixel	MALL	0		
@@ -2672,6 +2681,8 @@ silver salt-shaker	MALL	0
 silver shrimp fork	MALL	0		
 silver tongue charrrm	MALL	0		
 Sinful Desires	MALL	1		
+single of Donho's Bubbly Ballad	MALL	0		
+single of Inigo's Incantation of Inspiration	MALL	0		
 single swig of vodka	MALL	0		
 single-serving herbal stuffing	MALL	0		
 six pack of Mountain Stream	MALL	0		
@@ -2811,6 +2822,7 @@ spiked femur	MALL	0
 spiky turtle helmet	MALL	1		
 spiky turtle shield	MALL	1		
 spiky turtle shoulderpads	MALL	1		
+spirit bell	KEEP	0		
 sponge cake	KEEP	0		
 spooky bicycle chain	MALL	0		
 spooky cosmetics bag	MALL	0		
@@ -2839,7 +2851,7 @@ sprocket	AUTO	0
 squamous polyp	KEEP	0		
 squashed frog	MALL	0		
 Squat-Thrust Magazine	MALL	0		
-Stabonic scroll	CLST	0		
+Stabonic scroll	KEEP	0		
 Staff of Blood and Pudding	CLST	0		
 Staff of Holiday Sensations	KEEP	0		
 Staff of Queso Escusado	KEEP	0		
@@ -3080,6 +3092,7 @@ time sleigh	CLST	0
 time sword	MALL	3		
 time trousers	MALL	1		
 time's arrow	MALL	0		
+tin snips	MALL	2		
 tiny bottle of absinthe	MALL	0		
 tiny bowler	MALL	0		
 tiny canopic jar	MALL	0		
@@ -3251,6 +3264,21 @@ Wand of Nagamar	MALL	0
 Wand of Oscus	KEEP	0		
 wang	MALL	0		
 war tongs	MALL	0		
+warbear auto-anvil	MALL	1		
+warbear breakfast machine	KEEP	0		
+warbear chemistry lab	MALL	1		
+warbear energy bracers	MALL	1		
+warbear exo-arm	MALL	1		
+warbear gyro	MALL	0		
+warbear gyrocopter	MALL	1		
+warbear high-efficiency still	MALL	1		
+warbear hoverbelt	KEEP	0		
+warbear induction oven	MALL	1		
+warbear jackhammer drill press	MALL	1		
+warbear laser beacon	MALL	1		
+warbear LP-ROM burner	MALL	1		
+warbear oil pan	MALL	1		
+warbear soda machine	KEEP	0		
 warm fur	MALL	0		
 warm mushroom	MALL	0		
 Warm Subject gift certificate	USE	0		
