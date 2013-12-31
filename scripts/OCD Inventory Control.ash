@@ -84,9 +84,23 @@ int terrarium_amount(item it) {
 		- (get_property("autoSatisfyWithStash") == "true"? stash_amount(it): 0);	// Don't include Clan Stash
 }
 
+int camp_amount(item it) {
+	switch(it) {
+	case $item[Warbear auto-anvil]:
+	case $item[Warbear chemistry lab]:
+	case $item[Warbear high-efficiency still]:
+	case $item[Warbear induction oven]:
+	case $item[Warbear jackhammer drill press]:
+	case $item[Warbear LP-ROM burner]:
+		if(get_campground() contains it) return 1;
+	}
+	return 0;
+}
+
 // available_amount varies depending on whether the character can satisfy requests with the closet etc. This doesn't
 int full_amount(item it) {
 	return available_amount(it)
+		+ camp_amount(it) // Some items lurk in the campground
 		+ (get_property("autoSatisfyWithCloset") == "false"? closet_amount(it): 0)	// Include Closet
 		+ ((get_property("autoSatisfyWithStorage") == "false" || !can_interact())? storage_amount(it): 0)	// Include Hangk's Storage
 		- (get_property("autoSatisfyWithStash") == "true"? stash_amount(it): 0);	// Don't include Clan Stash
@@ -655,7 +669,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 					if(price[it]> 0)  // If price is -1, then there was an error.
 						put_shop(price[it], 0, quant, it);  // price[it] was found during print_cat()
 				} else
-					put_shop(0, 0, quant, it);   // Set to max price of 999,999,999 meat
+					put_shop((shop_amount(it)>0? shop_price(it): 0), 0, quant, it);   // Set to max price of 999,999,999 meat
 				break;
 			case "AUTO":
 				autosell(quant, it);
