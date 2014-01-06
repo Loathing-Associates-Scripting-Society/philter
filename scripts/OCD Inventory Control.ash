@@ -606,6 +606,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	// Break kBay into separate auctions because 100 meat needs to be sent with each.
 	boolean kBayStuff(string group, int [item] cat) {
 		return vprint("kBay is no long accepting new auction listings!", "red", 3);
+		/*
 		// If kBaying has been disabled, don't do this
 		if(vars["BaleOCD_kBay"] == "0") return true;
 		int [item] goodies;
@@ -630,6 +631,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		if(count(goodies) > 0 && !auction())
 			return false;
 		return true;
+		*/
 	}
 
 	boolean act_cat(int [item] cat, string act, string to) {
