@@ -327,7 +327,7 @@ string action_drop(string act, item doodad) {
 		write_option(act, "Mall sale", "MALL");
 	if(is_breakable(doodad))
 		write_option(act, "Break Apart", "BREAK");
-	if(autosell_price(doodad) > 0)
+	if(is_discardable(doodad) && autosell_price(doodad) > 0)
 		write_option(act, "Autosell", "AUTO");
 	else if(discard_bait(doodad))
 		write_option(act, "Discard", "DISC", "color:#FFFFFF;background-color:#FFAF00");

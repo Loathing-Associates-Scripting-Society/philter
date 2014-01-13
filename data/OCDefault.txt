@@ -21,14 +21,14 @@
 7-Foot Dwarven mattock	MALL	1		
 8-ball	MALL	0		
 9-ball	MALL	0		
-A Beginner's Guide to Charming Snakes (used)	KEEP	0		
+A Beginner's Guide to Charming Snakes (used)	CLST	0		
 a butt tuba	MALL	0		
-A Crimbo Carol, Ch. 1 (used)	KEEP	0		
-A Crimbo Carol, Ch. 2 (used)	KEEP	0		
-A Crimbo Carol, Ch. 3 (used)	KEEP	0		
-A Crimbo Carol, Ch. 4 (used)	KEEP	0		
-A Crimbo Carol, Ch. 5 (used)	KEEP	0		
-A Crimbo Carol, Ch. 6 (used)	KEEP	0		
+A Crimbo Carol, Ch. 1 (used)	CLST	0		
+A Crimbo Carol, Ch. 2 (used)	CLST	0		
+A Crimbo Carol, Ch. 3 (used)	CLST	0		
+A Crimbo Carol, Ch. 4 (used)	CLST	0		
+A Crimbo Carol, Ch. 5 (used)	CLST	0		
+A Crimbo Carol, Ch. 6 (used)	CLST	0		
 A Light that Never Goes Out	MALL	1		
 a little sump'm sump'm	MALL	0		
 A muse-bouche	MALL	0		
@@ -118,6 +118,7 @@ anger blaster	CLST	0
 Angry Farmer candy	MALL	0		
 angry inch	MALL	0		
 Ankh of Badahnkadh	MALL	1		
+anniversary balsa wood socks	CLST	0		
 anniversary burlap belt	CLST	0		
 anniversary chutney sculpture	CLST	0		
 anniversary concrete fedora	CLST	0		
@@ -169,7 +170,7 @@ astral mushroom	MALL	0
 Atomic Pop	MALL	0		
 attorney's badge	MALL	1		
 Aura Libre	MALL	0		
-Autobiography Of Dynamite Superman Jones (used)	KEEP	0		
+Autobiography Of Dynamite Superman Jones (used)	CLST	0		
 autocalliope	MALL	0		
 auxiliary backbone	MALL	1		
 awful poetry journal	MALL	0		
@@ -653,7 +654,6 @@ clownskin belt	MALL	1
 clownskin buckler	MALL	0		
 clownskin harness	MALL	1		
 club necklace	TODO	0	i_eat_food trades 3k meat each	
-
 club sandwich	KEEP	0		
 clumsiness bark	MALL	0		
 cluster of hops	MALL	0		
@@ -745,11 +745,11 @@ creamsicle	MALL	0
 creepy ginger ale	MALL	0		
 creepy voodoo doll	MALL	1		
 creepy-ass club	CLST	0		
-CRIMBCO Employee Handbook (chapter 1) (used)	KEEP	0		
-CRIMBCO Employee Handbook (chapter 2) (used)	KEEP	0		
-CRIMBCO Employee Handbook (chapter 3) (used)	KEEP	0		
-CRIMBCO Employee Handbook (chapter 4) (used)	KEEP	0		
-CRIMBCO Employee Handbook (chapter 5) (used)	KEEP	0		
+CRIMBCO Employee Handbook (chapter 1) (used)	CLST	0		
+CRIMBCO Employee Handbook (chapter 2) (used)	CLST	0		
+CRIMBCO Employee Handbook (chapter 3) (used)	CLST	0		
+CRIMBCO Employee Handbook (chapter 4) (used)	CLST	0		
+CRIMBCO Employee Handbook (chapter 5) (used)	CLST	0		
 Crimbo candied pecan	MALL	0		
 Crimbo Candy Cookbook	KBAY	0	1000	Found under the Crimbo Tree
 crimbo elfling	KEEP	0		
@@ -1013,9 +1013,9 @@ electric crutch	MALL	0
 elemental paste	MALL	0		
 elephant stinger	MALL	0		
 eleven-foot pole	MALL	0		
-Elf Farm Raffle ticket	MALL	0		
+Elf Farm Raffle ticket	MALL	11		
 Elfin shortbread	MALL	0		
-Ellsbury's journal (used)	KEEP	0		
+Ellsbury's journal (used)	CLST	0		
 Elmley shades	MALL	0		
 elven hardtack	MALL	0		
 elven magi-pack	MALL	0		
@@ -1083,6 +1083,7 @@ fancy blue potion	MALL	0
 fancy but probably evil chocolate	MALL	0		
 fancy opera glasses	KEEP	0		
 fancy seashell necklace	CLST	0		
+fancy tin beer can	MALL	0		
 fancy tophat	CLST	0		
 fancy tuxedo pants	CLST	0		
 farfalle bow tie	MALL	1		
@@ -1223,6 +1224,7 @@ frilly shirt	MALL	0
 frilly skirt	AUTO	0		
 frog lip-print	MALL	0		
 Fromage Pinotage	MALL	0		
+frost flower	MALL	0		
 frost-rimed seal hide	KEEP	0		
 frosty halo	MALL	0		
 Frosty's arm	KEEP	0		
@@ -1456,10 +1458,6 @@ halfberd	MALL	0
 halibut	MALL	1		
 hamburger	MALL	0		
 hamethyst	MALL	0		
-hamethyst bracelet	KEEP	0		
-hamethyst earring	KEEP	0		
-hamethyst necklace	KEEP	0		
-hamethyst ring	KEEP	0		
 hammerus	MALL	0		
 hand grenegg	MALL	0		
 Hand in Glove	MALL	1		
@@ -1484,6 +1482,7 @@ handful of walnuts	MALL	0
 handmade hobby horse	MALL	1		
 handsomeness potion	MALL	0		
 handyman &quot;hand soap&quot;	MALL	0		
+hangman's hood	KEEP	0		
 happiness	MALL	0		
 hardened slime belt	KEEP	0		
 hardened slime hat	KEEP	0		
@@ -1532,6 +1531,7 @@ hippy bongo	MALL	0
 hippy medical kit	MALL	1		
 hippy paste	MALL	0		
 hippy protest button	MALL	1		
+Hjodor's Guide to Arctic Dalmatians (used)	CLST	0		
 HOA citation pad	KEEP	0		
 HOA regulation book	KEEP	0		
 HOA zombie eyes	KEEP	0		
@@ -1590,6 +1590,7 @@ hyperinflated seal lung	KEEP	0
 hypnodisk	KEEP	0		
 hypodermic needle	MALL	0		
 ice baby	KEEP	0		
+ice harvest	MALL	0		
 ice pick	KEEP	0		
 ice sickle	KEEP	0		
 ice skates	KEEP	0		
@@ -2206,6 +2207,7 @@ packet of dragon's teeth	KEEP	0
 packet of mayfly bait	KEEP	0		
 packet of pumpkin seeds	KEEP	0		
 packet of tofurkey gravy	MALL	0		
+packet of winter seeds	KEEP	0		
 PADL Phone	MALL	0		
 pail	MALL	0		
 Pain Dip	MALL	0		
@@ -2358,8 +2360,6 @@ popcorn	MALL	0
 popsicle stick	MALL	0		
 pork elf goodies sack	CLST	0		
 porquoise	MALL	0		
-porquoise eyebrow ring	KEEP	0		
-porquoise necklace	KEEP	0		
 porquoise ring	KEEP	0		
 portable motorcycle	MALL	1		
 possessed tomato	MALL	0		
@@ -2444,9 +2444,9 @@ ravioli hat	MALL	1
 razor-sharp can lid	MALL	0		
 really dense meat stack	CLST	0		
 really thick bandage	MALL	0		
-record of infuriating silence (used)	KEEP	0		
-record of menacing silence (used)	KEEP	0		
-record of tranquil silence (used)	KEEP	0		
+record of infuriating silence (used)	CLST	0		
+record of menacing silence (used)	CLST	0		
+record of tranquil silence (used)	CLST	0		
 recording of Benetton's Medley of Diversity	MALL	0		
 recording of Chorale of Companionship	MALL	0		
 recording of Donho's Bubbly Ballad	MALL	0		
@@ -2769,8 +2769,10 @@ Sneaky Pete's key lime	MAKE	0	Sneaky Pete's key lime pie
 Sneaky Pete's key lime pie	MALL	0		
 snifter of thoroughly aged brandy	MALL	0		
 snorkel	AUTO	0		
-snow belt	CLST	0		
+snow belly	CLST	0		
+snow berries	MALL	0		
 snow hat	CLST	0		
+snow machine	MALL	1		
 snow pants	CLST	0		
 Snow Queen Crown	MALL	0		
 Snow Suit	KEEP	0		
@@ -2783,7 +2785,7 @@ soft green echo eyedrop antidote	MALL	31
 soft green echo eyedrop antidote martini	MALL	0		
 software glitch	MALL	0	20000	
 soggy seed packet	MALL	0		
-soggy used band-aid	MALL	0		
+soggy used band-aid	MALL	5		
 soggy wofl t-shirt	MALL	0		
 solid gold bowling ball	CLST	0		
 solid gold pegleg	AUTO	0		
@@ -3008,7 +3010,7 @@ Taco Dan's Taco Stand Taco	MALL	0
 taco shell	AUTO	0		
 tainted seal's blood	KEEP	0		
 Tales from the Fireside	MALL	1		
-Tales of a Kansas Toymaker (used)	KEEP	0		
+Tales of a Kansas Toymaker (used)	CLST	0		
 Tales of Dread	KEEP	0		
 Talisman of Baio	KEEP	0		
 Talisman of Bakula	KEEP	0		
@@ -3045,10 +3047,10 @@ tequila grenade	MALL	0
 tequila with training wheels	MALL	0		
 terrible poem	MALL	0		
 that gum you like	MALL	0		
-The Art of Slapfighting (used)	KEEP	0		
+The Art of Slapfighting (used)	CLST	0		
 The Big Book of Pirate Insults	AUTO	0		
 The Bomb	MALL	0		
-The Joy of Wassailing (used)	KEEP	0		
+The Joy of Wassailing (used)	CLST	0		
 the kindest cold cut	MALL	0		
 The Legendary Beat	KEEP	0		
 The Lost Comb	MALL	0		
@@ -3057,7 +3059,7 @@ The Necbromancer's Hat	KEEP	0
 The Necbromancer's Shorts	KEEP	0		
 The Necbromancer's Stein	KEEP	0		
 The Necbromancer's Wizard Staff	KEEP	0		
-The Necbronomicon (used)	KEEP	0		
+The Necbronomicon (used)	CLST	0		
 The Sagittarian's leisure pants	KEEP	0		
 the Slug Lord's map	USE	0		
 The Snitch's Manifesto	MALL	0		
@@ -3194,7 +3196,7 @@ Uncle Hobo's gift baggy pants	KEEP	0
 Uncle Hobo's highest bough	KEEP	0		
 Uncle Hobo's stocking cap	KEEP	0		
 Uncle Jick's Brownie Mix	MALL	0		
-Uncle Romulus (used)	KEEP	0		
+Uncle Romulus (used)	CLST	0		
 Unconscious Collective Dream Jar	MALL	3		
 uncooked chorizo	MALL	0		
 underwater slingshot	MALL	0		
@@ -3267,6 +3269,7 @@ war tongs	MALL	0
 warbear auto-anvil	MALL	1		
 warbear breakfast machine	KEEP	0		
 warbear chemistry lab	MALL	1		
+warbear empathy chip (used)	CLST	0		
 warbear energy bracers	MALL	1		
 warbear exo-arm	MALL	1		
 warbear gyro	MALL	0		
@@ -3277,6 +3280,7 @@ warbear induction oven	MALL	1
 warbear jackhammer drill press	MALL	1		
 warbear laser beacon	MALL	1		
 warbear LP-ROM burner	MALL	1		
+warbear metalworking primer (used)	CLST	0		
 warbear oil pan	MALL	1		
 warbear soda machine	KEEP	0		
 warm fur	MALL	0		
@@ -3403,4 +3407,4 @@ Zombo's shoulder blade	KEEP	0
 Zombo's skull ring	KEEP	0		
 Zombo's skullcap	KEEP	0		
 Zoodriver	MALL	0		
-Zu Mannk&auml;se Dienen (used)	KEEP	0		
+Zu Mannk&auml;se Dienen (used)	CLST	0		
