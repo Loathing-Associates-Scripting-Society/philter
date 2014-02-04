@@ -478,6 +478,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		# if(malusOnly)
 			# return vprint("Asked wadbot to malus some wads.", "blue", 3);
 		# return vprint("Sent your pulverizables to wadbot.", "blue", 3);
+		return true;
 	}
 
 	boolean pulverize() {
