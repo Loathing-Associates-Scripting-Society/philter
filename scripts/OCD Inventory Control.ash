@@ -452,6 +452,12 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	}
 
 	boolean wadbot(int [item] pulverize) {
+		string wadmessage() {
+			for x from 1444 to 1449 if(OCD[to_item(x)].action == "PULV") return "wads";
+			for x from 1438 to 1443 if(OCD[to_item(x)].action == "PULV") return "nuggets";
+			return "";
+		}
+		
 		boolean malusOnly = true;
 		foreach thing, quant in pulverize
 			if(thing.is_wadable()) {
@@ -462,12 +468,16 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			vprint("Nothing to pulverize after all.", "blue", 3);
 			return false;
 		}
-		if(is_online("wadbot"))
+		if(can_interact() && is_online("smashbot")) {
+			vprint("Sending pulverizables to: Smashbot", "blue", 3);
+			kmail("smashbot", wadmessage(), 0, pulv);
+		} else if(is_online("wadbot")) {
+			vprint("Sending pulverizables to: Wadbot", "blue", 3);
 			kmail("wadbot", "", 0, pulv);
-		else return vprint("Wadbot is not currently online! Pulverizables will not be sent at this time, just in case.", "olive", -3);
-		if(malusOnly)
-			return vprint("Asked wadbot to malus some wads.", "blue", 3);
-		return vprint("Sent your pulverizables to wadbot.", "blue", 3);
+		} else return vprint("Neither Wadbot nor Smashbot are currently online! Pulverizables will not be sent at this time, just in case.", "olive", -3);
+		# if(malusOnly)
+			# return vprint("Asked wadbot to malus some wads.", "blue", 3);
+		# return vprint("Sent your pulverizables to wadbot.", "blue", 3);
 	}
 
 	boolean pulverize() {
@@ -605,7 +615,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 
 	// Break kBay into separate auctions because 100 meat needs to be sent with each.
 	boolean kBayStuff(string group, int [item] cat) {
-		return vprint("kBay is currently defunct!", "red", 3);
+		return vprint("kBay is currently defunct, but may return soon!", "red", 3);
 		/*
 		// If kBaying has been disabled, don't do this
 		if(vars["BaleOCD_kBay"] == "0") return true;
@@ -760,12 +770,13 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			foreach person in gift
 				act_cat(gift[person], "GIFT", person);
 		if(count(kbay) > 0) {
-			foreach type in kbay
+			return vprint("You have stuff to kBay. kBay is currently defunct, but may return soon!", "red", 3);
+			/*foreach type in kbay
 				act_cat(kbay[type], "KBAY", type);
 			vprint("", 3);
 			if(kBidTot > 0)  // Auctions might have been invalidated for lack of quantity
 				vprint("Minimum biding for all auctions = "+rnum(kBidTot), "blue", 3);
-			FinalSale += kBidTot;
+			FinalSale += kBidTot; */
 		}
 		
 		if(vars["BaleOCD_Stock"] == "1" && !vars["BaleOCD_Sim"].to_boolean())

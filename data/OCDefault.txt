@@ -1,4 +1,5 @@
 &quot;DRINK ME&quot; potion	MALL	10		
+&quot;honey&quot; dipper	MALL	0		
 1-ball	MALL	0		
 1337 7r0uZ0RZ	MALL	0		
 17-ball	KEEP	0		
@@ -117,7 +118,9 @@ Angelhair Culottes	KEEP	0
 anger blaster	CLST	0		
 Angry Farmer candy	MALL	0		
 angry inch	MALL	0		
+anise-flavored venom	MALL	0		
 Ankh of Badahnkadh	MALL	1		
+ankleweights	MALL	1		
 anniversary balsa wood socks	CLST	0		
 anniversary burlap belt	CLST	0		
 anniversary chutney sculpture	CLST	0		
@@ -218,6 +221,7 @@ bar skin	MALL	0
 bar whip	MALL	0		
 barbed-wire fence	MALL	0		
 bargain flash powder	MALL	0		
+baritone accordion	MALL	0		
 bark beret	CLST	0		
 bark boxers	CLST	0		
 bark bracelet	CLST	0		
@@ -522,6 +526,7 @@ calle de miel	MALL	0
 calm attention-deficit demon	KEEP	0		
 Camp Scout backpack	KEEP	0		
 Camp Scout pup tent	MALL	0		
+can of Adultwitch&trade;	MALL	0		
 can of Binarrrca	MALL	0		
 can of black paint	KEEP	0		
 can of Rain-Doh	KEEP	0		
@@ -537,13 +542,17 @@ can-shaped gelatinous cranberry sauce	MALL	0
 can-you-dig-it?	CLST	0		
 Candicaine	MALL	0		
 candied kobold	MALL	0		
+candied pecan	MALL	0		
 candied yams	MALL	0		
 Candy Alexander	MALL	0		
 candy brain	MALL	0		
 candy cane	MALL	0		
+candy carrot	MALL	0		
 candy cornucopia	KEEP	0		
 candy crayons	MALL	0		
 candy knife	MALL	0		
+candy mountain oyster	MALL	0		
+candy stick	MALL	0		
 cane-mail pants	MALL	1		
 cane-mail shirt	MALL	1		
 cannonball charrrm	MALL	0		
@@ -558,6 +567,7 @@ caret	MALL	0
 carob chunk noodles	MALL	0		
 carob chunks	MALL	0		
 carrot nose	MALL	3		
+carrot-on-a-stick	MALL	1		
 carton of rotten eggs	MALL	0		
 cartoon heart	MALL	0		
 casino pass	AUTO	1		
@@ -609,6 +619,8 @@ chloroform rag	MALL	0
 chlorophyll paste	MALL	0		
 chocolate filthy lucre	MALL	0		
 chocolate frosted sugar bomb	MALL	0		
+chocolate rabbit's foot	MALL	0		
+chocolate-stained collar	MALL	1		
 chopsticks	MALL	0		
 chorizo taco	MALL	0		
 chrome crossbow	MALL	0		
@@ -1136,6 +1148,7 @@ fishy paste	MALL	0
 fishy pipe	KEEP	0		
 fishy wand	MALL	1		
 fistful of ashes	KEEP	0		
+Five Second Energy&trade;	MALL	0		
 fixed-gear bicycle	MALL	1		
 fizzy potion	MALL	0		
 Flaming Caipiranha	MALL	0		
@@ -1327,6 +1340,7 @@ glass of gnat milk	MALL	0
 glass of goat's milk	MALL	0		
 glass of warm milk	MALL	0		
 glass of warm water	MALL	0		
+glass slipper	KEEP	0		
 glimmering roc feather	MALL	0		
 glistening fish meat	MALL	0		
 glittery mascara	AUTO	0		
@@ -1415,6 +1429,7 @@ green-frosted astral cupcake	MALL	0
 gremlin juice	MALL	0		
 gremlin mutagen	MALL	0		
 grey cube	MALL	0		
+grim fairy tale	MALL	3		
 grisly shell fragment	MALL	0		
 grisly shield	KEEP	0		
 grog	MALL	0		
@@ -1436,12 +1451,14 @@ guard turtle collar	MALL	1
 guard turtle shell	MALL	0		
 guitar pick	MALL	1		
 gummi bowtie	KEEP	0		
+gummi fang	MALL	0		
 Gummy Brains	MALL	0		
 gun cleaning kit	MALL	0		
 gunpowder burrito	MALL	0		
 guts necklace	MALL	0		
 guy made of bee pollen	MALL	0		
 gym membership card	MALL	0		
+gym shorts	MALL	1		
 haggis socks	MALL	0		
 haggis-infused soap	MALL	0		
 haggis-wrapped haggis-stuffed haggis	MALL	0		
@@ -1487,6 +1504,8 @@ happiness	MALL	0
 hardened slime belt	KEEP	0		
 hardened slime hat	KEEP	0		
 hardened slime pants	KEEP	0		
+hare brush	MALL	0		
+hare pin	KEEP	0		
 harem girl t-shirt	MALL	0		
 Hatorade	AUTO	0		
 Haymaker	MALL	0		
@@ -1518,6 +1537,7 @@ hermit permit	AUTO	1
 Herring Daiquiri	MALL	0		
 Herring Wallbanger	MALL	0		
 Herringtini	MALL	0		
+hi-octane carrot juice	MALL	0		
 hideous egg	MALL	0		
 high-calorie sugar substitute	MALL	0		
 high-pressure seltzer bottle	MALL	1		
@@ -1590,6 +1610,7 @@ hyperinflated seal lung	KEEP	0
 hypnodisk	KEEP	0		
 hypodermic needle	MALL	0		
 ice baby	KEEP	0		
+ice cream sandwich	MALL	0		
 ice harvest	MALL	0		
 ice pick	KEEP	0		
 ice sickle	KEEP	0		
@@ -1664,6 +1685,7 @@ Jarlsberg's pan	KEEP	0
 Jarlsberg's pan (Cosmic portal mode)	KEEP	0		
 Jeans of Loathing	KEEP	0		
 Jekyllin hide belt	KEEP	0		
+Jerks' Health&trade; Magazine	MALL	0		
 jewel-eyed wizard hat	KEEP	0		
 jewelry-making pliers	AUTO	1		
 jigsaw blade	MALL	0		
@@ -1752,10 +1774,13 @@ leechknife	MALL	0
 left bear arm	KEEP	0		
 left half of a heart necklace	KEEP	0		
 left-handed melodica	KEEP	0		
+leftover canap&eacute;s	MALL	0		
 leftover Crimbo rations	KEEP	0		
 leftovers of indeterminate origin	MALL	0		
 lemon	AUTO	0		
 lemon meringue pie	MALL	0		
+lemonhead caviar	MALL	0		
+lemony scales	MALL	0		
 length of old fuse	MALL	0		
 Lens of Hatred	KEEP	0		
 Lens of Violence	KEEP	0		
@@ -1769,6 +1794,7 @@ Libram of Candy Heart Summoning	KEEP	0
 Libram of Divine Favors	KEEP	0		
 Libram of Love Songs	KEEP	0		
 library card	MALL	0		
+licorice whip	MALL	1		
 lihc eye	MALL	0		
 lihc face	MALL	0		
 limburger biker boots	MALL	0		
@@ -1779,6 +1805,7 @@ linoleum crossbow	MALL	0
 linoleum ore	MALL	0		
 linoleum staff	MALL	0		
 linoleum sword	MALL	0		
+lint	MALL	0		
 lion oil	MALL	0		
 little box of fireworks	KEEP	0		
 little laminated card	AUTO	0		
@@ -1993,6 +2020,7 @@ Microplushie: Hobomosome	KBAY	0	200	Microplushies
 Microplushie: Otakulone	KBAY	0	200	Microplushies
 Microplushie: Raverdrine	KBAY	0	200	Microplushies
 Microplushie: Sororitrate	KBAY	0	200	Microplushies
+mid-level medieval mead	MALL	0		
 midriff scrubs	MALL	0		
 milk of magnesium	MALL	2		
 Milk Studs	MALL	0		
@@ -2058,6 +2086,7 @@ Mr. Mediocrebar	MALL	0
 Ms. Accessory	KEEP	0		
 muddy pirate hat	MALL	0		
 muddy skirt	MALL	1		
+mulberry	MALL	0		
 mullet wig	MALL	0		
 mummy wrapping	MALL	0		
 munchies pill	MALL	0		
@@ -2067,6 +2096,7 @@ mushroom fermenting solution	MALL	0
 musty moccasins	KEEP	0		
 mysterious chemical residue	MALL	0		
 mysterious silver lapel pin	KEEP	0		
+nachos of the night	MALL	0		
 nail file	MALL	0		
 nanorhino credit card	MALL	1		
 Nardz energy beverage	MALL	0		
@@ -2115,6 +2145,7 @@ ocarina of space	MALL	0
 occult jelly donut	MALL	0		
 ocean motion	MALL	0		
 octopus's spade	MALL	2		
+odd silver coin	KEEP	0		
 off-white polka-dot oyster egg	MALL	0		
 Ogres and Oubliettes&trade; module	MALL	0		
 Oh, the Humanitini	MALL	0		
@@ -2187,6 +2218,7 @@ Oscus's pelt	KEEP	0
 Osk'r Chow	MALL	0		
 Ouija Board, Ouija Board	MALL	1		
 out-of-tune biwa	MALL	0		
+Outer Wolf&trade; cologne	MALL	0		
 oven mitts	MALL	0		
 over-the-shoulder Folder Holder	KEEP	0		
 overcookie	MALL	0		
@@ -2300,6 +2332,7 @@ pink pinkslip slip	MALL	0
 pink pony	MALL	0		
 pink-belly slapper	MALL	0		
 pink-frosted astral cupcake	MALL	0		
+pint of sweat	KEEP	0		
 pipe wrench	MALL	0		
 piping organ pie	MALL	0		
 pirate cream pie	MALL	0		
@@ -2310,6 +2343,7 @@ pixel energy tank	MALL	3
 pixel grappling hook	MALL	1		
 pixel morning star	KEEP	0		
 pixel power cell	MALL	0		
+pixie axie	MALL	0		
 Plague of Locusts	MALL	0		
 plastic bib	MALL	1		
 plastic guitar	MALL	0		
@@ -2326,6 +2360,7 @@ plexiglass pocketwatch	KEEP	0
 PlexiPips	MALL	0		
 plot hole	MALL	0		
 plum	AUTO	0		
+plumber's lunch	MALL	0		
 plump juicy grub	MALL	0		
 Pocket Square of Loathing	KEEP	0		
 pocket theremin	MALL	0		
@@ -2428,6 +2463,7 @@ quasi-ethereal macaroni fragments	CLST	0
 Queue Du Coq cocktailcrafting kit	AUTO	0		
 Quiets-Your-Steps	KEEP	0		
 quirky accordion	MALL	0		
+R&uuml;mpelstiltz	MALL	0		
 radium-flavored potato chips	KEEP	0		
 raffle ticket	KEEP	0		
 rainbow crossbow	MALL	2		
@@ -2700,6 +2736,7 @@ skeleton	MALL	0
 skeleton bone	MAKE	0	skeleton key	true
 skeleton key	MALL	0		
 skeleton skis	MALL	1		
+Sketcherz&trade;	MALL	0		
 skewer	AUTO	0		
 skewered cherry	KEEP	0		
 skewered jumbo olive	KEEP	0		
@@ -2746,6 +2783,7 @@ slug of rum	MALL	0
 slug of shochu	MALL	0		
 slug of vodka	MALL	0		
 small box	MALL	0		
+small gummi fin	MALL	0		
 small laminated card	AUTO	0		
 small leather glove	MALL	0		
 small slimy cyst	MALL	0		
@@ -2794,6 +2832,7 @@ sonar-in-a-biscuit	MALL	0
 soul knife	MALL	1		
 soul monocle	KEEP	0		
 soup turtle	MALL	0		
+sour powder	MALL	0		
 souvenir ski t-shirt	MALL	0		
 Sp'n-Zor's Grimoire of &quot;Tasteful&quot; Gifts	KEEP	0		
 space marine flash grenade	MALL	0		
@@ -2992,10 +3031,13 @@ suspicious-looking fedora	KEEP	0
 Swabbie&trade; swab	MALL	0		
 swamp lolly	MALL	0		
 swashbuckling pants	MALL	0		
+sweat socks	MALL	0		
+sweatband	MALL	1		
 sweet ninja sword	AUTO	0		
 sweet rims	MALL	0		
 Sweet Sword	MALL	0		
 swirly potion	MALL	0		
+Swizzler	MALL	0		
 sword behind inappropriate prepositions	MALL	1		
 Sword of Dark Omens	KEEP	0		
 Sword of Procedural Generation	KEEP	0		
@@ -3282,6 +3324,7 @@ warbear laser beacon	MALL	1
 warbear LP-ROM burner	MALL	1		
 warbear metalworking primer (used)	CLST	0		
 warbear oil pan	MALL	1		
+warbear procedural hilarity drone	MALL	0		
 warbear soda machine	KEEP	0		
 warm fur	MALL	0		
 warm mushroom	MALL	0		
@@ -3342,6 +3385,8 @@ Winifred's whistle	MALL	0
 Wint-O-Fresh mint	MALL	0		
 wintergreen-flavored potato chips	KEEP	0		
 witch wart	MALL	0		
+witch's bread	MALL	0		
+witch's brew	MALL	0		
 witty rapier	MALL	2		
 wizard action figure	KEEP	0		
 wolf mask	MALL	0		
