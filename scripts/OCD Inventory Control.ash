@@ -54,6 +54,7 @@ boolean is_OCDable(item it) {
 	case $item[fish-oil smoke bomb]:
 	case $item[vial of squid ink]:
 	case $item[potion of fishy speed]:
+	case $item[blessed large box]:
 		return true;
 	case $item[DNOTC Box]: // Let these hide in your inventory until it is time for them to strike!
 		if(substring(today_to_string(), 4, 6) == "12" && substring(today_to_string(), 6, 8).to_int() < 25) return false;
