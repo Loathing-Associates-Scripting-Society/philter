@@ -772,7 +772,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			foreach person in gift
 				act_cat(gift[person], "GIFT", person);
 		if(count(kbay) > 0) {
-			return vprint("You have stuff to kBay. kBay is currently defunct, but may return soon!", "red", 3);
+			vprint("You have stuff to kBay. kBay is currently defunct, but may return soon!", "red", 3);
 			/*foreach type in kbay
 				act_cat(kbay[type], "KBAY", type);
 			vprint("", 3);
