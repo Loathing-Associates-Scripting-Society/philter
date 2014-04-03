@@ -881,10 +881,24 @@ void main() {
 	load_OCD();
 	set_craftable();
 	set_cats();
-	
-	// write_page()
 	fields = form_fields();
 	success = count(fields) > 0;
+	# foreach x,y in fields print(x + " - "+ y); print("==============================");
+	// If the script has already been run, save this information
+	if(success) {
+		item doodad;
+		string doodadNo;
+		foreach key in fields
+			if(key.char_at(0) == "_") {
+				doodadNo = key.substring(1);
+				doodad = doodadNo.to_item();
+				OCD[doodad].action = fields[key];
+				OCD[doodad].q = fields["q_"+doodadNo].to_int();
+				OCD[doodad].info = fields["i_"+doodadNo];
+			}
+	}
+	
+	// write_page()
 	writeln("<html><head>");
 	styles();
 	writeln("</head><body><form name='relayform' method='POST' action=''>");
