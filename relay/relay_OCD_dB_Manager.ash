@@ -28,7 +28,6 @@ record stock_item {
 	int q;
 };
 stock_item[int] newstock1;
-stock_item[int] newstock2;
 boolean [item] delstock;
 
 boolean [item] makes;
@@ -49,6 +48,8 @@ boolean [item] keeps;
 boolean [item] is_craftable;
 boolean [item] is_untinkerable;
 
+buffer page;
+
 void version_update() {
 	string current_ver = get_property("_version_BaleOCDrelay");
 	// My rendition of zarqon's version checker. If it is unable to load version info, it will try again 20% of the time.
@@ -60,7 +61,7 @@ void version_update() {
 		set_property("_version_BaleOCDrelay", current_ver);
 	}
 	if(current_ver.to_float() > thisver.to_float()) {
-		writeln("<p style='margin-bottom:0; font-size:140%; font-weight:bold; font-family:Arial,Helvetica,sans-serif'><a class='red' href='"+thread+"' target='_blank'>New version of "+scriptname+": "+current_ver+"</a></p>");
+		page.append("<p style='margin-bottom:0; font-size:140%; font-weight:bold; font-family:Arial,Helvetica,sans-serif'><a class='red' href='"+thread+"' target='_blank'>New version of "+scriptname+": "+current_ver+"</a></p>");
 		title = "Visit <a class='version' href='"+thread+"' target='_blank'>this thread</a> to update "+scriptname+".";
 	} else if(current_ver == "0")
 		title += " &nbsp; &#x25E6; &nbsp; &#x25E6; &nbsp; &#x25E6; &nbsp; Current version unknown.";
@@ -73,37 +74,37 @@ boolean success;	// form successfully submitted
 
 string write_radio(string ov, string name, string label, string value) {
 	if(fields contains name) ov = fields[name];
-	if(label != "") write("<label>");
-	write("<input type='radio' name='" + name + "' value='" + entity_encode(value) + "'");
-	if(value == ov) write(" checked");
-	write(">");
-	if(label != "" ) write(label+ "</label>");
+	if(label != "") page.append("<label>");
+	page.append("<input type='radio' name='" + name + "' value='" + entity_encode(value) + "'");
+	if(value == ov) page.append(" checked");
+	page.append(">");
+	if(label != "" ) page.append(label+ "</label>");
 	return ov;
 }
 
 string write_select(string ov, string name, string label) {
-	write("<label>" +label);
+	page.append("<label>" +label);
 	if(fields contains name) ov = fields[name];
-	write("<select style='width:112;' name='" +name);
-	if(label == "") write("' id='" +name);
-	write("'>");
+	page.append("<select style='width:112;' name='" +name);
+	if(label == "") page.append("' id='" +name);
+	page.append("'>");
 	return ov;
 }
 
 void finish_select() {
-	writeln("</select></label>");
+	page.append("</select></label>");
 }
 
 void write_option(string ov, string label, string value) {
-	write("<option value='" + entity_encode(value)+ "'");
-	if(value == ov) write(" selected");
-	writeln(">" +label+ "</option>");
+	page.append("<option value='" + entity_encode(value)+ "'");
+	if(value == ov) page.append(" selected");
+	page.append(">" +label+ "</option>");
 }
 
 void write_option(string ov, string label, string value, string style) {
-	write("<option style='"+style+"' value='" + entity_encode(value)+ "'");
-	if(value == ov) write(" selected");
-	writeln(">" +label+ "</option>");
+	page.append("<option style='"+style+"' value='" + entity_encode(value)+ "'");
+	if(value == ov) page.append(" selected");
+	page.append(">" +label+ "</option>");
 }
 
 string intvalidator(string name) {
@@ -126,7 +127,7 @@ string itemvalidator(string name) {
 
 string write_field(string ov, string name, string label, int size, string validator) {
 	if(label != "" )
-		write("<label>"+label);
+		page.append("<label>"+label);
 	string err;
 	string rv = ov;
 	if(fields contains name) {
@@ -134,20 +135,20 @@ string write_field(string ov, string name, string label, int size, string valida
 			err = call string validator(name);
 		rv = fields[name];
 	}
-	write("<input type='text' name=\""+ name);
+	page.append("<input type='text' name=\""+ name);
 	if(label == "")
-		write("\" id=\""+ name);
-	write("\" value=\""+ entity_encode(rv)+ "\"");
+		page.append("\" id=\""+ name);
+	page.append("\" value=\""+ entity_encode(rv)+ "\"");
 	if(size != 0)
-		write("size="+size);
-	write(">");
+		page.append("size="+size);
+	page.append(">");
 	if(err != "") {
 		success = false;
 		rv = ov;
-		write("<br /><font color='red'>"+ err+ "</font>");
+		page.append("<br /><font color='red'>"+ err+ "</font>");
 	}
 	if(label != "" )
-		writeln("</label>");
+		page.append("</label>");
 	return rv;
 }
 int write_field(int ov, string name) {
@@ -161,13 +162,13 @@ item write_field(item ov, string name, int size) {
 }
 
 boolean write_check(boolean ov, string name, string label) {
-	if(label != "" ) write("<label>"+label);
+	if(label != "" ) page.append("<label>"+label);
 	if(fields contains name && fields[name] != "") ov = true;
 	else if(count(fields) > 0) ov = false;
-	write("<input type='checkbox' name='" + name + "'");
-	if(ov) write(" checked");
-	write(">");
-	if(label != "" ) write("</label>");
+	page.append("<input type='checkbox' name='" + name + "'");
+	if(ov) page.append(" checked");
+	page.append(">");
+	if(label != "" ) page.append("</label>");
 	return ov;
 }
 string write_check(string ov, string name, string label) {
@@ -180,9 +181,9 @@ boolean test_button(string name) {
 }
 
 boolean write_button(string name, string label) {
-	write("<input type='submit' name='");
-	write(name+ "' value='");
-	write(label+ "'>");
+	page.append("<input type='submit' name='");
+	page.append(name+ "' value='");
+	page.append(label+ "'>");
 	return test_button(name);
 }
 ////////// End of jasonharper's htmlform.ash
@@ -190,26 +191,26 @@ boolean write_button(string name, string label) {
 // This forgets all form changes if the user switches tabs without saving.
 string write_hidden(string ov, string name) {
 	if(ov != "false")
-		write("<input type='hidden' name='"+ name+ "' value='"+entity_encode(ov)+ "'>");
+		page.append("<input type='hidden' name='"+ name+ "' value='"+entity_encode(ov)+ "'>");
 	return ov;
 }
 
 void styles() {
-	writeln("<script language=Javascript>"+
+	page.append("<script language=Javascript>"+
 	"function descitem(desc) {"+
 	"	newwindow=window.open('/desc_item.php?whichitem='+desc,'name','height=200,width=214');"+
 	"		if (window.focus) {newwindow.focus()}"+
 	"}"+
 	"</script>");
 	
-	writeln("<script language=Javascript>"+
+	page.append("<script language=Javascript>"+
 	"function wikiitem(desc) {"+
 	"	newwindow=window.open('http://kol.coldfront.net/thekolwiki/index.php/Special:Search?search=' + desc + '&go=Go');"+
 	"		if (window.focus) {newwindow.focus()}"+
 	"}"+
 	"</script>");
 
-	writeln("<style type='text/css'>"+
+	page.append("<style type='text/css'>"+
 	"th {background-color:blue; color:white; font-family:Arial,Helvetica,sans-serif;}"+
 	
 	"fieldset {background-color:white; margin-top: 3px; padding-top:10px; padding-bottom:15px;}"+
@@ -412,21 +413,21 @@ int curr_items() {
 }
 
 void add_items() {
-	writeln("<fieldset><legend>Add Actions for these Items</legend>"); // write_box()
+	page.append("<fieldset><legend>Add Actions for these Items</legend>"); // write_box()
 
 	int AddQ;
 	foreach key in OCDefault
 		if(!(OCD contains key) && item_amount(key) > 0) AddQ += 1; #{AddQ += 1; print(key);}
 	int curr_items = curr_items();
 	if(curr_items > 0 && AddQ > 0) {
-		write("<p>");
+		page.append("<p>");
 		if(write_button("defaultdata", "Add default")) {
 			foreach key in OCDefault
 				if(!(OCD contains key) && item_amount(key) > 0) OCD[key] = OCDefault[key];
 			save_ocd();
 			curr_items = curr_items();
 		}
-		write(" Add default information for "+AddQ+" common item"+(AddQ == 1? " that is": "s that are")+" listed below.</p>");
+		page.append(" Add default information for "+AddQ+" common item"+(AddQ == 1? " that is": "s that are")+" listed below.</p>");
 	}
 
 	boolean table_started = false;
@@ -434,26 +435,26 @@ void add_items() {
 		// Quest items are the only items that cannot be displayed, so check for is_OCDable()
 		if(is_OCDable(doodad) && !(OCD contains doodad && OCD[doodad].action != "UNKN")) {
 			if(!table_started) {
-				writeln("<table border=0 cellpadding=1><tr><td>");
+				page.append("<table border=0 cellpadding=1><tr><td>");
 				write_button("mall", "Mall All");
-				write("</td><td>Categorize all mallable items to be sold in the mall</td></tr><tr><td>");
+				page.append("</td><td>Categorize all mallable items to be sold in the mall</td></tr><tr><td>");
 				write_button("closet", "Closet All");
-				write("</td><td>Categorize all uncategorized items to be stored in your closet</td></tr><tr><td>");
+				page.append("</td><td>Categorize all uncategorized items to be stored in your closet</td></tr><tr><td>");
 				write_button("keep", "Keep All");
-				write("</td><td>Categorize all uncategorized items to be kept</td></tr></table>");
+				page.append("</td><td>Categorize all uncategorized items to be kept</td></tr></table>");
 				
-				writeln("<table border=0 cellpadding=1>");
-				writeln("<tr><th colspan=2>Item</th><th>Have</th>");
+				page.append("<table border=0 cellpadding=1>");
+				page.append("<tr><th colspan=2>Item</th><th>Have</th>");
 				if(count(stock) > 0 && vars["BaleOCD_Stock"].to_int() > 0)
-					write("<th>Stock</th>");
-				write("<th>Keep</th><th>Action</th><th>... information</th></tr>");
+					page.append("<th>Stock</th>");
+				page.append("<th>Keep</th><th>Action</th><th>... information</th></tr>");
 				table_started = true;
 			}
-			write("<tr valign=center class='item'");
+			page.append("<tr valign=center class='item'");
 			if(count(stock) > 0 && vars["BaleOCD_Stock"].to_int() > 0 
 			  && stock contains doodad && stock[doodad].q >= item_amount(doodad))
-				write(" style='background-color:E3E3E3'");
-			write("><td>"+imagedesc(doodad)+"</a></td>");
+				page.append(" style='background-color:E3E3E3'");
+			page.append("><td>"+imagedesc(doodad)+"</a></td>");
 			int q = 0;
 			string act = "UNKN";
 			string info = "";
@@ -462,37 +463,37 @@ void add_items() {
 				act = OCD[doodad].action;
 				info = OCD[doodad].info;
 			}
-			write("<td align=center>"+item_amount(doodad)+"</td><td align=center>");
+			page.append("<td align=center>"+item_amount(doodad)+"</td><td align=center>");
 			if(count(stock) > 0 && vars["BaleOCD_Stock"].to_int() > 0) {
-				if(stock contains doodad) write(stock[doodad].q);
-				else write("0");
-				write("</td><td align=center>");
+				if(stock contains doodad) page.append(stock[doodad].q);
+				else page.append("0");
+				page.append("</td><td align=center>");
 			}
 			OCD[doodad].q = write_field(q, "q_"+to_int(doodad));
-			write("</td><td>");
+			page.append("</td><td>");
 			OCD[doodad].action = action_drop(act, doodad);
-			write("</td><td>");
+			page.append("</td><td>");
 			OCD[doodad].info = write_field(info, "i_"+to_int(doodad), 14);
-			write("</td></tr>");
+			page.append("</td></tr>");
 		}
 	if(table_started)
-		writeln("</table>");
+		page.append("</table>");
 	else
-		writeln("<p style='text-align:center; font-size:110%; font-weight:bold; color:#0000BB;'>Your entire inventory has already been categorized.<br />Nothing to see here, please move along.</p>");
+		page.append("<p style='text-align:center; font-size:110%; font-weight:bold; color:#0000BB;'>Your entire inventory has already been categorized.<br />Nothing to see here, please move along.</p>");
 
-	writeln("</fieldset>"); 	// finish_box()
+	page.append("</fieldset>"); 	// finish_box()
 }
 
 void edit_items(string act) {
 	string fieldset;
 	void this_tab(boolean [item] cat) {
-		write("<fieldset><legend>Manage "+fieldset+"</legend>");
+		page.append("<fieldset><legend>Manage "+fieldset+"</legend>");
 		if(act == "kBay") {
-			writeln("<table border=0 cellpadding=1><tr><td>");
+			page.append("<table border=0 cellpadding=1><tr><td>");
 			write_button("kbayReset", "Reset");
-			write("</td><td>Reset all auction bidding to default values!</td>");
+			page.append("</td><td>Reset all auction bidding to default values!</td>");
 			if(test_button("kbayReset")) {
-				write("<td><span style=\"color:blue\">&nbsp;Reset!</span></td>");
+				page.append("<td><span style=\"color:blue\">&nbsp;Reset!</span></td>");
 				foreach doodad in cat {
 					OCD[doodad].message = (kBayList contains doodad)? kBayList[doodad].type: "Buy my stuff";
 					#fields["m_"+doodad.to_int()] = OCD[doodad].message;
@@ -500,74 +501,74 @@ void edit_items(string act) {
 				}
 				map_to_file(OCD, "OCDdata_"+vars["BaleOCD_DataFile"]+".txt");
 			}
-			write("</tr></table>");
-			write("<table class='zlib' border=0 cellpadding=1><tr><td align=right>kBay Status: </td><td>");
+			page.append("</tr></table>");
+			page.append("<table class='zlib' border=0 cellpadding=1><tr><td align=right>kBay Status: </td><td>");
 			if(vars["BaleOCD_kBay"] != "0" && vars["BaleOCD_kBay"] != "1") vars["BaleOCD_kBay"] = 1;
 			vars["BaleOCD_kBay"] = write_radio(vars["BaleOCD_kBay"], "EnableKBay", "Send Items to kBay,", 1);
 			write_radio(vars["BaleOCD_kBay"], "EnableKBay", "Hold kBay items in inventory", 0);
-			write("</td></tr></table>");
+			page.append("</td></tr></table>");
 		}
-		writeln("<table border=0 cellpadding=1>");
-		write("<tr><th colspan=2>Item</th>");
+		page.append("<table border=0 cellpadding=1>");
+		page.append("<tr><th colspan=2>Item</th>");
 		if(act == "Keep")
-			write("<th>Have</th>");
-		write("<th>Keep</th><th>Action</th>");
+			page.append("<th>Have</th>");
+		page.append("<th>Keep</th><th>Action</th>");
 		switch(act) {
 		case "Mall":
-			write("<th>Minimum Sale Price</th>");
+			page.append("<th>Minimum Sale Price</th>");
 			break;
 		case "Crafting":
-			write("<th>Craft into a</th><th>No purchase</th>");
+			page.append("<th>Craft into a</th><th>No purchase</th>");
 			break;
 		case "Reminders":
-			write("<th>To do...</th>");
+			page.append("<th>To do...</th>");
 			break;
 		case "Gift List":
-			write("<th>Send to</th><th>Message with Gift</th>");
+			page.append("<th>Send to</th><th>Message with Gift</th>");
 			break;
 		case "kBay":
-			write("<th>Minimum Bid</th>");
+			page.append("<th>Minimum Bid</th>");
 			break;
 		}
-		writeln("</tr>");
+		page.append("</tr>");
 		foreach doodad in cat {
-			write("<tr valign=center class='item'><td>"+descPlusQ(doodad) +"</a></td>");
+			page.append("<tr valign=center class='item'><td>"+descPlusQ(doodad) +"</a></td>");
 			if(act == "Keep")
-				write("<td align=center>"+item_amount(doodad)+"</td>");
-			write("<td>");
+				page.append("<td align=center>"+item_amount(doodad)+"</td>");
+			page.append("<td>");
 			OCD[doodad].q = write_field(OCD[doodad].q, "q_"+to_int(doodad));
-			write("</td><td>");
+			page.append("</td><td>");
 			OCD[doodad].action = action_drop(OCD[doodad].action, doodad);
 			switch(act) {
 			case "Mall":
-				write("</td><td>");
+				page.append("</td><td>");
 				OCD[doodad].info = write_field((is_integer(OCD[doodad].info) && OCD[doodad].info != "0")? OCD[doodad].info: "", "i_"+to_int(doodad), 20);
 				break;
 			case "Crafting":
 			case "Reminders":
-				write("</td><td>");
+				page.append("</td><td>");
 				OCD[doodad].info = write_field(OCD[doodad].info, "i_"+to_int(doodad), 25);
 				if(act == "Crafting") {
-					write("</td><td align=center>");
+					page.append("</td><td align=center>");
 					OCD[doodad].message = write_check(OCD[doodad].message, "m_"+doodad.to_int(),"");
 				}
 				break;
 			case "Gift List":
-				write("</td><td>");
+				page.append("</td><td>");
 				OCD[doodad].info = write_field(OCD[doodad].info, "i_"+to_int(doodad), 10);
-				write("</td><td>");
+				page.append("</td><td>");
 				OCD[doodad].message = write_field(OCD[doodad].message, "m_"+to_int(doodad), 25);
 				break;
 			case "kBay":
-				write("</td><td>");
+				page.append("</td><td>");
 				#OCD[doodad].message = write_hidden(OCD[doodad].message, "m_"+doodad.to_int());
 				OCD[doodad].info = write_field(OCD[doodad].info, "i_"+to_int(doodad), "", 12, "intvalidator");
 				break;
 			}
-			writeln("</td></tr>");
+			page.append("</td></tr>");
 		}
-		writeln("</table>");
-		writeln("</fieldset>"); 	// finish_box()
+		page.append("</table>");
+		page.append("</fieldset>"); 	// finish_box()
 	}
 	
 	switch(act) {
@@ -629,25 +630,25 @@ void edit_items(string act) {
 void stock_items() {
 	item [int] ostock;
 	
-	writeln("<fieldset><legend>Items to keep in stock</legend>"); // write_box()
+	page.append("<fieldset><legend>Items to keep in stock</legend>"); // write_box()
 	
-	write("What to do with items on this list?<ul class='stock'><li>");
+	page.append("What to do with items on this list?<ul class='stock'><li>");
 	vars["BaleOCD_Stock"] = write_radio(vars["BaleOCD_Stock"], "stock", " Acquire these items for future use", 1);
-	write("</li><li>");
+	page.append("</li><li>");
 	write_radio(vars["BaleOCD_Stock"], "stock", " Keep them... if they <i>happen</i> to be in inventory", 2);
-	write("</li><li>");
+	page.append("</li><li>");
 	write_radio(vars["BaleOCD_Stock"], "stock", " Ignore this stock list", 0);
-	writeln("</li></ul>");
+	page.append("</li></ul>");
 	
-	writeln("<table border=0 cellpadding=1><tr><td align=right>");
+	page.append("<table border=0 cellpadding=1><tr><td align=right>");
 	if(write_button("stocknew", " New ")) {
 		clear(stock);
 		if(!file_to_map("OCDstock.txt", stock) || count(stock) == 0)
 			print("Error loading default stock data.","red");
 	}
-	write("</td><td>Create a default stock list for softcore pulls!</td></tr>");
+	page.append("</td><td>Create a default stock list for softcore pulls!</td></tr>");
 	if(count(stock) > 0) {
-		write("<tr><td align=right>");
+		page.append("<tr><td align=right>");
 		if(write_button("stockdel", "Delete")) {
 			clear(stock);
 			foreach key in fields
@@ -655,47 +656,47 @@ void stock_items() {
 					remove fields[key];
 			map_to_file(stock, "OCDstock_"+vars["BaleOCD_StockFile"]+".txt");
 		}
-		write("</td><td>Delete <i>all</i> entries in the following list!</td></tr>");
+		page.append("</td><td>Delete <i>all</i> entries in the following list!</td></tr>");
 	}
-	write("</table><br />");
+	page.append("</table><br />");
 				
 	if(count(stock) > 0) {
-		writeln("<table border=0 cellpadding=1>");
-		writeln("<tr><th>Purpose</th><th colspan=2>Item</th><th>Have</th><th>Stock</th><th>Delete?</th></tr>");
+		page.append("<table border=0 cellpadding=1>");
+		page.append("<tr><th>Purpose</th><th colspan=2>Item</th><th>Have</th><th>Stock</th><th>Delete?</th></tr>");
 		foreach doodad in stock
 			ostock[count(ostock)] = doodad;
 		sort ostock by stock[value].type;
 		string lasttype = stock[ostock[0]].type;
 		foreach i, doodad in ostock {
 			if(lasttype != stock[doodad].type) {
-				write("<tr><td>&nbsp;</td></tr>");
+				page.append("<tr><td>&nbsp;</td></tr>");
 				lasttype = stock[doodad].type;
 			}
-			write("<tr valign=center class='item'><td>");
+			page.append("<tr valign=center class='item'><td>");
 			stock[doodad].type = write_field(stock[doodad].type, "stock_t_"+doodad.to_int(), 15);
-			write("</td><td>&nbsp;"+imagedesc(doodad) +"</a></td><td align=center>"+full_amount(doodad)+"</td><td align=center>");
+			page.append("</td><td>&nbsp;"+imagedesc(doodad) +"</a></td><td align=center>"+full_amount(doodad)+"</td><td align=center>");
 			stock[doodad].q = write_field(stock[doodad].q, "stock_q_"+doodad.to_int());
-			write("</td><td align=center>");
+			page.append("</td><td align=center>");
 			delstock[doodad] = write_check(delstock[doodad], "stock_del_"+doodad.to_int(), "");
-			writeln("</td></tr>");
+			page.append("</td></tr>");
 		}
-		writeln("</table>");
-	} else writeln("<p style='text-align:center; font-size:110%; font-weight:bold; color:#0000BB;'>Your stock list is completely empty!<br />Click the above button to create a list, or you can add items below.<br />When done, click \"Save All\"</p>");
-	writeln("<p></p>");
-	writeln("<table border=0 cellpadding=1>");
-	writeln("<tr><th>Add New Item</th><th>Acquire</th><th>Purpose</th></tr>");
+		page.append("</table>");
+	} else page.append("<p style='text-align:center; font-size:110%; font-weight:bold; color:#0000BB;'>Your stock list is completely empty!<br />Click the above button to create a list, or you can add items below.<br />When done, click \"Save All\"</p>");
+	page.append("<p></p>");
+	page.append("<table border=0 cellpadding=1>");
+	page.append("<tr><th>Add New Item</th><th>Acquire</th><th>Purpose</th></tr>");
 	for i from 1 to 11 {
-		write("<tr><td valign=top>");
+		page.append("<tr><td valign=top>");
 		newstock1[i].doodad = write_field(newstock1[i].doodad, "newd_"+i, 25);
-		write("</td><td align=center valign=top>");
+		page.append("</td><td align=center valign=top>");
 		newstock1[i].q = write_field(newstock1[i].q, "newq_"+i);
-		write("</td><td valign=top>");
+		page.append("</td><td valign=top>");
 		newstock1[i].type = write_field(newstock1[i].type, "newt_"+i, 15);
-		write("</td></tr>");
+		page.append("</td></tr>");
 	}
-	writeln("</table>");
+	page.append("</table>");
 
-	writeln("</fieldset>"); 	// finish_box()
+	page.append("</fieldset>"); 	// finish_box()
 }
 
 void set_cats() {
@@ -746,43 +747,43 @@ void set_cats() {
 }
 
 void zlib_vars() {
-	writeln("<fieldset><legend>Configure Character Settings</legend>"); // write_box()
+	page.append("<fieldset><legend>Configure Character Settings</legend>"); // write_box()
 	
-	write("<table class='zlib' border=0 cellpadding=1>");
-	write("<tr><td align=right>Empty Closet First: </td><td>");
+	page.append("<table class='zlib' border=0 cellpadding=1>");
+	page.append("<tr><td align=right>Empty Closet First: </td><td>");
 	if(vars["BaleOCD_EmptyCloset"] != "-1" && vars["BaleOCD_EmptyCloset"] != "0") vars["BaleOCD_EmptyCloset"] = 0;
 	vars["BaleOCD_EmptyCloset"] = write_radio(vars["BaleOCD_EmptyCloset"], "EmptyCloset", "Never,", -1);
 	write_radio(vars["BaleOCD_EmptyCloset"], "EmptyCloset", "Before Emptying Hangk's (recommended)", 0);
-	write("<tr><td align=right>kBay Status: </td><td>");
+	page.append("<tr><td align=right>kBay Status: </td><td>");
 	if(vars["BaleOCD_kBay"] != "0" && vars["BaleOCD_kBay"] != "1") vars["BaleOCD_kBay"] = 1;
 	vars["BaleOCD_kBay"] = write_radio(vars["BaleOCD_kBay"], "EnableKBay", "Send Items to kBay,", 1);
 	write_radio(vars["BaleOCD_kBay"], "EnableKBay", "Hold kBay items in inventory", 0);
-	write("</td></tr><tr><td align=right>Mall Pricing: </td><td>");
+	page.append("</td></tr><tr><td align=right>Mall Pricing: </td><td>");
 	vars["BaleOCD_Pricing"] = write_radio(vars["BaleOCD_Pricing"], "Pricing", "Automatic,", "auto");
 	write_radio(vars["BaleOCD_Pricing"], "Pricing", "999,999,999 meat.", "max");
-	write("</td></tr></table>");
+	page.append("</td></tr></table>");
 	
-	write("<p class='zlib'>");
+	page.append("<p class='zlib'>");
 	vars["BaleOCD_Sim"] = write_check(vars["BaleOCD_Sim"], "Sim", "Simulate Only ");
-	writeln(" <font size=1>(no actions will be taken)</font></p>");
+	page.append(" <font size=1>(no actions will be taken)</font></p>");
 	
-	write("<table class='zlib' border=0 cellpadding=1><tr><td align=right>My Mall Multi:</td><td>");
+	page.append("<table class='zlib' border=0 cellpadding=1><tr><td align=right>My Mall Multi:</td><td>");
 	vars["BaleOCD_MallMulti"] = write_field(vars["BaleOCD_MallMulti"], "MallMulti", 14);
-	write("</td><td align=right>&nbsp;&nbsp;Mall Multi kMail Text</td><td>");
+	page.append("</td><td align=right>&nbsp;&nbsp;Mall Multi kMail Text</td><td>");
 	vars["BaleOCD_MultiMessage"] = write_field(vars["BaleOCD_MultiMessage"], "MultiMessage", 14);
-	write("</td></tr><tr><td colspan=2>");
+	page.append("</td></tr><tr><td colspan=2>");
 	vars["BaleOCD_UseMallMulti"] = write_check(vars["BaleOCD_UseMallMulti"], "UseMulti", "Use Mall Multi");
-	write("</td></tr></table>");
+	page.append("</td></tr></table>");
 	
-	write("<p class='zlib'>Data file: OCDdata_");
+	page.append("<p class='zlib'>Data file: OCDdata_");
 	vars["BaleOCD_DataFile"] = write_field(vars["BaleOCD_DataFile"], "DataFile", 10);
 	if(vars["BaleOCD_DataFile"] == "")
 		vars["BaleOCD_DataFile"] = my_name();
-	write("<br />Stock file: OCDstock_");
+	page.append("<br />Stock file: OCDstock_");
 	vars["BaleOCD_StockFile"] = write_field(vars["BaleOCD_StockFile"], "StockFile", 10);
 	if(vars["BaleOCD_StockFile"] == "")
 		vars["BaleOCD_StockFile"] = my_name();
-	write("<br />Change file names without writing any data: ");
+	page.append("<br />Change file names without writing any data: ");
 	if(write_button("change", "Change Filename!")) {
 		string DataFile = vars["BaleOCD_DataFile"];
 		string StockFile = vars["BaleOCD_StockFile"];
@@ -791,72 +792,72 @@ void zlib_vars() {
 		vars["BaleOCD_DataFile"] = DataFile;
 		vars["BaleOCD_StockFile"] = StockFile;
 		updatevars();
-		write("<div style='font-weight:bold; color:blue;'>Filename changed @ ");
-		write("<script language='javascript'>ourDate = new Date();document.write(' at '+ ourDate.toLocaleString() + '.<br/>');</script></div>");
+		page.append("<div style='font-weight:bold; color:blue;'>Filename changed @ ");
+		page.append("<script language='javascript'>ourDate = new Date();document.write(' at '+ ourDate.toLocaleString() + '.<br/>');</script></div>");
 	}
-	writeln("</p>");
+	page.append("</p>");
 	
-	writeln("</fieldset>"); 	// finish_box()
+	page.append("</fieldset>"); 	// finish_box()
 }
 
 void information(string ver) {
-	writeln("<fieldset><legend>"+title+"</legend>"); // write_box()
+	page.append("<fieldset><legend>"+title+"</legend>"); // write_box()
 	if(ver != "")
-		writeln("<fieldset>"+ver+"</fieldset><br />");
+		page.append("<fieldset>"+ver+"</fieldset><br />");
 	int AddQ;
 	foreach key in OCDefault
 		if(!(OCD contains key) && item_amount(key) > 0) AddQ += 1; #{AddQ += 1; print(key);}
 	if(count(OCD) > 0) {
 		int curr_items = curr_items();
 		if(curr_items > 0 && AddQ > 0) {
-			write("<p>");
+			page.append("<p>");
 			if(write_button("defaultdata", "Add data")) {
 				foreach key in OCDefault
 					if(!(OCD contains key) && item_amount(key) > 0) OCD[key] = OCDefault[key];
 				save_ocd();
 				curr_items = curr_items();
 			}
-			write(" Add default information for "+AddQ+" common item"+(AddQ == 1? " that is": "s that are")+" not already in your data.</p>");
+			page.append(" Add default information for "+AddQ+" common item"+(AddQ == 1? " that is": "s that are")+" not already in your data.</p>");
 		}
-		writeln("<table border=0 cellpadding=1>");
-		write("<tr");
-		if(curr_items > 0) write(" style='color: #FF0000;'");
-		writeln("><td align=right>"+curr_items+"&nbsp;</td><td colspan=3>Items in inventory to add</td></tr>");
-		writeln("<tr><td align=right>"+count(OCD)+"&nbsp;</td><td colspan=3>Items in Database</td></tr>");
-		writeln("<tr><td>&nbsp;</td><td align=right>"+count(keeps) + "&nbsp;</td><td>Items to keep</td></tr>");
-		writeln("<tr><td>&nbsp;</td><td align=right>"+count(malls) + "&nbsp;</td><td>Items to mall</td></tr>");
-		writeln("<tr><td>&nbsp;</td><td align=right>"+count(autos) + "&nbsp;</td><td>Items to dispose (autosell or discard)</td></tr>");
-		writeln("<tr><td>&nbsp;</td><td align=right>"+count(pulvs) + "&nbsp;</td><td>Items to pulverize</td></tr>");
-		writeln("<tr><td>&nbsp;</td><td align=right>"+count(uses)  + "&nbsp;</td><td>Items to use (or break)</td></tr>");
-		writeln("<tr><td>&nbsp;</td><td align=right>"+count(clsts) + "&nbsp;</td><td>Items to closet</td></tr>");
-		writeln("<tr><td>&nbsp;</td><td align=right>"+count(clans) + "&nbsp;</td><td>Items to stash</td></tr>");
-		writeln("<tr><td>&nbsp;</td><td align=right>"+count(makes) + "&nbsp;</td><td>Items to craft</td></tr>");
-		writeln("<tr><td>&nbsp;</td><td align=right>"+count(untinks)+"&nbsp;</td><td>Items to untinker</td></tr>");
-		writeln("<tr><td>&nbsp;</td><td align=right>"+count(gifts) + "&nbsp;</td><td>Items to send as gifts</td></tr>");
-		writeln("<tr><td>&nbsp;</td><td align=right>"+count(kbays) + "&nbsp;</td><td>Items to trade on kBay</td></tr>");
-		writeln("<tr><td>&nbsp;</td><td align=right>"+count(disps) + "&nbsp;</td><td>Items to display</td></tr>");
-		writeln("<tr><td>&nbsp;</td><td align=right>"+count(todos) + "&nbsp;</td><td>Items to remind me about</td></tr>");
-		writeln("</table>");
+		page.append("<table border=0 cellpadding=1>");
+		page.append("<tr");
+		if(curr_items > 0) page.append(" style='color: #FF0000;'");
+		page.append("><td align=right>"+curr_items+"&nbsp;</td><td colspan=3>Items in inventory to add</td></tr>");
+		page.append("<tr><td align=right>"+count(OCD)+"&nbsp;</td><td colspan=3>Items in Database</td></tr>");
+		page.append("<tr><td>&nbsp;</td><td align=right>"+count(keeps) + "&nbsp;</td><td>Items to keep</td></tr>");
+		page.append("<tr><td>&nbsp;</td><td align=right>"+count(malls) + "&nbsp;</td><td>Items to mall</td></tr>");
+		page.append("<tr><td>&nbsp;</td><td align=right>"+count(autos) + "&nbsp;</td><td>Items to dispose (autosell or discard)</td></tr>");
+		page.append("<tr><td>&nbsp;</td><td align=right>"+count(pulvs) + "&nbsp;</td><td>Items to pulverize</td></tr>");
+		page.append("<tr><td>&nbsp;</td><td align=right>"+count(uses)  + "&nbsp;</td><td>Items to use (or break)</td></tr>");
+		page.append("<tr><td>&nbsp;</td><td align=right>"+count(clsts) + "&nbsp;</td><td>Items to closet</td></tr>");
+		page.append("<tr><td>&nbsp;</td><td align=right>"+count(clans) + "&nbsp;</td><td>Items to stash</td></tr>");
+		page.append("<tr><td>&nbsp;</td><td align=right>"+count(makes) + "&nbsp;</td><td>Items to craft</td></tr>");
+		page.append("<tr><td>&nbsp;</td><td align=right>"+count(untinks)+"&nbsp;</td><td>Items to untinker</td></tr>");
+		page.append("<tr><td>&nbsp;</td><td align=right>"+count(gifts) + "&nbsp;</td><td>Items to send as gifts</td></tr>");
+		page.append("<tr><td>&nbsp;</td><td align=right>"+count(kbays) + "&nbsp;</td><td>Items to trade on kBay</td></tr>");
+		page.append("<tr><td>&nbsp;</td><td align=right>"+count(disps) + "&nbsp;</td><td>Items to display</td></tr>");
+		page.append("<tr><td>&nbsp;</td><td align=right>"+count(todos) + "&nbsp;</td><td>Items to remind me about</td></tr>");
+		page.append("</table>");
 	} else {
-		writeln("</table>");
-		writeln("<p style='text-align:center; font-size:140%; font-weight:bold; color:red;'>All item information is corrupted or missing.</p>");
-		writeln("<p style='color:navy;'>Hopefully this is the first time you've run OCD Inventory. If so, you'll need to add handling instructions for every item in your inventory.</p>");
-		writeln("<p>Simply click on the \"Add Items\" tab above. If this is your first run it may take a minute to load. Don't panic! This wait is normal when you have many uncategorized items.</p>");
-		writeln("<p>From the \"Add Items\" tab you will select an action from the drop down next to each item. If you want to keep all of an item, then choose the \"Keep\" action. If you want to keep only a limited quantity of an item, then enter the number to keep into the text box.</p>");
-		writeln("<p>If you want to craft an item into another item, list the product into the information field. When giving gifts, you should enter the name of the recipient into the information field. Later on, you may list the note to go with a gift if you edit the \"Gift List\" tab when editing the database.</p>");
+		page.append("</table>");
+		page.append("<p style='text-align:center; font-size:140%; font-weight:bold; color:red;'>All item information is corrupted or missing.</p>");
+		page.append("<p style='color:navy;'>Hopefully this is the first time you've run OCD Inventory. If so, you'll need to add handling instructions for every item in your inventory.</p>");
+		page.append("<p>Simply click on the \"Add Items\" tab above. If this is your first run it may take a minute to load. Don't panic! This wait is normal when you have many uncategorized items.</p>");
+		page.append("<p>From the \"Add Items\" tab you will select an action from the drop down next to each item. If you want to keep all of an item, then choose the \"Keep\" action. If you want to keep only a limited quantity of an item, then enter the number to keep into the text box.</p>");
+		page.append("<p>If you want to craft an item into another item, list the product into the information field. When giving gifts, you should enter the name of the recipient into the information field. Later on, you may list the note to go with a gift if you edit the \"Gift List\" tab when editing the database.</p>");
 	}
-	writeln("</fieldset>"); 	// finish_box()
+	page.append("</fieldset>"); 	// finish_box()
 }
 
 void write_tab(string tabname, string value) {
-	write("<li");
-	if(fields[tabname] == value) write(" class='tabberactive'");
-	write("><input type='submit' class='nav' name='"+ tabname+ "' value='"+value+"'>");
-	writeln("</li>");
+	page.append("<li");
+	if(fields[tabname] == value) page.append(" class='tabberactive'");
+	page.append("><input type='submit' class='nav' name='"+ tabname+ "' value='"+value+"'>");
+	page.append("</li>");
 }
 
 void subcat_tabs() {
-	write("<ul class='tabbernav'>");
+	page.append("<ul class='tabbernav'>");
 	if(count(keeps) > 0) write_tab("editTab", "Keep");
 	if(count(malls) > 0) write_tab("editTab", "Mall");
 	if(count(pulvs) > 0) write_tab("editTab", "Pulverize");
@@ -870,7 +871,7 @@ void subcat_tabs() {
 	if(count(disps) > 0) write_tab("editTab", "Display");
 	if(count(autos) > 0) write_tab("editTab", "Dispose");
 	if(count(todos) > 0) write_tab("editTab", "Reminders");
-	writeln("<li></ul>");
+	page.append("<li></ul>");
 	
 	if(fields["editTab"] == "")
 		information("");
@@ -885,23 +886,34 @@ void main() {
 	success = count(fields) > 0;
 	# foreach x,y in fields print(x + " - "+ y); print("==============================");
 	// If the script has already been run, save this information
-	if(success) {
+	if(test_button("save") && success) {
 		item doodad;
-		string doodadNo;
-		foreach key in fields
+		string num;
+		foreach key, val in fields
 			if(key.char_at(0) == "_") {
-				doodadNo = key.substring(1);
-				doodad = doodadNo.to_item();
-				OCD[doodad].action = fields[key];
-				OCD[doodad].q = fields["q_"+doodadNo].to_int();
-				OCD[doodad].info = fields["i_"+doodadNo];
+				num = key.substring(1);
+				doodad = num.to_int().to_item();
+				OCD[doodad].action = val;
+				OCD[doodad].q = fields["q_"+num].to_int();
+				OCD[doodad].info = fields["i_"+num];
+			} else if(key.contains_text("newd_") && val != "none") {
+				num = key.substring(5);
+				doodad = to_item(val);
+				stock[doodad].type = fields["newt_"+num];
+				stock[doodad].q = fields["newq_"+num].to_int();
+				newstock1[to_int(num)].doodad = $item[none];
+				fields["newd_"+num] = "none";
+			} else if(key.contains_text("stock_del_") && val == "on") {
+				num = key.substring(10);
+				doodad = num.to_int().to_item();
+				remove stock[doodad];
 			}
 	}
 	
 	// write_page()
-	writeln("<html><head>");
+	page.append("<html><head>");
 	styles();
-	writeln("</head><body><form name='relayform' method='POST' action=''>");
+	page.append("</head><body><form name='relayform' method='POST' action=''>");
 	
 	if(!(fields contains "tab")) {
 		if(fields contains "last_tab")
@@ -919,26 +931,26 @@ void main() {
 	}
 	string ver = check_version("relay OCD dB Manager", "BaleOCDrelay", thisver, 1818);
 	
-	writeln("<table border=0 cellpadding=1><tr><td>");
+	page.append("<table border=0 cellpadding=1><tr><td>");
 	if(fields["tab"] == "information" || (fields["tab"] == "Edit Database" && fields["editTab"] == ""))
-		write("&nbsp;");
+		page.append("&nbsp;");
 	else {
 		write_button("save", "Save All");
-		writeln("</td><td>");
+		page.append("</td><td>");
 		if(test_button("save") && success) {
-			write("<div style='font-weight:bold; color:blue;'>Last save @ ");
-			write("<script language='javascript'>ourDate = new Date();document.write(' at '+ ourDate.toLocaleString() + '.<br/>');</script></div>");
-		} else write("Save all changes below");
+			page.append("<div style='font-weight:bold; color:blue;'>Last save @ ");
+			page.append("<script language='javascript'>ourDate = new Date();document.write(' at '+ ourDate.toLocaleString() + '.<br/>');</script></div>");
+		} else page.append("Save all changes below");
 	}
-	writeln("</td></tr></table>");
+	page.append("</td></tr></table>");
 
-	write("<ul class='tabbernav'>");
+	page.append("<ul class='tabbernav'>");
 	write_tab("tab", "Information");
 	write_tab("tab", "Add Items");
 	write_tab("tab", "Edit Database");
 	write_tab("tab", "Items to Stock");
 	write_tab("tab", "Configure Script");
-	writeln("</ul>");
+	page.append("</ul>");
 
 	// Save TRUE checkboxes
 	foreach doodad in makes
@@ -970,11 +982,11 @@ void main() {
 	}
 	
 	if(fields["tab"] == "information" || (fields["tab"] == "Edit Database" && fields["editTab"] == ""))
-		write("&nbsp;");
+		page.append("&nbsp;");
 	else {
-		writeln("<table border=0 cellpadding=1><tr><td>");
+		page.append("<table border=0 cellpadding=1><tr><td>");
 		write_button("save", "Save All");
-		writeln("</td><td>");
+		page.append("</td><td>");
 		if(test_button("save") && success) {
 			save_ocd();
 			foreach doodad in delstock
@@ -996,11 +1008,18 @@ void main() {
 			map_to_file(stock, "OCDstock_"+vars["BaleOCD_StockFile"]+".txt");
 			updatevars();
 			vprint("Item(s) have been categorized.", "green", 3);
-			write("<div style='font-weight:bold; color:blue;'>Last save @ ");
-			write("<script language='javascript'>ourDate = new Date();document.write(' at '+ ourDate.toLocaleString() + '.<br/>');</script></div>");
-		} else write("Save all changes above");
-		writeln("</td></tr></table>");
+			page.append("<div style='font-weight:bold; color:blue;'>Last save @ ");
+			page.append("<script language='javascript'>ourDate = new Date();document.write(' at '+ ourDate.toLocaleString() + '.<br/>');</script></div>");
+		} else page.append("Save all changes above");
+		page.append("</td></tr></table>");
 	}
 	
-	writeln("</form></body></html>"); 	// finish_page()
+	// Ensure nothing is forgotten when tabs are switched
+	if(success)
+		foreach key, value in fields
+			 if(!page.contains_text(key))
+				write_hidden(value, key);
+	
+	page.append("</form></body></html>"); 	// finish_page()
+	writeln(page);
 }
