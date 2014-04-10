@@ -981,43 +981,45 @@ void main() {
 		}
 	}
 	
-	if(fields["tab"] == "information" || (fields["tab"] == "Edit Database" && fields["editTab"] == ""))
+	boolean noSave = fields["tab"] == "information" || (fields["tab"] == "Edit Database" && fields["editTab"] == "");
+	if(noSave)
 		page.append("&nbsp;");
 	else {
 		page.append("<table border=0 cellpadding=1><tr><td>");
 		write_button("save", "Save All");
 		page.append("</td><td>");
-		if(test_button("save") && success) {
-			save_ocd();
-			foreach doodad in delstock
-				if(delstock[doodad] && stock contains doodad) {
-					remove stock[doodad];
-					remove fields["stock_q_"+doodad.to_int()];
-					remove fields["stock_t_"+doodad.to_int()];
-					remove fields["stock_del_"+doodad.to_int()];
-				}
-			foreach i,val in newstock1
-				if(val.doodad != $item[none]) {
-					stock[val.doodad].q = val.q;
-					stock[val.doodad].type = val.type;
-					remove fields["newd_"+i];
-					remove fields["newq_"+i];
-					remove fields["newt_"+i];
-				}
-			clear(newstock1);
-			map_to_file(stock, "OCDstock_"+vars["BaleOCD_StockFile"]+".txt");
-			updatevars();
-			vprint("Item(s) have been categorized.", "green", 3);
-			page.append("<div style='font-weight:bold; color:blue;'>Last save @ ");
-			page.append("<script language='javascript'>ourDate = new Date();document.write(' at '+ ourDate.toLocaleString() + '.<br/>');</script></div>");
-		} else page.append("Save all changes above");
-		page.append("</td></tr></table>");
 	}
+	if(test_button("save") && success) {
+		save_ocd();
+		foreach doodad in delstock
+			if(delstock[doodad] && stock contains doodad) {
+				remove stock[doodad];
+				remove fields["stock_q_"+doodad.to_int()];
+				remove fields["stock_t_"+doodad.to_int()];
+				remove fields["stock_del_"+doodad.to_int()];
+			}
+		foreach i,val in newstock1
+			if(val.doodad != $item[none]) {
+				stock[val.doodad].q = val.q;
+				stock[val.doodad].type = val.type;
+				remove fields["newd_"+i];
+				remove fields["newq_"+i];
+				remove fields["newt_"+i];
+			}
+		clear(newstock1);
+		map_to_file(stock, "OCDstock_"+vars["BaleOCD_StockFile"]+".txt");
+		updatevars();
+		vprint("Item(s) have been categorized.", "green", 3);
+		page.append("<div style='font-weight:bold; color:blue;'>Last save @ ");
+		page.append("<script language='javascript'>ourDate = new Date();document.write(' at '+ ourDate.toLocaleString() + '.<br/>');</script></div>");
+	} else if(!noSave) page.append("Save all changes above");
+	if(!noSave)
+		page.append("</td></tr></table>");
 	
 	// Ensure nothing is forgotten when tabs are switched
 	if(success)
 		foreach key, value in fields
-			 if(!page.contains_text(key))
+			 if(!(page.contains_text(key) || key.contains_text("tab")))
 				write_hidden(value, key);
 	
 	page.append("</form></body></html>"); 	// finish_page()
