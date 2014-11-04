@@ -1,5 +1,6 @@
 // Relay OCD Inventory dB Manager by Bale
 
+since r14923;
 import "OCD Inventory Control";
 string thisver = "1.10"; 				// This is the script's version!
 string thread = "http://kolmafia.us/showthread.php?1818-OCD-Inventory-control&p=11138&viewfull=1#post11138";
@@ -44,9 +45,8 @@ boolean [item] kbays;
 boolean [item] todos;
 boolean [item] keeps;
 
-// Some of KoLmafia's data files are helpful...
+// One of KoLmafia's data files is helpful...
 boolean [item] is_craftable;
-boolean [item] is_untinkerable;
 
 buffer page;
 
@@ -300,8 +300,6 @@ void set_craftable() {
 		is_craftable[item_name(value.mix2)] = true;
 		is_craftable[item_name(value.mix3)] = true;
 		is_craftable[item_name(value.mix4)] = true;
-		if(value.method == "COMBINE" && is_tradeable(to_item(key)))
-			is_untinkerable[to_item(key)] = true;
 	}
 	is_craftable[$item[titanium assault umbrella]] = true;
 }
@@ -345,7 +343,7 @@ string action_drop(string act, item doodad) {
 	}
 	if(is_craftable[doodad])
 		write_option(act, "Craft into a...", "MAKE");
-	if(is_untinkerable[doodad])
+	if(craft_type(doodad) == "Meatpasting")
 		write_option(act, "Untinker", "UNTN");
 	if(doodad.usable || doodad.multi)  // Can the item be used or multi-used?
 		write_option(act, "Use", "USE");
@@ -919,7 +917,7 @@ void main() {
 		if(fields contains "last_tab")
 			fields["tab"] = fields["last_tab"];
 		else {
-			if(curr_items() > 99 || curr_items() < 1)
+			if((curr_items() > 99 || curr_items() < 1) && !test_button("save"))
 				fields["tab"] = "Information";
 			else fields["tab"] = "Add Items";
 		}
