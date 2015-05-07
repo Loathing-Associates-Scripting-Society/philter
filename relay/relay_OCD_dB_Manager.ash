@@ -445,7 +445,7 @@ void add_items() {
 				page.append("<tr><th colspan=2>Item</th><th>Have</th>");
 				if(count(stock) > 0 && vars["BaleOCD_Stock"].to_int() > 0)
 					page.append("<th>Stock</th>");
-				page.append("<th>Keep</th><th>Action</th><th>... information</th></tr>");
+				page.append("<th>Price</th><th>Keep</th><th>Action</th><th>... information</th></tr>");
 				table_started = true;
 			}
 			page.append("<tr valign=center class='item'");
@@ -461,12 +461,17 @@ void add_items() {
 				act = OCD[doodad].action;
 				info = OCD[doodad].info;
 			}
-			page.append("<td align=center>"+item_amount(doodad)+"</td><td align=center>");
+			page.append("<td align=center>"+item_amount(doodad)+"</td>");
 			if(count(stock) > 0 && vars["BaleOCD_Stock"].to_int() > 0) {
+				page.append("<td align=center>");
 				if(stock contains doodad) page.append(stock[doodad].q);
 				else page.append("0");
 				page.append("</td><td align=center>");
 			}
+			page.append("<td align=right>");
+			if(historical_price(doodad) > 0)
+				page.append(to_string(historical_price(doodad), ,"%,d"));
+			page.append("&nbsp;</td><td align=center>");
 			OCD[doodad].q = write_field(q, "q_"+to_int(doodad));
 			page.append("</td><td>");
 			OCD[doodad].action = action_drop(act, doodad);
@@ -508,6 +513,7 @@ void edit_items(string act) {
 		}
 		page.append("<table border=0 cellpadding=1>");
 		page.append("<tr><th colspan=2>Item</th>");
+		page.append("<th>Price</th>");
 		if(act == "Keep")
 			page.append("<th>Have</th>");
 		page.append("<th>Keep</th><th>Action</th>");
@@ -531,6 +537,10 @@ void edit_items(string act) {
 		page.append("</tr>");
 		foreach doodad in cat {
 			page.append("<tr valign=center class='item'><td>"+descPlusQ(doodad) +"</a></td>");
+			page.append("<td align=right>");
+			if(historical_price(doodad) > 0)
+				page.append(to_string(historical_price(doodad), ,"%,d"));
+			page.append("&nbsp;</td>");
 			if(act == "Keep")
 				page.append("<td align=center>"+item_amount(doodad)+"</td>");
 			page.append("<td>");
