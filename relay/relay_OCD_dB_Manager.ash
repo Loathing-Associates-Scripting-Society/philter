@@ -2,10 +2,9 @@
 
 since r14923;
 import "OCD Inventory Control";
-string thisver = "1.10"; 				// This is the script's version!
 string thread = "http://kolmafia.us/showthread.php?1818-OCD-Inventory-control&p=11138&viewfull=1#post11138";
 string scriptname = "Bales's OCD dB Manager";
-string title = "<a class='version' href='"+thread+"' target='_blank'>"+scriptname+"</a> v"+thisver+", by <a href='showplayer.php?who=754005'>Bale</a>";
+string title = "<a class='version' href='"+thread+"' target='_blank'>"+scriptname+"</a>, by <a href='showplayer.php?who=754005'>Bale</a>";
 
 OCDinfo [item] OCD;
 OCDinfo [item] OCDefault;
@@ -49,24 +48,6 @@ boolean [item] keeps;
 boolean [item] is_craftable;
 
 buffer page;
-
-void version_update() {
-	string current_ver = get_property("_version_BaleOCDrelay");
-	// My rendition of zarqon's version checker. If it is unable to load version info, it will try again 20% of the time.
-	if(current_ver == "" || (current_ver == "0" && random(5) == 0)) {
-		matcher version = create_matcher("<b>relay OCD dB Manager (.+?)</b>", visit_url(thread));
-		if(version.find()) {
-			current_ver = version.group(1);
-		} else current_ver = "0";
-		set_property("_version_BaleOCDrelay", current_ver);
-	}
-	if(current_ver.to_float() > thisver.to_float()) {
-		page.append("<p style='margin-bottom:0; font-size:140%; font-weight:bold; font-family:Arial,Helvetica,sans-serif'><a class='red' href='"+thread+"' target='_blank'>New version of "+scriptname+": "+current_ver+"</a></p>");
-		title = "Visit <a class='version' href='"+thread+"' target='_blank'>this thread</a> to update "+scriptname+".";
-	} else if(current_ver == "0")
-		title += " &nbsp; &#x25E6; &nbsp; &#x25E6; &nbsp; &#x25E6; &nbsp; Current version unknown.";
-	//else title += " &nbsp; &#x25E6; &nbsp; &#x25E6; &nbsp; &#x25E6; &nbsp; up to date.";
-}
 
 ////////// Beginning of form functions based strongly on jasonharper's htmlform.ash from http://kolmafia.us/showthread.php?3842
 string[string] fields;	// shared result from form_fields()
@@ -487,10 +468,21 @@ void add_items() {
 	page.append("</fieldset>"); 	// finish_box()
 }
 
+boolean [item] search_items(string search) {
+	boolean[item] ia;
+	if(length(search) > 0) {
+		search = to_lower_case(search);
+		foreach i in $items[]
+			if(i.to_string().to_lower_case().contains_text(search) && is_OCDable(i))
+				ia[i] = true;
+	}
+	return ia;
+}
+
 void edit_items(string act) {
 	string fieldset;
 	void this_tab(boolean [item] cat) {
-		page.append("<fieldset><legend>Manage "+fieldset+"</legend>");
+		page.append("<fieldset><legend>"+fieldset+"</legend>");
 		if(act == "kBay") {
 			page.append("<table border=0 cellpadding=1><tr><td>");
 			write_button("kbayReset", "Reset");
@@ -511,126 +503,140 @@ void edit_items(string act) {
 			write_radio(vars["BaleOCD_kBay"], "EnableKBay", "Hold kBay items in inventory", 0);
 			page.append("</td></tr></table>");
 		}
-		page.append("<table border=0 cellpadding=1>");
-		page.append("<tr><th colspan=2>Item</th>");
-		page.append("<th>Price</th>");
-		if(act == "Keep")
-			page.append("<th>Have</th>");
-		page.append("<th>Keep</th><th>Action</th>");
-		switch(act) {
-		case "Mall":
-			page.append("<th>Minimum Sale Price</th>");
-			break;
-		case "Crafting":
-			page.append("<th>Craft into a</th><th>No purchase</th>");
-			break;
-		case "Reminders":
-			page.append("<th>To do...</th>");
-			break;
-		case "Gift List":
-			page.append("<th>Send to</th><th>Message with Gift</th>");
-			break;
-		case "kBay":
-			page.append("<th>Minimum Bid</th>");
-			break;
-		}
-		page.append("</tr>");
-		foreach doodad in cat {
-			page.append("<tr valign=center class='item'><td>"+descPlusQ(doodad) +"</a></td>");
-			page.append("<td align=right>");
-			if(historical_price(doodad) > 0)
-				page.append(to_string(historical_price(doodad), ,"%,d"));
-			page.append("&nbsp;</td>");
-			if(act == "Keep")
-				page.append("<td align=center>"+item_amount(doodad)+"</td>");
-			page.append("<td>");
-			OCD[doodad].q = write_field(OCD[doodad].q, "q_"+to_int(doodad));
+		if(act == "Search") {
+			page.append("<table border=0 cellpadding=1><tr><td>");
+			write_field(fields["searchbox"], "searchbox", "Search for: ", 64, "");
 			page.append("</td><td>");
-			OCD[doodad].action = action_drop(OCD[doodad].action, doodad);
+			write_button("dosearch", "Search");
+			page.append("</td></tr></table>");
+		}
+		if(count(cat) > 0) {
+			page.append("<table border=0 cellpadding=1>");
+			page.append("<tr><th colspan=2>Item</th>");
+			page.append("<th>Price</th>");
+			if(act == "Keep")
+				page.append("<th>Have</th>");
+			page.append("<th>Keep</th><th>Action</th>");
 			switch(act) {
 			case "Mall":
-				page.append("</td><td>");
-				OCD[doodad].info = write_field((is_integer(OCD[doodad].info) && OCD[doodad].info != "0")? OCD[doodad].info: "", "i_"+to_int(doodad), 20);
+				page.append("<th>Minimum Sale Price</th>");
 				break;
 			case "Crafting":
+				page.append("<th>Craft into a</th><th>No purchase</th>");
+				break;
 			case "Reminders":
-				page.append("</td><td>");
-				OCD[doodad].info = write_field(OCD[doodad].info, "i_"+to_int(doodad), 25);
-				if(act == "Crafting") {
-					page.append("</td><td align=center>");
-					OCD[doodad].message = write_check(OCD[doodad].message, "m_"+doodad.to_int(),"");
-				}
+				page.append("<th>To do...</th>");
 				break;
 			case "Gift List":
-				page.append("</td><td>");
-				OCD[doodad].info = write_field(OCD[doodad].info, "i_"+to_int(doodad), 10);
-				page.append("</td><td>");
-				OCD[doodad].message = write_field(OCD[doodad].message, "m_"+to_int(doodad), 25);
+				page.append("<th>Send to</th><th>Message with Gift</th>");
 				break;
 			case "kBay":
-				page.append("</td><td>");
-				#OCD[doodad].message = write_hidden(OCD[doodad].message, "m_"+doodad.to_int());
-				OCD[doodad].info = write_field(OCD[doodad].info, "i_"+to_int(doodad), "", 12, "intvalidator");
+				page.append("<th>Minimum Bid</th>");
 				break;
 			}
-			page.append("</td></tr>");
-		}
-		page.append("</table>");
+			page.append("</tr>");
+			foreach doodad in cat {
+				page.append("<tr valign=center class='item'><td>"+descPlusQ(doodad) +"</a></td>");
+				page.append("<td align=right>");
+				if(historical_price(doodad) > 0)
+					page.append(to_string(historical_price(doodad), ,"%,d"));
+				page.append("&nbsp;</td>");
+				if(act == "Keep")
+					page.append("<td align=center>"+item_amount(doodad)+"</td>");
+				page.append("<td>");
+				OCD[doodad].q = write_field(OCD[doodad].q, "q_"+to_int(doodad));
+				page.append("</td><td>");
+				OCD[doodad].action = action_drop(OCD[doodad].action, doodad);
+				switch(act) {
+				case "Mall":
+					page.append("</td><td>");
+					OCD[doodad].info = write_field((is_integer(OCD[doodad].info) && OCD[doodad].info != "0")? OCD[doodad].info: "", "i_"+to_int(doodad), 20);
+					break;
+				case "Crafting":
+				case "Reminders":
+					page.append("</td><td>");
+					OCD[doodad].info = write_field(OCD[doodad].info, "i_"+to_int(doodad), 25);
+					if(act == "Crafting") {
+						page.append("</td><td align=center>");
+						OCD[doodad].message = write_check(OCD[doodad].message, "m_"+doodad.to_int(),"");
+					}
+					break;
+				case "Gift List":
+					page.append("</td><td>");
+					OCD[doodad].info = write_field(OCD[doodad].info, "i_"+to_int(doodad), 10);
+					page.append("</td><td>");
+					OCD[doodad].message = write_field(OCD[doodad].message, "m_"+to_int(doodad), 25);
+					break;
+				case "kBay":
+					page.append("</td><td>");
+					#OCD[doodad].message = write_hidden(OCD[doodad].message, "m_"+doodad.to_int());
+					OCD[doodad].info = write_field(OCD[doodad].info, "i_"+to_int(doodad), "", 12, "intvalidator");
+					break;
+				}
+				page.append("</td></tr>");
+			}
+			page.append("</table>");
+		} else if(act == "Search" && fields["searchbox"].length() > 0) 
+			page.append("<p style='text-indent:3%; color:#FF6666'>No search results found. Try searching for a partial match.</p>");
 		page.append("</fieldset>"); 	// finish_box()
 	}
 	
 	switch(act) {
 	case "Keep":
-		fieldset = "Items to Keep";
+		fieldset = "Manage Items to Keep";
 		this_tab(keeps);
 		break;
 	case "Mall":
-		fieldset = "Mall";
+		fieldset = "Manage Mall";
 		this_tab(malls);
 		break;
 	case "Dispose":
-		fieldset = "Items to Autosell or Discard";
+		fieldset = "Manage Items to Autosell or Discard";
 		this_tab(autos);
 		break;
 	case "Pulverize":
-		fieldset = "Items to Pulverize";
+		fieldset = "Manage Items to Pulverize";
 		this_tab(pulvs);
 		break;
 	case "Use":
-		fieldset = "Items to Use (or Break Apart)";
+		fieldset = "Manage Items to Use (or Break Apart)";
 		this_tab(uses);
 		break;
 	case "Closet":
-		fieldset = "Closet Items";
+		fieldset = "Manage Closet Items";
 		this_tab(clsts);
 		break;
 	case "Clan Stash":
-		fieldset = "Items for Clan Stash";
+		fieldset = "Manage Items for Clan Stash";
 		this_tab(clans);
 		break;
 	case "Crafting":
-		fieldset = "Crafting Items";
+		fieldset = "Manage Crafting Items";
 		this_tab(makes);
 		break;
 	case "Untinkering":
-		fieldset = "Items to Untinker";
+		fieldset = "Manage Items to Untinker";
 		this_tab(untinks);
 		break;
 	case "Gift List":
-		fieldset = "Gift List";
+		fieldset = "Manage Gift List";
 		this_tab(gifts);
 		break;
 	case "kBay":
-		fieldset = "<a class='version' href='http://kbay.turias.net/' target='_blank'>kBay Auctions</a>";
+		fieldset = "Manage <a class='version' href='http://kbay.turias.net/' target='_blank'>kBay Auctions</a>";
 		this_tab(kbays);
 		break;
 	case "Display":
-		fieldset = "Display Items";
+		fieldset = "Manage Display Case";
 		this_tab(disps);
 		break;
 	case "Reminders":
-		fieldset = "Reminders";
+		fieldset = "Manage Reminders";
 		this_tab(todos);
+		break;
+	case "Search":
+		fieldset = "Search for Items";
+		this_tab(search_items(fields["searchbox"]));
 		break;
 	}
 }
@@ -808,10 +814,8 @@ void zlib_vars() {
 	page.append("</fieldset>"); 	// finish_box()
 }
 
-void information(string ver) {
+void information() {
 	page.append("<fieldset><legend>"+title+"</legend>"); // write_box()
-	if(ver != "")
-		page.append("<fieldset>"+ver+"</fieldset><br />");
 	int AddQ;
 	foreach key in OCDefault
 		if(!(OCD contains key) && item_amount(key) > 0) AddQ += 1; #{AddQ += 1; print(key);}
@@ -879,10 +883,11 @@ void subcat_tabs() {
 	if(count(disps) > 0) write_tab("editTab", "Display");
 	if(count(autos) > 0) write_tab("editTab", "Dispose");
 	if(count(todos) > 0) write_tab("editTab", "Reminders");
+	write_tab("editTab", "Search");
 	page.append("<li></ul>");
 	
 	if(fields["editTab"] == "")
-		information("");
+		information();
 	else edit_items(fields["editTab"]);
 }
 
@@ -937,7 +942,6 @@ void main() {
 			fields["editTab"] = fields["last_editTab"];
 		else fields["editTab"] = "";
 	}
-	string ver = check_version("relay OCD dB Manager", "BaleOCDrelay", thisver, 1818);
 	
 	page.append("<table border=0 cellpadding=1><tr><td>");
 	if(fields["tab"] == "information" || (fields["tab"] == "Edit Database" && fields["editTab"] == ""))
@@ -975,7 +979,7 @@ void main() {
 		write_hidden(vars["BaleOCD_UseMallMulti"], "UseMulti");
 		switch(fields["tab"]) {
 		case "Information":
-			information(ver);
+			information();
 			break;
 		case "Add Items":
 			add_items();
