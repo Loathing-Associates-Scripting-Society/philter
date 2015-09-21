@@ -886,9 +886,7 @@ void subcat_tabs() {
 	write_tab("editTab", "Search");
 	page.append("<li></ul>");
 	
-	if(fields["editTab"] == "")
-		information();
-	else edit_items(fields["editTab"]);
+	edit_items(fields["editTab"]);
 }
 
 void main() {
@@ -922,7 +920,7 @@ void main() {
 				remove stock[doodad];
 			}
 	}
-	
+
 	// write_page()
 	page.append("<html><head>");
 	styles();
@@ -940,11 +938,28 @@ void main() {
 	if(!(fields contains "editTab")) {
 		if(fields contains "last_editTab")
 			fields["editTab"] = fields["last_editTab"];
-		else fields["editTab"] = "";
+		else fields["editTab"] = "Search";
 	}
 	
+	# foreach x,y in fields print(x + " - "+ y); print("==============================");
+	boolean noSave = fields["tab"] == "Information" || (fields["tab"] == "Edit Database" && fields["editTab"] == "Search" && fields["searchbox"].length() == 0);
+
+	# if(noSave)
+		# page.append("&nbsp;");
+	# else {
+		# page.append("<table border=0 cellpadding=1><tr><td>");
+		# write_button("save", "Save All");
+		# page.append("</td><td>");
+	# }
+	# if(test_button("save") && success) {
+		# page.append("<div style='font-weight:bold; color:blue;'>Last save @ ");
+		# page.append("<script language='javascript'>ourDate = new Date();document.write(' at '+ ourDate.toLocaleString() + '.<br/>');</script></div>");
+	# } else if(!noSave) page.append("Save all changes above");
+	# if(!noSave)
+		# page.append("</td></tr></table>");
+	
 	page.append("<table border=0 cellpadding=1><tr><td>");
-	if(fields["tab"] == "information" || (fields["tab"] == "Edit Database" && fields["editTab"] == ""))
+	if(fields["tab"] == "Information" || (fields["tab"] == "Edit Database" && fields["editTab"] == ""))
 		page.append("&nbsp;");
 	else {
 		write_button("save", "Save All");
@@ -993,7 +1008,6 @@ void main() {
 		}
 	}
 	
-	boolean noSave = fields["tab"] == "information" || (fields["tab"] == "Edit Database" && fields["editTab"] == "");
 	if(noSave)
 		page.append("&nbsp;");
 	else {
