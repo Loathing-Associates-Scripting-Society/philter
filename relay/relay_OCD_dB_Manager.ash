@@ -30,19 +30,19 @@ record stock_item {
 stock_item[int] newstock1;
 boolean [item] delstock;
 
-boolean [item] makes;
-boolean [item] untinks;
-boolean [item] uses;
-boolean [item] pulvs;
-boolean [item] malls;
-boolean [item] autos;
-boolean [item] disps;
-boolean [item] clsts;
-boolean [item] clans;
-boolean [item] gifts;
-boolean [item] kbays;
-boolean [item] todos;
-boolean [item] keeps;
+item [int] makes;
+item [int] untinks;
+item [int] uses;
+item [int] pulvs;
+item [int] malls;
+item [int] autos;
+item [int] disps;
+item [int] clsts;
+item [int] clans;
+item [int] gifts;
+item [int] kbays;
+item [int] todos;
+item [int] keeps;
 
 // One of KoLmafia's data files is helpful...
 boolean [item] is_craftable;
@@ -468,20 +468,21 @@ void add_items() {
 	page.append("</fieldset>"); 	// finish_box()
 }
 
-boolean [item] search_items(string search) {
-	boolean[item] ia;
+item [int] search_items(string search) {
+	item [int] ia;
 	if(length(search) > 0) {
 		search = to_lower_case(search);
-		foreach i in $items[]
-			if(i.to_string().to_lower_case().contains_text(search) && is_OCDable(i))
-				ia[i] = true;
+		foreach it in $items[]
+			if(it.to_string().to_lower_case().contains_text(search) && is_OCDable(it))
+				ia[ count(ia) ] = it;
 	}
 	return ia;
 }
 
 void edit_items(string act) {
 	string fieldset;
-	void this_tab(boolean [item] cat) {
+	void this_tab(item [int] cat) {
+		sort cat by to_string(value);
 		page.append("<fieldset><legend>"+fieldset+"</legend>");
 		if(act == "kBay") {
 			page.append("<table border=0 cellpadding=1><tr><td>");
@@ -489,9 +490,8 @@ void edit_items(string act) {
 			page.append("</td><td>Reset all auction bidding to default values!</td>");
 			if(test_button("kbayReset")) {
 				page.append("<td><span style=\"color:blue\">&nbsp;Reset!</span></td>");
-				foreach doodad in cat {
+				foreach x, doodad in cat {
 					OCD[doodad].message = (kBayList contains doodad)? kBayList[doodad].type: "Buy my stuff";
-					#fields["m_"+doodad.to_int()] = OCD[doodad].message;
 					fields["i_"+doodad.to_int()] = kPrice(doodad);
 				}
 				map_to_file(OCD, "OCDdata_"+vars["BaleOCD_DataFile"]+".txt");
@@ -535,7 +535,7 @@ void edit_items(string act) {
 				break;
 			}
 			page.append("</tr>");
-			foreach doodad in cat {
+			foreach x, doodad in cat {
 				page.append("<tr valign=center class='item'><td>"+descPlusQ(doodad) +"</a></td>");
 				page.append("<td align=right>");
 				if(historical_price(doodad) > 0)
@@ -717,45 +717,45 @@ void set_cats() {
 	foreach key, value in OCD
 		switch(value.action) {
 		case "KEEP":
-			keeps[key] = true;
+			keeps[ count(keeps) ] = key;
 			break;
 		case "MAKE":
-			makes[key] = true;
+			makes[ count(makes) ] = key;
 			break;
 		case "UNTN":
-			untinks[key] = true;
+			untinks[ count(untinks) ] = key;
 			break;
 		case "USE":
 		case "BREAK":
-			uses[key] = true;
+			uses[ count(uses) ] = key;
 			break;
 		case "PULV":
-			pulvs[key] = true;
+			pulvs[ count(pulvs) ] = key;
 			break;
 		case "MALL":
-			malls[key] = true;
+			malls[ count(malls) ] = key;
 			break;
 		case "AUTO":
 		case "DISC":
-			autos[key] = true;
+			autos[ count(autos) ] = key;
 			break;
 		case "DISP":
-			disps[key] = true;
+			disps[ count(disps) ] = key;
 			break;
 		case "CLST":
-			clsts[key] = true;
+			clsts[ count(clsts) ] = key;
 			break;
 		case "CLAN":
-			clans[key] = true;
+			clans[ count(clans) ] = key;
 			break;
 		case "GIFT":
-			gifts[key] = true;
+			gifts[ count(gifts) ] = key;
 			break;
 		case "KBAY":
-			kbays[key] = true;
+			kbays[ count(kbays) ] = key;
 			break;
 		case "TODO":
-			todos[key] = true;
+			todos[ count(todos) ] = key;
 			break;
 		}
 }
@@ -980,7 +980,7 @@ void main() {
 	page.append("</ul>");
 
 	// Save TRUE checkboxes
-	foreach doodad in makes
+	foreach x, doodad in makes
 		if(OCD[doodad].message == "true" && (fields["tab"] != "Edit Database" || fields["editTab"] != "Crafting"))
 			write_hidden(count(fields) > 2? fields["m_"+doodad.to_int()]: OCD[doodad].message,"m_"+doodad.to_int());
 	if(count(fields) > 2) {
