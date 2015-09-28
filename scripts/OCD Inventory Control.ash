@@ -87,6 +87,9 @@ int terrarium_amount(item it) {
 
 int camp_amount(item it) {
 	switch(it) {
+	case $item[Little Geneticist DNA-Splicing Lab]:
+	case $item[snow machine]:
+	case $item[spinning wheel]:
 	case $item[Warbear auto-anvil]:
 	case $item[Warbear chemistry lab]:
 	case $item[Warbear high-efficiency still]:
