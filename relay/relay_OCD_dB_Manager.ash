@@ -391,6 +391,16 @@ int curr_items() {
 	return total;
 }
 
+void add_catbuttons(buffer page) {
+		page.append("<table border=0 cellpadding=1><tr><td>");
+		write_button("mall", "Mall All");
+		page.append("</td><td>Categorize all mallable items to be sold in the mall</td></tr><tr><td>");
+		write_button("closet", "Closet All");
+		page.append("</td><td>Categorize all uncategorized items to be stored in your closet</td></tr><tr><td>");
+		write_button("keep", "Keep All");
+		page.append("</td><td>Categorize all uncategorized items to be kept</td></tr></table>");
+}
+
 void add_items() {
 	page.append("<fieldset><legend>Add Actions for these Items</legend>"); // write_box()
 
@@ -414,13 +424,7 @@ void add_items() {
 		// Quest items are the only items that cannot be displayed, so check for is_OCDable()
 		if(is_OCDable(doodad) && !(OCD contains doodad && OCD[doodad].action != "UNKN")) {
 			if(!table_started) {
-				page.append("<table border=0 cellpadding=1><tr><td>");
-				write_button("mall", "Mall All");
-				page.append("</td><td>Categorize all mallable items to be sold in the mall</td></tr><tr><td>");
-				write_button("closet", "Closet All");
-				page.append("</td><td>Categorize all uncategorized items to be stored in your closet</td></tr><tr><td>");
-				write_button("keep", "Keep All");
-				page.append("</td><td>Categorize all uncategorized items to be kept</td></tr></table>");
+				page.add_catbuttons();
 				
 				page.append("<table border=0 cellpadding=1>");
 				page.append("<tr><th colspan=2>Item</th><th>Have</th>");
@@ -511,6 +515,8 @@ void edit_items(string act) {
 			page.append("</td></tr></table>");
 		}
 		if(count(cat) > 0) {
+			if(act == "Search")
+				page.add_catbuttons();
 			page.append("<table border=0 cellpadding=1>");
 			page.append("<tr><th colspan=2>Item</th>");
 			page.append("<th>Price</th>");
