@@ -43,6 +43,7 @@ item [int] gifts;
 item [int] kbays;
 item [int] todos;
 item [int] keeps;
+item [int] search;
 
 // One of KoLmafia's data files is helpful...
 boolean [item] is_craftable;
@@ -106,7 +107,7 @@ string itemvalidator(string name) {
 	return "";
 }
 
-string write_field(string ov, string name, string label, int size, string validator) {
+string write_field(string ov, string name, string label, int size, string validator, string extra) {
 	if(label != "" )
 		page.append("<label>"+label);
 	string err;
@@ -116,12 +117,14 @@ string write_field(string ov, string name, string label, int size, string valida
 			err = call string validator(name);
 		rv = fields[name];
 	}
-	page.append("<input type='text' name=\""+ name);
+	page.append("<input type='text' name='"+ name);
 	if(label == "")
 		page.append("\" id=\""+ name);
-	page.append("\" value=\""+ entity_encode(rv)+ "\"");
+	page.append("' value=\""+ entity_encode(rv)+ "\"");
 	if(size != 0)
-		page.append("size="+size);
+		page.append(" size="+size);
+	if(extra != "")
+		page.append(" "+extra);
 	page.append(">");
 	if(err != "") {
 		success = false;
@@ -132,14 +135,17 @@ string write_field(string ov, string name, string label, int size, string valida
 		page.append("</label>");
 	return rv;
 }
+string write_field(string ov, string name, string label, int size, string validator) {
+	return write_field(ov, name, label, size, validator, "");
+}
 int write_field(int ov, string name) {
-	return write_field(ov.to_string(), name, "", 2, "intvalidator").to_int();
+	return write_field(ov.to_string(), name, "", 2, "intvalidator", "").to_int();
 }
 string write_field(string ov, string name, int size) {
-	return write_field(ov, name, "", size, "");
+	return write_field(ov, name, "", size, "", "");
 }
 item write_field(item ov, string name, int size) {
-	return write_field(ov.to_string(), name, "", size, "itemvalidator").to_item();
+	return write_field(ov.to_string(), name, "", size, "itemvalidator", "").to_item();
 }
 
 boolean write_check(boolean ov, string name, string label) {
@@ -212,7 +218,7 @@ void styles() {
 	
 	"ul.stock {list-style-type:none;margin-bottom:20;margin-top:0;padding:0;position: relative;top:5;left:10;width:100%;}"+
 
-	"input {margin-bottom:-2;}"+   # This corrects for buttons adding extra margin onto the bottom of a table. :(
+	"input {margin-bottom:-2;}"+   // This corrects for buttons adding extra margin onto the bottom of a table. :(
 	"input.nav {margin-bottom:-1; padding: 0; font-size:100%;}"+
 	
 	"ul.tabbernav {margin:0; padding: 3px 1px 0; border-bottom: 1px solid black; font: bold 12px Verdana, sans-serif;}"+
@@ -509,7 +515,7 @@ void edit_items(string act) {
 		}
 		if(act == "Search") {
 			page.append("<table border=0 cellpadding=1><tr><td>");
-			write_field(fields["searchbox"], "searchbox", "Search for: ", 64, "");
+			write_field(fields["searchbox"], "searchbox", "Search for: ", 64, "", "autofocus");
 			page.append("</td><td>");
 			write_button("dosearch", "Search");
 			page.append("</td></tr></table>");
@@ -642,7 +648,7 @@ void edit_items(string act) {
 		break;
 	case "Search":
 		fieldset = "Search for Items";
-		this_tab(search_items(fields["searchbox"]));
+		this_tab(search);
 		break;
 	}
 }
@@ -931,6 +937,7 @@ void main() {
 	page.append("<html><head>");
 	styles();
 	page.append("</head><body><form name='relayform' method='POST' action=''>");
+	page.append("<input type='submit' name='no show' value='donothing' style='position: absolute; left: -9999px'/>");  // Catches enter in a text field without saving
 	
 	if(!(fields contains "tab")) {
 		if(fields contains "last_tab")
@@ -946,37 +953,25 @@ void main() {
 			fields["editTab"] = fields["last_editTab"];
 		else fields["editTab"] = "Search";
 	}
+	if(fields contains "searchbox") 
+		search = search_items(fields["searchbox"]);
 	
 	# foreach x,y in fields print(x + " - "+ y); print("==============================");
-	boolean noSave = fields["tab"] == "Information" || (fields["tab"] == "Edit Database" && fields["editTab"] == "Search" && fields["searchbox"].length() == 0);
+	boolean noSave = fields["tab"] == "Information" || (fields["tab"] == "Edit Database" && fields["editTab"] == "Search" && (count(search) == 0));
 
-	# if(noSave)
-		# page.append("&nbsp;");
-	# else {
-		# page.append("<table border=0 cellpadding=1><tr><td>");
-		# write_button("save", "Save All");
-		# page.append("</td><td>");
-	# }
-	# if(test_button("save") && success) {
-		# page.append("<div style='font-weight:bold; color:blue;'>Last save @ ");
-		# page.append("<script language='javascript'>ourDate = new Date();document.write(' at '+ ourDate.toLocaleString() + '.<br/>');</script></div>");
-	# } else if(!noSave) page.append("Save all changes above");
-	# if(!noSave)
-		# page.append("</td></tr></table>");
-	
-	page.append("<table border=0 cellpadding=1><tr><td>");
-	if(fields["tab"] == "Information" || (fields["tab"] == "Edit Database" && fields["editTab"] == ""))
+	if(noSave) {
 		page.append("&nbsp;");
-	else {
+	} else {
+		page.append("<table border=0 cellpadding=1><tr><td>");
 		write_button("save", "Save All");
 		page.append("</td><td>");
 		if(test_button("save") && success) {
 			page.append("<div style='font-weight:bold; color:blue;'>Last save @ ");
 			page.append("<script language='javascript'>ourDate = new Date();document.write(' at '+ ourDate.toLocaleString() + '.<br/>');</script></div>");
-		} else page.append("Save all changes below");
+		} else if(!noSave) page.append("Save all changes above");
+		page.append("</td></tr></table>");
 	}
-	page.append("</td></tr></table>");
-
+	
 	page.append("<ul class='tabbernav'>");
 	write_tab("tab", "Information");
 	write_tab("tab", "Add Items");
