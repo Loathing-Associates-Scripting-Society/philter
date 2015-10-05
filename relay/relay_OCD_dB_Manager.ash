@@ -117,10 +117,10 @@ string write_field(string ov, string name, string label, int size, string valida
 			err = call string validator(name);
 		rv = fields[name];
 	}
-	page.append("<input type='text' name='"+ name);
+	page.append("<input type='text' name=\""+ name);
 	if(label == "")
 		page.append("\" id=\""+ name);
-	page.append("' value=\""+ entity_encode(rv)+ "\"");
+	page.append("\" value=\""+ entity_encode(rv)+ "\"");
 	if(size != 0)
 		page.append(" size="+size);
 	if(extra != "")
