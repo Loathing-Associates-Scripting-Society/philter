@@ -457,7 +457,7 @@ void add_items() {
 				page.append("<td align=center>");
 				if(stock contains doodad) page.append(stock[doodad].q);
 				else page.append("0");
-				page.append("</td><td align=center>");
+				page.append("</td>");
 			}
 			page.append("<td align=right>");
 			if(historical_price(doodad) > 0)
