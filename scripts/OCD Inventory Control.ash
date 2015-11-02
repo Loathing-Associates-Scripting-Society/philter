@@ -321,6 +321,12 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	
 	void print_cat(int [item] cat, string act, string to) {
 		if(count(cat) < 1) return;
+	
+		item [int] catOrder;
+		foreach it in cat
+			catOrder[ count(catOrder) ] = it;
+		sort catOrder by to_lower_case(to_string(value));
+		
 		int len, total, linevalue;
 		buffer queue;
 		int [item] kBayCount, kBayClear;
@@ -369,7 +375,8 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			return true;
 		}
 
-		foreach it, quant in cat {
+		foreach x, it in catOrder {
+			int quant = cat[it];
 			if(it == $item[Degrassi Knoll shopping list] && item_amount($item[bitchin' meatcar]) == 0)
 				continue;
 			if(len != 0)
@@ -650,6 +657,12 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	}
 
 	boolean act_cat(int [item] cat, string act, string to) {
+	
+		item [int] catOrder;
+		foreach it in cat
+			catOrder[ count(catOrder) ] = it;
+		sort catOrder by to_lower_case(to_string(value));
+		
 		if(count(cat) == 0) return false;
 		int i = 0;
 		if(act == "TODO" && count(todo) > 0)
@@ -675,7 +688,8 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		case "KBAY":
 			return kBayStuff(to, cat);
 		}
-		foreach it, quant in cat {
+		foreach x, it in catOrder {
+			int quant = cat[it];
 			switch(act) {
 			case "BREAK":
 				for i from 1 to quant
