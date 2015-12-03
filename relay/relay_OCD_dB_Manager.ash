@@ -319,7 +319,7 @@ string action_drop(string act, item doodad) {
 		write_option(act, "Discard", "DISC", "color:#FFFFFF;background-color:#FFAF00");
 	if(is_giftable(doodad)) {
 		write_option(act, "Send as gift to...", "GIFT");
-		write_option(act, "Sell on kBay", "KBAY");
+		# write_option(act, "Sell on kBay", "KBAY");
 		write_option(act, "Clan Stash", "CLAN");
 	}
 	if(is_pulverizable(doodad)) {
@@ -545,6 +545,9 @@ void edit_items(string act) {
 			case "kBay":
 				page.append("<th>Minimum Bid</th>");
 				break;
+			case "Search":
+				page.append("<th>Extra Info?</th>");
+				break;
 			}
 			page.append("</tr>");
 			foreach x, doodad in cat {
@@ -566,6 +569,7 @@ void edit_items(string act) {
 					break;
 				case "Crafting":
 				case "Reminders":
+				case "Search":
 					page.append("</td><td>");
 					OCD[doodad].info = write_field(OCD[doodad].info, "i_"+to_int(doodad), 25);
 					if(act == "Crafting") {

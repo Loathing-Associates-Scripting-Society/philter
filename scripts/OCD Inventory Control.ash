@@ -811,6 +811,8 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 // *******  Finally, here is the main for ocd_control()
 // int ocd_control(boolean StopForMissingItems) {
 	
+	cli_execute("inventory refresh");
+	
 	// Empty closet before emptying out Hangks, otherwise it may interfere with which Hangk's items go to closet
 	if(to_int(vars["BaleOCD_EmptyCloset"]) >= 0 && get_property("lastEmptiedStorage").to_int() != my_ascensions() 
 	  && vars["BaleOCD_Sim"] == "false")
