@@ -46,7 +46,7 @@ item [int] keeps;
 item [int] search;
 
 // One of KoLmafia's data files is helpful...
-boolean [item] is_craftable;
+static boolean [item] is_craftable;
 
 buffer page;
 
@@ -279,16 +279,19 @@ void set_craftable() {
 		string mix2;
 		string mix3;
 		string mix4;
+		string mix5;
 	};
 	concoctions [string] crafty;
 	file_to_map("concoctions.txt", crafty);
 	foreach key, value in crafty {
-		is_craftable[item_name(value.mix1)] = true;
-		is_craftable[item_name(value.mix2)] = true;
-		is_craftable[item_name(value.mix3)] = true;
-		is_craftable[item_name(value.mix4)] = true;
+		is_craftable[ item_name(value.mix1) ] = true;
+		is_craftable[ item_name(value.mix2) ] = true;
+		is_craftable[ item_name(value.mix3) ] = true;
+		is_craftable[ item_name(value.mix4) ] = true;
+		is_craftable[ item_name(value.mix5) ] = true;
 	}
-	is_craftable[$item[titanium assault umbrella]] = true;
+	foreach it in $items[hot nuggets, cold nuggets, spooky nuggets, stench nuggets, sleaze nuggets, titanium assault umbrella]
+		is_craftable[it] = true;
 }
 
 string kPrice(item doodad) {
@@ -907,7 +910,7 @@ void subcat_tabs() {
 
 void main() {
 	load_OCD();
-	set_craftable();
+	static set_craftable();
 	set_cats();
 	fields = form_fields();
 	success = count(fields) > 0;
