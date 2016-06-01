@@ -39,6 +39,8 @@ record OCDinfo {
 
 boolean is_OCDable(item it) {
 	switch(it) {
+	case $item[none]: // For some reason $item[none] is_displayable()
+		return false;
 	case $item[Boris's key]:
 	case $item[Jarlsberg's key]:
 	case $item[Richard's star key]:
