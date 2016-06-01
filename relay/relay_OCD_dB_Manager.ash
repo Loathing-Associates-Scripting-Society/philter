@@ -401,13 +401,22 @@ int curr_items() {
 }
 
 void add_catbuttons(buffer page) {
-		page.append("<table border=0 cellpadding=1><tr><td>");
-		write_button("mall", "Mall All");
-		page.append("</td><td>Categorize all mallable items to be sold in the mall</td></tr><tr><td>");
-		write_button("closet", "Closet All");
-		page.append("</td><td>Categorize all uncategorized items to be stored in your closet</td></tr><tr><td>");
-		write_button("keep", "Keep All");
-		page.append("</td><td>Categorize all uncategorized items to be kept</td></tr></table>");
+	page.append("<table border=0 cellpadding=1><tr><td>");
+	write_button("mall", "Mall All");
+	page.append("</td><td>Categorize all mallable items to be sold in the mall</td></tr><tr><td>");
+	write_button("closet", "Closet All");
+	page.append("</td><td>Categorize all uncategorized items to be stored in your closet</td></tr><tr><td>");
+	write_button("keep", "Keep All");
+	page.append("</td><td>Categorize all uncategorized items to be kept</td></tr></table>");
+}
+
+void append_price(buffer page, item doodad) {
+	if(historical_price(doodad) > 0) {
+		page.append(to_string(historical_price(doodad), ,"%,d"));
+		if(historical_price(doodad) == max(autosell_price(doodad) * 2, 100))
+			page.append('<span style="float:right; transform:rotate(90deg); margin:4px -4px 0 -4px; font-size:10px; color:blue;">min</span>');
+			# page.append('<span style="float:right; font-size:10px;">m<br>i<br>n</span>');
+	}
 }
 
 void add_items() {
@@ -463,8 +472,7 @@ void add_items() {
 				page.append("</td>");
 			}
 			page.append("<td align=right>");
-			if(historical_price(doodad) > 0)
-				page.append(to_string(historical_price(doodad), ,"%,d"));
+			page.append_price(doodad);
 			page.append("&nbsp;</td><td align=center>");
 			OCD[doodad].q = write_field(q, "q_"+to_int(doodad));
 			page.append("</td><td>");
@@ -556,8 +564,7 @@ void edit_items(string act) {
 			foreach x, doodad in cat {
 				page.append("<tr valign=center class='item'><td>"+descPlusQ(doodad) +"</a></td>");
 				page.append("<td align=right>");
-				if(historical_price(doodad) > 0)
-					page.append(to_string(historical_price(doodad), ,"%,d"));
+				page.append_price(doodad);
 				page.append("&nbsp;</td>");
 				if(act == "Keep")
 					page.append("<td align=center>"+item_amount(doodad)+"</td>");
