@@ -413,8 +413,8 @@ void add_catbuttons(buffer page) {
 void append_price(buffer page, item doodad) {
 	if(historical_price(doodad) > 0) {
 		page.append(to_string(historical_price(doodad), ,"%,d"));
-		if(historical_price(doodad) == max(autosell_price(doodad) * 2, 100))
-			page.append('<span style="float:right; transform:rotate(90deg); margin:4px -4px 0 -4px; font-size:10px; color:blue;">min</span>');
+		if(historical_price(doodad) <= max(autosell_price(doodad) * 2, 100)) // Price can be less if they are purchasable from an NPC.
+			page.append('<span style="float:right; transform:rotate(90deg); margin:3px -4px 0 -4px; font-size:11px; color:blue;">min</span>');
 			# page.append('<span style="float:right; font-size:10px;">m<br>i<br>n</span>');
 	}
 }
