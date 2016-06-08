@@ -557,6 +557,7 @@ void edit_items(string act) {
 				page.append("<th>Minimum Bid</th>");
 				break;
 			case "Search":
+			case "Inventory":
 				page.append("<th>Extra Info?</th>");
 				break;
 			}
@@ -580,6 +581,7 @@ void edit_items(string act) {
 				case "Crafting":
 				case "Reminders":
 				case "Search":
+				case "Inventory":
 					page.append("</td><td>");
 					OCD[doodad].info = write_field(OCD[doodad].info, "i_"+to_int(doodad), 25);
 					if(act == "Crafting") {
@@ -663,6 +665,14 @@ void edit_items(string act) {
 	case "Search":
 		fieldset = "Search for Items";
 		this_tab(search);
+		break;
+	case "Inventory":
+		fieldset = "Double check inventory that was already added";
+		item [int] inv;
+		foreach it in $items[]
+			if(available_amount(it) > 0 && is_OCDable(it))
+				inv[ count(inv) ] = it;
+		this_tab(inv);
 		break;
 	}
 }
@@ -989,6 +999,7 @@ void main() {
 	page.append("<ul class='tabbernav'>");
 	write_tab("tab", "Information");
 	write_tab("tab", "Add Items");
+	write_tab("tab", "Inventory Check");
 	write_tab("tab", "Edit Database");
 	write_tab("tab", "Items to Stock");
 	write_tab("tab", "Configure Script");
@@ -1013,6 +1024,9 @@ void main() {
 			break;
 		case "Add Items":
 			add_items();
+			break;
+		case "Inventory Check":
+			edit_items("Inventory");
 			break;
 		case "Edit Database":
 			subcat_tabs();
