@@ -276,7 +276,9 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 						disc[doodad] = excess;
 						break;
 					case "DISP":
-						disp[doodad] = excess;
+						if(have_display())
+							disp[doodad] = excess;
+						// else KEEP
 						break;
 					case "CLST":
 						clst[doodad] = excess;
