@@ -99,9 +99,11 @@
 [164]smart skull	MALL	0		
 [165]skewer	AUTO	0		
 [166]ghuol ears	MALL	0		
+[167]ghuol-ear kabob	MALL	0		
 [168]bone rattle	MALL	0		
 [169]bugbear beanie	AUTO	1		
 [170]lihc eye	MALL	0		
+[171]lihc eye pie	MALL	0		
 [172]gnoll lips	MALL	0		
 [173]taco shell	AUTO	0		
 [174]Gnollish casserole dish	AUTO	0		
@@ -134,11 +136,13 @@
 [213]filthy corduroys	MALL	1		
 [214]filthy knitted dread sack	MALL	1		
 [215]Uncle Jick's Brownie Mix	MALL	0		
+[216]carob brownies	MALL	0		
 [217]herb brownies	MALL	0		
 [218]hemp string	MALL	0		
 [220]gnoll teeth	MALL	0		
 [222]phat turquoise bead	MALL	0		
 [224]eyepatch	MALL	0		
+[225]tofu casserole	MALL	0		
 [226]can of Red Minotaur	MALL	0		
 [230]dead guy's watch	MALL	0		
 [232]Doc Galaktik's Ailment Ointment	AUTO	0		
@@ -216,6 +220,8 @@
 [318]spicy enchanted bean burrito	MALL	0		
 [319]insanely spicy enchanted bean burrito	MALL	0		
 [322]goat cheese	MALL	0		
+[323]plain pizza	MALL	0		
+[324]sausage pizza	MALL	0		
 [325]goat cheese pizza	MALL	0		
 [328]bottle of whiskey	MALL	2		
 [329]goat beard	MALL	0		
@@ -337,11 +343,14 @@
 [495]catgut	MALL	0		
 [496]cat appendix	MALL	0		
 [497]gnatwing	MALL	0		
+[498]papaya	MALL	0		
 [500]Elf Farm Raffle ticket	MALL	0		
 [501]Elfin shortbread	MALL	0		
 [504]evil golden arches	MALL	0		
+[506]Hell broth	MALL	0		
 [507]heavy metal thunderrr guitarrr	MALL	1		
 [508]heavy metal sonata	MALL	1		
+[510]Boris's key lime	MAKE	0	Boris's key lime pie	
 [512]Sneaky Pete's key lime	MAKE	0	Sneaky Pete's key lime pie	
 [513]Boris's key lime pie	MALL	0		
 [514]Jarlsberg's key lime pie	MALL	0		
@@ -389,6 +398,7 @@
 [578]Hell ramen	MALL	0		
 [579]boring spaghetti	MALL	0		
 [583]fettucini Inconnu	MALL	0		
+[584]spaghetti with Skullheads	MALL	0		
 [585]gnocchetti di Nietzsche	MALL	0		
 [586]ridiculously huge sword	MALL	0		
 [587]super-spiky hair gel	MALL	0		
@@ -473,16 +483,6 @@
 [706]porquoise	MALL	0		
 [707]pork elf goodies sack	CLST	0		
 [709]jewelry-making pliers	AUTO	1		
-[711]hamethyst earring	KEEP	0		
-[712]hamethyst necklace	KEEP	0		
-[713]hamethyst bracelet	KEEP	0		
-[714]hamethyst ring	KEEP	0		
-[715]baconstone earring	KEEP	0		
-[716]baconstone pendant	KEEP	0		
-[717]baconstone bracelet	KEEP	0		
-[718]baconstone ring	KEEP	0		
-[719]porquoise eyebrow ring	KEEP	0		
-[720]porquoise necklace	KEEP	0		
 [722]porquoise ring	KEEP	0		
 [723]Knoll mushroom	MALL	0		
 [724]spooky mushroom	MALL	0		
@@ -494,7 +494,9 @@
 [745]serrated proboscis extension	KEEP	0		
 [747]Knob Goblin firecracker	MALL	0		
 [749]warm mushroom	MALL	0		
+[750]spicy mushroom quesadilla	MALL	0		
 [751]cool mushroom	MALL	0		
+[752]cool mushroom casserole	MALL	0		
 [753]pointy mushroom	MALL	0		
 [755]flaming mushroom	MALL	0		
 [756]frozen mushroom	MALL	0		
@@ -520,6 +522,12 @@
 [798]ocean motion	MALL	0		
 [799]fuzzbump	MALL	0		
 [800]poutine	MALL	0		
+[801]Knob stir-fry	MALL	0		
+[804]Knoll stir-fry	MALL	0		
+[809]bat wing stir-fry	MALL	0		
+[812]pr0n stir-fry	MALL	0		
+[816]Knob stroganoff	MALL	0		
+[817]menudo ravioli	MALL	0		
 [819]milky potion	MALL	0		
 [820]swirly potion	MALL	0		
 [821]bubbly potion	MALL	0		
@@ -708,11 +716,13 @@
 [1254]jumping bean burrito	MALL	0		
 [1255]spicy jumping bean burrito	MALL	0		
 [1256]insanely spicy jumping bean burrito	MALL	0		
+[1257]rat scrapple	MALL	0		
 [1260]wax lips	KEEP	0		
 [1261]Hatorade	AUTO	0		
 [1263]pygmy bugbear shaman	KEEP	0		
 [1264]tiny nose-bone fetish	MALL	1		
 [1265]box of sunshine	KEEP	0		
+[1267]dead mimic	KEEP	0		
 [1273]magic lamp	MALL	0		
 [1274]Medicinal Herb's medicinal herbs	KEEP	0		
 [1291]Jekyllin hide belt	KEEP	0		
@@ -811,7 +821,7 @@
 [1514]Knob Goblin eyedrops	AUTO	0		
 [1515]Knob Goblin nasal spray	AUTO	0		
 [1519]Talisman of Bakula	KEEP	0		
-[1526]pet rock &quot;Snooty&quot; disguise	KBAY	1	500	Hilarious Objects
+[1526]pet rock &quot;Snooty&quot; disguise	KEEP	0		
 [1536]homeless hobo spirit	KEEP	0		
 [1537]weegee sqouija	MALL	1		
 [1539]lucky Tam O'Shatner	KEEP	0		
@@ -825,6 +835,7 @@
 [1556]boxed champagne	MALL	0		
 [1558]tangerine	MALL	0		
 [1559]tonic water	MALL	0		
+[1561]raspberry	MALL	0		
 [1563]whiskey bittersweet	MALL	0		
 [1564]mimosette	MALL	0		
 [1565]tequila sunset	MALL	0		
@@ -849,6 +860,7 @@
 [1584]Mae West	MALL	0		
 [1585]Mon Tiki	MALL	0		
 [1586]teqiwila slammer	MALL	0		
+[1588]asparagus lo mein	MALL	0		
 [1590]spooky lo mein	MALL	0		
 [1592]hot hi mein	MALL	0		
 [1593]cold hi mein	MALL	0		
@@ -898,7 +910,7 @@
 [1675]cardboard ore	MALL	0		
 [1676]styrofoam ore	MALL	0		
 [1677]bubblewrap ore	MALL	0		
-[1678]pet rock &quot;Groucho&quot; disguise	KBAY	1	500	Hilarious Objects
+[1678]pet rock &quot;Groucho&quot; disguise	KEEP	0		
 [1687]Platinum Yendorian Express Card	KEEP	0		
 [1689]blue ribbon	CLST	0		
 [1690]giant discarded bottlecap	MALL	0		
@@ -907,13 +919,15 @@
 [1693]eyedrops of newt	MALL	0		
 [1694]Frogade	MALL	0		
 [1695]papotion of papower	MALL	0		
+[1697]tofu taco	MALL	0		
+[1698]jumping bean taco	MALL	0		
+[1700]goat cheese taco	MALL	0		
 [1702]alphabet gum	MALL	0		
 [1703]Comma Chameleon egg	KEEP	0		
 [1704]roofie	MALL	0		
 [1705]flaregun	MALL	0		
 [1709]sword of static	MALL	0		
 [1720]curdflinger	MALL	0		
-[1734]sword behind inappropriate prepositions	MALL	1		
 [1748]goulauncher	MALL	0		
 [1750]Gnollish pie server	MALL	0		
 [1751]Gnollish slotted spoon	MALL	0		
@@ -1005,31 +1019,31 @@
 [1971]plastic pumpkin bucket	KEEP	0		
 [1972]silver shrimp fork	MALL	0		
 [1974]stuffed cocoabo	GIFT	0	Holatuwol	Thanks for creating KoLmafia
-[1975]stuffed baby gravy fairy	KBAY	0	300	Stuffies
-[1976]stuffed flaming gravy fairy	KBAY	0	300	Stuffies
-[1977]stuffed frozen gravy fairy	KBAY	0	300	Stuffies
-[1978]stuffed stinky gravy fairy	KBAY	0	300	Stuffies
-[1979]stuffed spooky gravy fairy	KBAY	0	300	Stuffies
-[1980]stuffed sleazy gravy fairy	KBAY	0	300	Stuffies
-[1981]stuffed astral badger	KBAY	0	300	Stuffies
-[1982]stuffed MagiMechTech MicroMechaMech	KBAY	0	300	Stuffies
-[1983]stuffed hand turkey	KBAY	0	300	Stuffies
-[1984]stuffed snowy owl	KBAY	0	300	Stuffies
-[1985]stuffed scary death orb	KBAY	0	300	Stuffies
-[1986]stuffed mind flayer	KBAY	0	300	Stuffies
-[1987]stuffed undead elbow macaroni	KBAY	0	300	Stuffies
-[1988]stuffed angry cow	KBAY	0	300	Stuffies
-[1989]stuffed Cheshire bitten	KBAY	0	300	Stuffies
-[1990]stuffed yo-yo	KBAY	0	300	Stuffies
-[1991]rubber WWJD? bracelet	TODO	0	Bluelazer trades 2k meat each	
-[1992]rubber WWBD? bracelet	TODO	0	Bluelazer trades 2k meat each	
-[1993]rubber WWSPD? bracelet	TODO	0	Bluelazer trades 2k meat each	
+[1975]stuffed baby gravy fairy	TODO	0	icon315 trades 75 meat each	
+[1976]stuffed flaming gravy fairy	TODO	0	icon315 trades 75 meat each	
+[1977]stuffed frozen gravy fairy	TODO	0	icon315 trades 75 meat each	
+[1978]stuffed stinky gravy fairy	TODO	0	icon315 trades 75 meat each	
+[1979]stuffed spooky gravy fairy	TODO	0	icon315 trades 75 meat each	
+[1980]stuffed sleazy gravy fairy	TODO	0	icon315 trades 75 meat each	
+[1981]stuffed astral badger	TODO	0	icon315 trades 100 meat each	
+[1982]stuffed MagiMechTech MicroMechaMech	TODO	0	icon315 trades 100 meat each	
+[1983]stuffed hand turkey	TODO	0	icon315 trades 100 meat each	
+[1984]stuffed snowy owl	TODO	0	zap into a yo-yo and sell to i_eat_food for 4k	Stuffies
+[1985]stuffed scary death orb	TODO	0	icon315 trades 75 meat each	Stuffies
+[1986]stuffed mind flayer	TODO	0	icon315 trades 75 meat each	
+[1987]stuffed undead elbow macaroni	TODO	0	icon315 trades 100 meat each	
+[1988]stuffed angry cow	TODO	0	icon315 trades 100 meat each	
+[1989]stuffed Cheshire bitten	TODO	0	i_eat_food trades 3k meat each	Thanks for your scripting
+[1990]stuffed yo-yo	GIFT	0	i_eat_food	Thanks for all the Hodgies!
+[1991]rubber WWJD? bracelet	TODO	0	icon315 trades 150 meat each	
+[1992]rubber WWBD? bracelet	TODO	0	icon315 trades 150 meat each	
+[1993]rubber WWSPD? bracelet	TODO	0	icon315 trades 150 meat each	
 [1994]rubber WWtNSD? bracelet	GIFT	0	Veracity	For making KoLmafia so good
-[1995]heart necklace	TODO	0	i_eat_food trades 3k meat each	
+[1995]heart necklace	TODO	0	Agape trades 15k meat each	
 [1997]left half of a heart necklace	KEEP	0		
 [1998]pack of KWE trading card	MALL	0		
 [2016]diamond necklace	TODO	0	Lady Luck Fortuna trades 10k meat each	
-[2017]spade necklace	TODO	0	i_eat_food trades 3k meat each	
+[2017]spade necklace	GIFT	0	Darzil	For making KoLmafia so good
 [2018]club necklace	TODO	0	i_eat_food trades 3k meat each	
 [2020]cherry pie	MALL	0		
 [2021]strawberry pie	MALL	0		
@@ -1037,6 +1051,7 @@
 [2023]Genalen&trade; Bottle	MALL	0		
 [2024]mixed wildflower greens	MALL	0		
 [2025]handful of walnuts	MALL	0		
+[2028]tofu wonton	MALL	0		
 [2029]hippy protest button	MALL	1		
 [2030]Lockenstock&trade; sandals	MALL	0		
 [2031]didgeridooka	MALL	0		
@@ -1105,8 +1120,10 @@
 [2190]yuletide troll chrysalis	KEEP	0		
 [2191]giant book of ancient carols	MALL	1		
 [2194]spooky eggnog	MALL	0		
+[2196]gingerbread horror	MALL	0		
 [2197]fancy but probably evil chocolate	MALL	0		
-[2206]time sleigh	CLST	0		
+[2198]bat-shaped Crimboween cookie	MALL	0		
+[2199]skull-shaped Crimboween cookie	MALL	0		
 [2207]lucky Crimbo tiki necklace	KEEP	0		
 [2210]Tiki lighter	KEEP	0		
 [2211]deck of tropical cards	KEEP	0		
@@ -1137,6 +1154,7 @@
 [2263]lion oil	MALL	0		
 [2264]stunt nuts	MALL	0		
 [2265]wet stew	MALL	0		
+[2269]sausage wonton	MALL	0		
 [2271]dusty bottle of Merlot	MALL	0		
 [2272]dusty bottle of Port	MALL	0		
 [2273]dusty bottle of Pinot Noir	MALL	0		
@@ -1256,7 +1274,7 @@
 [2481]demon buckler	MALL	0		
 [2483]barskin cloak	MALL	1		
 [2485]clownskin harness	MALL	1		
-[2486]demonskin jacket	MALL	1		
+[2486]demonskin jacket	MALL	0		
 [2487]hipposkin poncho	MALL	1		
 [2489]tuxedo shirt	MALL	1		
 [2492]tropical orchid	MALL	0		
@@ -1309,8 +1327,8 @@
 [2583]centipede eggs	MALL	0		
 [2584]wonderwall shield	MALL	0		
 [2585]Colonel Mustard's Lonely Spades Club Jacket	MALL	0		
-[2586]General Sage's Lonely Diamonds Club Jacket	MALL	1		
-[2587]Corporal Fennel's Lonely Clubs Club Jacket	MALL	1		
+[2586]General Sage's Lonely Diamonds Club Jacket	MALL	0		
+[2587]Corporal Fennel's Lonely Clubs Club Jacket	MALL	0		
 [2588]Private Pepper's Lonely Hearts Club Jacket	MALL	0		
 [2589]hot date	MALL	0		
 [2590]distilled fortified wine	MALL	0		
@@ -1322,6 +1340,7 @@
 [2596]leathery cat skin	MALL	0		
 [2597]leathery bat skin	MALL	0		
 [2598]leathery rat skin	MALL	0		
+[2599]Discount Telescope Warehouse gift certificate	DISP	0		
 [2600]carbonated water lily	MALL	0		
 [2602]Staff of Blood and Pudding	CLST	0		
 [2604]Tuesday's ruby	MALL	0		
@@ -1341,6 +1360,7 @@
 [2632]mother's little helper	MALL	0		
 [2634]mummy wrapping	MALL	0		
 [2635]really thick bandage	MALL	0		
+[2636]mummy mask	MALL	0		
 [2638]gauze hammock	KEEP	0		
 [2639]black cherry soda	AUTO	0		
 [2640]black greaves	MALL	0		
@@ -1354,6 +1374,7 @@
 [2648]flirtatious feather	MALL	0		
 [2649]Lord Spookyraven's ear trumpet	KEEP	0		
 [2650]bottled green pixie	KEEP	0		
+[2652]S.T.L.T.	MALL	0		
 [2653]honey-dew	MALL	0		
 [2654]white Xanadian	MALL	0		
 [2655]tiny bottle of absinthe	MALL	0		
@@ -1421,6 +1442,9 @@
 [2732]shot of peach schnapps	MALL	0		
 [2733]bunch of square grapes	MALL	0		
 [2734]brown sugar cane	MALL	0		
+[2735]sandwich of the gods	DISP	0		
+[2736]Pan-Dimensional Gargle Blaster	DISP	0		
+[2737]enchanted leopard-print barbell	DISP	0		
 [2739]panty raider camouflage	MALL	0		
 [2740]Staff of the Walk-In Freezer	KEEP	0		
 [2741]boilermaker	MALL	0		
@@ -1438,6 +1462,7 @@
 [2764]Order of the Silver Wossname	KEEP	0		
 [2766]solid gold bowling ball	MALL	0		
 [2767]Crimbo pie	MALL	0		
+[2769]peach pie	MALL	0		
 [2770]chunk of rock salt	MALL	0		
 [2771]handful of pine needles	MALL	0		
 [2772]steamy ruby	MALL	0		
@@ -1463,6 +1488,7 @@
 [2817]Brimstone Brooch	KEEP	0		
 [2818]Brimstone Bracelet	KEEP	0		
 [2829]really dense meat stack	MALL	0		
+[2830]digital key lime	MAKE	0	digital key lime pie	
 [2831]star key lime	MAKE	0	star key lime pie	false
 [2832]digital key lime pie	MALL	0		
 [2833]star key lime pie	MALL	0		
@@ -1621,6 +1647,7 @@
 [3220]hobo code binder	KEEP	0		
 [3221]gator skin	MALL	0		
 [3223]sewer nuggets	MALL	0		
+[3224]sewer wad	MALL	0		
 [3225]bottle of sewage schnapps	MALL	0		
 [3227]C.H.U.M. chum	MALL	0		
 [3229]decaying goldfish liver	MALL	0		
@@ -1652,15 +1679,16 @@
 [3271]crotchety pants	CLST	0		
 [3272]Saccharine Maple pendant	CLST	0		
 [3273]willowy bonnet	CLST	0		
-[3274]flavored foot massage oil	KBAY	0	50	Tasteful Gifts
-[3275]foam dart	KBAY	0	50	Tasteful Gifts
-[3276]black-and-blue light	KBAY	0	50	Tasteful Gifts
-[3277]Loudmouth Larry Lamprey	KBAY	0	50	Tasteful Gifts
-[3278]cheap studded belt	KBAY	0	50	Tasteful Gifts
-[3279]personal massager	KBAY	0	50	Tasteful Gifts
-[3280]personalized coffee mug	KBAY	0	50	Tasteful Gifts
-[3281]blue plasma ball	KBAY	0	50	Tasteful Gifts
-[3282]stick-on eyebrow piercing	KBAY	0	50	Tasteful Gifts
+[3274]flavored foot massage oil	KEEP	0	50	
+[3275]foam dart	KEEP	0	50	
+[3276]black-and-blue light	KEEP	0	50	
+[3277]Loudmouth Larry Lamprey	KEEP	0	50	
+[3278]cheap studded belt	KEEP	0	50	
+[3279]personal massager	KEEP	0	50	
+[3280]personalized coffee mug	KEEP	0	50	
+[3281]blue plasma ball	KEEP	0	50	
+[3282]stick-on eyebrow piercing	KEEP	0	50	
+[3283]delicious salad	MALL	0		
 [3285]C.H.U.M. knife	MALL	0		
 [3286]Frosty's snowball sack	KEEP	0		
 [3287]quasi-ethereal macaroni fragments	CLST	0		
@@ -1797,12 +1825,12 @@
 [3505]LWA ring	KEEP	0		
 [3506]LARP membership card	KEEP	0		
 [3507]Scratch 'n' Sniff Sticker Tome	KEEP	0		
-[3509]scratch 'n' sniff unicorn sticker	MALL	0		
-[3510]scratch 'n' sniff apple sticker	MALL	0		
-[3511]scratch 'n' sniff UPC sticker	MALL	0		
-[3512]scratch 'n' sniff wrestler sticker	MALL	0		
-[3513]scratch 'n' sniff dragon sticker	MALL	0		
-[3514]scratch 'n' sniff rock band sticker	MALL	0		
+[3509]scratch 'n' sniff unicorn sticker	MALL	10		
+[3510]scratch 'n' sniff apple sticker	MALL	10		
+[3511]scratch 'n' sniff UPC sticker	MALL	10		
+[3512]scratch 'n' sniff wrestler sticker	MALL	10		
+[3513]scratch 'n' sniff dragon sticker	MALL	10		
+[3514]scratch 'n' sniff rock band sticker	MALL	10		
 [3515]ganger bandana	MALL	0		
 [3516]eel skin	MALL	0		
 [3517]eelskin hat	MALL	1		
@@ -1822,6 +1850,9 @@
 [3552]octopus's spade	MALL	2		
 [3553]soggy seed packet	MALL	0		
 [3554]glob of green slime	MALL	0		
+[3557]sea avocado	MALL	0		
+[3558]sea lychee	MALL	0		
+[3560]sea honeydew	MALL	0		
 [3561]pressurized potion of puissance	MALL	0		
 [3562]pressurized potion of perspicacity	MALL	0		
 [3563]pressurized potion of pulchritude	MALL	0		
@@ -1881,6 +1912,12 @@
 [3680]glowing esca	MALL	1		
 [3681]bubbling tempura batter	MALL	0		
 [3682]globe of Deep Sauce	MALL	0		
+[3684]tempura carrot	MALL	0		
+[3685]tempura cucumber	MALL	0		
+[3686]tempura avocado	MALL	0		
+[3687]sea broccoli	MALL	0		
+[3690]tempura cauliflower	MALL	0		
+[3692]sea persimmon	MALL	0		
 [3693]pressurized potion of perception	MALL	0		
 [3694]pressurized potion of proficiency	MALL	0		
 [3695]Mer-kin digpick	MALL	1		
@@ -1955,9 +1992,11 @@
 [3820]water-polo mitt	CLST	0		
 [3821]glowing syringe	MALL	0		
 [3822]fishy wand	MALL	1		
+[3829]tempura radish	MALL	0		
 [3830]water-polo cap	CLST	0		
 [3831]Typical Tavern swill	MALL	0		
 [3832]tropical swill	MALL	0		
+[3833]fruity girl swill	MALL	0		
 [3834]blended frozen swill	MALL	0		
 [3835]tiny costume wardrobe	KEEP	0		
 [3836]Elvish sunglasses	KEEP	0		
@@ -2012,6 +2051,8 @@
 [3913]blended frozen swill with a fly in it	KEEP	0		
 [3914]turtle wax	MALL	0		
 [3915]turtle wax shield	MALL	0		
+[3916]turtle wax helmet	MALL	0		
+[3917]turtle wax greaves	MALL	0		
 [3919]turtlemail bits	MALL	0		
 [3920]turtlemail coif	MALL	0		
 [3921]turtlemail breeches	MALL	0		
@@ -2038,7 +2079,15 @@
 [3944]shadowy seal eye	MALL	0		
 [3946]Clan VIP Lounge invitation	KEEP	0		
 [3947]Clan VIP Lounge key	KEEP	0		
+[3948]stuffed Meat	TODO	0	icon315 trades 100 meat each	
+[3949]stuffed treasure chest	KEEP	0		
+[3950]stuffed key	TODO	0	icon315 trades 100 meat each	
 [3951]stuffed Baron von Ratsworth	TODO	0	Plus4 trades 2k meat each	
+[3952]stuffed monocle	TODO	0	icon315 trades 100 meat each	
+[3953]stuffed mink	KEEP	0		
+[3954]stuffed teddy butler	TODO	0	icon315 trades 100 meat each	
+[3956]stuffed crazy bastard sword	TODO	0	icon315 trades 100 meat each	
+[3957]stuffed tin of caviar	TODO	0	icon315 trades 100 meat each	
 [3958]bejeweled cufflinks	KEEP	0		
 [3959]garish pinky ring	KEEP	0		
 [3960]giant designer sunglasses	KEEP	0		
@@ -2135,7 +2184,7 @@
 [4111]brazen bracelet	KEEP	0		
 [4112]bitter bowtie	KEEP	0		
 [4113]bewitching boots	KEEP	0		
-[4114]secret from the future	KEEP	0		
+[4114]secret from the future	DISP	0		
 [4116]rickety old unicycle	KEEP	0		
 [4117]crusty hula hoop	KEEP	0		
 [4118]Coily&trade;	KEEP	0		
@@ -2276,10 +2325,14 @@
 [4350]snow pants	CLST	0		
 [4351]snow belly	CLST	0		
 [4376]Crimbomination Contraption	CLST	0		
+[4389]peanut brittle shield	KEEP	0	500	
+[4390]Red Rover BB gun	KEEP	0	1000	
+[4391]red-and-green sweater	KEEP	0	1000	
+[4392]Crimbo Candy Cookbook	KEEP	0	Niktu trades 1k meat each	
 [4393]Crimbo peppermint bark	MALL	0		
 [4394]Crimbo fudge	MALL	0		
 [4395]Crimbo candied pecan	MALL	0		
-[4396]Jack-in-the-box	KBAY	0	9000	Found under the Crimbo Tree
+[4396]Jack-in-the-box	KEEP	0	9000	
 [4397]brass crank handle	MALL	0		
 [4398]stinky cheese ball	KEEP	0		
 [4399]stinky cheese sword	KEEP	0		
@@ -2308,9 +2361,15 @@
 [4445]spangly mariachi pants	MALL	0		
 [4446]spangly mariachi vest	MALL	0		
 [4447]spangly sombrero	MALL	1		
-[4448]Instant Karma	KEEP	0		
+[4448]Instant Karma	DISP	0		
 [4457]snailmail bits	MALL	0		
 [4461]seal-brain elixir	MALL	0		
+[4462]chocolate seal-clubbing club	MALL	0	6000	
+[4463]chocolate turtle totem	MALL	0	6000	
+[4464]chocolate pasta spoon	MALL	0	6000	
+[4465]chocolate saucepan	MALL	0	6000	
+[4466]chocolate disco ball	MALL	0	6000	
+[4467]chocolate stolen accordion	MALL	0	6000	
 [4468]Libram of BRICKOs	KEEP	0		
 [4469]BRICKO brick	MALL	0		
 [4470]BRICKO eye brick	MALL	0		
@@ -2332,7 +2391,6 @@
 [4503]recording of Inigo's Incantation of Inspiration	MALL	0		
 [4504]heart of the volcano	KEEP	0		
 [4505]Northern pemmican	MALL	0		
-[4507]Clan looking glass	KEEP	0		
 [4508]&quot;DRINK ME&quot; potion	MALL	10		
 [4509]reflection of a map	KEEP	0		
 [4519]ittah bittah hookah	KEEP	0		
@@ -2363,12 +2421,15 @@
 [4577]bugged b&Atilde;&para;n&plusmn;&Atilde;&copy;t	MALL	1		
 [4580]old school Mafi<i>a kni</i>cke&frac12;&aelig;	MALL	1		
 [4583]big glob of skin	KEEP	0		
+[4584]six tiny wedges of goat cheese	MALL	0		
 [4591]pixel morning star	KEEP	0		
+[4601]plastic cup of beer	MALL	0		
 [4605]bottle of Goldschn&ouml;ckered	CLST	0		
 [4614]Crown of Thrones	KEEP	0		
 [4619]glowing frisbee	KEEP	0		
-[4621]Game Grid token	MALL	10		
+[4621]Game Grid token	MALL	1		
 [4622]Game Grid ticket	MALL	0		
+[4624]pawn cookie	MALL	0		
 [4625]coffee pixie stick	KEEP	0		
 [4627]finger cuffs	KEEP	0		
 [4628]little parachute guy	KEEP	0		
@@ -2384,6 +2445,7 @@
 [4655]ironic jogging shorts	MALL	0		
 [4656]mole skin notebook	MALL	0		
 [4659]blackberry galoshes	MALL	1		
+[4661]poisonous caviar	MALL	0		
 [4665]hot plate	MALL	0		
 [4666]imp unity ring	MALL	0		
 [4670]beer-scented teddy bear	KEEP	0		
@@ -2400,6 +2462,7 @@
 [4702]archaeologing shovel	CLST	0		
 [4711]old sweatpants	KEEP	0		
 [4713]popsicle stick	MALL	0		
+[4714]lemon popsicle	MALL	0		
 [4717]liver popsicle	MALL	0		
 [4718]mariachi hat	MALL	1		
 [4719]Hollandaise helmet	MALL	1		
@@ -2424,6 +2487,8 @@
 [4764]pumpkin beer	MALL	3		
 [4765]pumpkin juice	MALL	0		
 [4811]Holiday Fun!	MALL	0		
+[4821]circular CRIMBCOOKIE	MALL	0		
+[4839]triangular CRIMBCOOKIE	MALL	0		
 [4841]bindlestocking	MALL	1		
 [4842]sleeping stocking	MALL	0		
 [4845]Uncle Hobo's stocking cap	KEEP	0		
@@ -2463,6 +2528,7 @@
 [4938]quake of arrows	MALL	1		
 [4939]time's arrow	MALL	0		
 [4940]arrowgram	MALL	0		
+[4941]Knob jelly donut	MALL	0		
 [4948]GOTO	MALL	10		
 [4949]weremoose spit	MALL	0		
 [4950]abominable blubber	MALL	0		
@@ -2478,27 +2544,7 @@
 [4960]Cobb's Knob Wurstbrau	MALL	0		
 [4962]mysterious silver lapel pin	KEEP	0		
 [4963]solid state loom	MALL	1		
-[4966]Pack of Alice's Army Cards	USE	0		
-[4967]Alice's Army Swordsman	MALL	1		
-[4968]Alice's Army Spearsman	MALL	1		
-[4969]Alice's Army Halberder	MALL	1		
-[4970]Alice's Army Guard	MALL	1		
-[4971]Alice's Army Wallman	MALL	1		
-[4972]Alice's Army Ninja	MALL	1		
-[4973]Alice's Army Alchemist	MALL	1		
-[4974]Alice's Army Page	MALL	1		
-[4975]Alice's Army Shieldmaiden	MALL	1		
-[4976]Alice's Army Mad Bomber	MALL	1		
-[4977]Alice's Army Nurse	MALL	1		
-[4978]Alice's Army Hammerman	MALL	1		
-[4979]Alice's Army Bowman	MALL	1		
-[4980]Alice's Army Lanceman	MALL	1		
-[4981]Alice's Army Horseman	MALL	1		
-[4982]Alice's Army Coward	MALL	1		
-[4983]Alice's Army Cleric	MALL	1		
-[4984]Alice's Army Sniper	MALL	1		
-[4985]Alice's Army Dervish	MALL	1		
-[4986]Alice's Army Martyr	MALL	1		
+[4966]Pack of Alice's Army Cards	MALL	0		
 [4988]Alice's Army Foil Swordsman	MALL	1		
 [4989]Alice's Army Foil Spearsman	MALL	1		
 [4990]Alice's Army Foil Halberder	MALL	1		
@@ -2522,8 +2568,10 @@
 [5009]card sleeve	KEEP	0		
 [5012]Ye Wizard's Shack snack voucher	MALL	0		
 [5013]wasabi pocky	MALL	0		
+[5014]tobiko pocky	MALL	0		
 [5016]wasabi-infused sake	MALL	0		
 [5017]tobiko-infused sake	MALL	0		
+[5018]natto-infused sake	MALL	0		
 [5024]marshmallow flamb&eacute;	MALL	0		
 [5025]cranberry schnapps	MALL	0		
 [5026]breaded beer	MALL	0		
@@ -2590,7 +2638,7 @@
 [5132]elven hardtack	MALL	0		
 [5133]elven squeeze	MALL	0		
 [5134]lunar isotope	MALL	0		
-[5141]Thwaitgold bee statuette	KEEP	0		
+[5141]Thwaitgold bee statuette	DISP	0		
 [5144]handful of honey	MALL	0		
 [5148]honey dipper	KEEP	0		
 [5149]honeybritches	KEEP	0		
@@ -2632,7 +2680,7 @@
 [5218]hobo paste	MALL	0		
 [5219]Crimbo paste	MALL	0		
 [5221]fat loot token	KEEP	0		
-[5222]Thwaitgold grasshopper statuette	KEEP	0		
+[5222]Thwaitgold grasshopper statuette	DISP	0		
 [5224]Ur-Donut	MALL	0		
 [5225]The Bomb	MALL	0		
 [5226]box of Familiar Jacks	MALL	0		
@@ -2740,7 +2788,7 @@
 [5370]miniature boiler	MALL	0		
 [5379]groose grease	MALL	0		
 [5390]ridiculous cocktail	MALL	0		
-[5392]Thwaitgold butterfly statuette	KEEP	0		
+[5392]Thwaitgold butterfly statuette	DISP	0		
 [5395]peppermint sprout	MALL	0		
 [5396]peppermint twist	MALL	0		
 [5397]peppermint patty	MALL	0		
@@ -2817,7 +2865,7 @@
 [5568]ninja rope	MALL	0		
 [5569]ninja crampons	MALL	0		
 [5570]ninja carabiner	MALL	0		
-[5572]Thwaitgold stag beetle statuette	KEEP	0		
+[5572]Thwaitgold stag beetle statuette	DISP	0		
 [5573]Drac & Tan	MALL	0		
 [5574]Transylvania Sling	MALL	0		
 [5575]Shot of the Living Dead	MALL	0		
@@ -2915,7 +2963,7 @@
 [5688]UV monocular	CLST	0		
 [5689]drone self-destruct chip	MALL	0		
 [5691]pacification grenade	MALL	0		
-[5694]Thwaitgold woollybear statuette	KEEP	0		
+[5694]Thwaitgold woollybear statuette	DISP	0		
 [5695]bugbear detector	CLST	0		
 [5696]bugbear purification pill	MALL	0		
 [5700]The Lost Comb	MALL	0		
@@ -2927,6 +2975,9 @@
 [5713]enchanted fire extinguisher	KEEP	0		
 [5716]Hjodor's Guide to Arctic Dalmatians (used)	KEEP	0		
 [5721]wings of fire	KEEP	0		
+[5726]hot daub bun	KEEP	0		
+[5727]hot daub stand	KEEP	0		
+[5728]foot-long hot daub	KEEP	0		
 [5733]eerily silent box	KEEP	0		
 [5735]Lord Flameface's cloak	KEEP	0		
 [5736]Drizzlers&trade; Black Licorice	MALL	0		
@@ -2954,7 +3005,7 @@
 [5764]fuzzy busby	KEEP	0		
 [5765]fuzzy earmuffs	CLST	0		
 [5766]fuzzy montera	KEEP	0		
-[5773]Thwaitgold maggot statuette	KEEP	0		
+[5773]Thwaitgold maggot statuette	DISP	0		
 [5776]Barney's rake	CLST	0		
 [5779]keel-haulin' knife	MALL	0		
 [5780]ancient ice cream scoop	MALL	0		
@@ -3040,6 +3091,7 @@
 [5880]packet of dragon's teeth	KEEP	0		
 [5881]skeleton	MALL	0		
 [5882]skeleton skis	MALL	1		
+[5883]skeleton quiche	MALL	0		
 [5886]Bonestabber	MALL	0		
 [5887]crystal skeleton vodka	MALL	0		
 [5889]auxiliary backbone	MALL	1		
@@ -3123,7 +3175,7 @@
 [6040]oil lamp	MALL	0		
 [6041]oil slacks	MALL	1		
 [6042]oil pan	MALL	1		
-[6045]Thwaitgold praying mantis statuette	KEEP	0		
+[6045]Thwaitgold praying mantis statuette	DISP	0		
 [6046]BittyCar SoulCar	KEEP	0		
 [6047]Misty Cloak	MALL	0		
 [6048]Misty Robe	MALL	0		
@@ -3150,17 +3202,17 @@
 [6083]actual reality goggles	MALL	0		
 [6084]Mr. Haggis	MALL	0		
 [6085]magnetic sculpture kit	MALL	0		
-[6086]Microplushie: Otakulone	KBAY	0	200	Microplushies
-[6087]Microplushie: Hippylase	KBAY	0	200	Microplushies
-[6088]Microplushie: Bropane	KBAY	0	200	Microplushies
-[6089]Microplushie: Sororitrate	KBAY	0	200	Microplushies
-[6090]Microplushie: Gothochondria	KBAY	0	200	Microplushies
-[6091]Microplushie: Raverdrine	KBAY	0	200	Microplushies
-[6092]Microplushie: Hobomosome	KBAY	0	200	Microplushies
-[6093]Microplushie: Ermahgerdic Acid	KBAY	0	200	Microplushies
-[6094]Microplushie: Dorkonide	KBAY	0	200	Microplushies
-[6095]Microplushie: Fauxnerditide	KBAY	0	200	Microplushies
-[6096]Microplushie: Hipsterine	KBAY	0	200	Microplushies
+[6086]Microplushie: Otakulone	KEEP	0		
+[6087]Microplushie: Hippylase	KEEP	0		
+[6088]Microplushie: Bropane	KEEP	0		
+[6089]Microplushie: Sororitrate	KEEP	0		
+[6090]Microplushie: Gothochondria	KEEP	0		
+[6091]Microplushie: Raverdrine	KEEP	0		
+[6092]Microplushie: Hobomosome	KEEP	0		
+[6093]Microplushie: Ermahgerdic Acid	KEEP	0		
+[6094]Microplushie: Dorkonide	KEEP	0		
+[6095]Microplushie: Fauxnerditide	KEEP	0		
+[6096]Microplushie: Hipsterine	KEEP	0		
 [6097]classy monkey	MALL	0		
 [6099]Thinknerd T-Shirt	KEEP	0		
 [6103]Artist's Whisk of Misery	MALL	0		
@@ -3233,6 +3285,7 @@
 [6276]Ye Olde Meade	MALL	0		
 [6277]Ye Olde Bawdy Limerick	MALL	0		
 [6278]Ye Olde Medieval Insult	MALL	0		
+[6279]pewter claymore	MALL	0		
 [6280]giant artisanal rice peeler	MALL	0		
 [6281]giant heirloom grape tomato	MALL	0		
 [6282]chipotle wasabi cilantro aioli	MALL	0		
@@ -3242,7 +3295,7 @@
 [6291]punk rock jacket	MALL	0		
 [6292]giant safety pin	MALL	0		
 [6293]stolen sushi	MALL	0		
-[6298]Thwaitgold firefly statuette	KEEP	0		
+[6298]Thwaitgold firefly statuette	DISP	0		
 [6300]Super Weight-Gain 9000	MALL	0		
 [6301]possibility potion	MALL	0		
 [6302]eleven-foot pole	MALL	1		
@@ -3431,11 +3484,13 @@
 [6540]old dry bone	MALL	0		
 [6542]tonguebone	MALL	0		
 [6545]weedy skirt	KEEP	0		
-[6547]Thwaitgold Goliath beetle statuette	KEEP	0		
+[6547]Thwaitgold Goliath beetle statuette	DISP	0		
 [6579]Dreadsylvanian Almanac page	MALL	0		
 [6580]length of old fuse	MALL	0		
+[6584]ancient hot dog wrapper	MALL	0		
 [6586]chicle de salchicha	MALL	0		
 [6588]gnawed-up dog bone	MALL	0		
+[6591]dream of a dog	MALL	0		
 [6594]hot Dreadsylvanian cocoa	KEEP	0		
 [6596]intricate clockwork egg	MALL	0		
 [6615]Cold One	KEEP	0		
@@ -3456,6 +3511,7 @@
 [6631]folder (Jackass Plumber)	MALL	1		
 [6633]folder (barbarian)	MALL	0		
 [6634]folder (rainbow unicorn)	MALL	0		
+[6635]folder (Seawolf)	MALL	0		
 [6638]folder (tranquil landscape)	MALL	1		
 [6639]folder (owl)	MALL	1		
 [6640]folder (Stinky Trash Kid)	MALL	0		
@@ -3477,7 +3533,7 @@
 [6658]hair oil	MALL	0		
 [6659]scrap metal	MALL	0		
 [6660]school spirit socket set	MALL	1		
-[6676]Thwaitgold bookworm statuette	KEEP	0		
+[6676]Thwaitgold bookworm statuette	DISP	0		
 [6679]antique machete	MALL	0		
 [6680]Cursed Punch	AUTO	0		
 [6681]Bowl of Scorpions	AUTO	0		
@@ -3529,7 +3585,9 @@
 [6757]can of Br&uuml;talbr&auml;u	MALL	0		
 [6758]can of Drooling Monk	MALL	0		
 [6759]can of Impetuous Scofflaw	MALL	0		
+[6761]bottle of Professor Beer	MALL	0		
 [6763]bottle of Race Car Red	MALL	0		
+[6765]bottle of Lambada Lambic	MALL	0		
 [6766]fancy tin beer can	MALL	0		
 [6774]tin snips	KEEP	0		
 [6779]crystalline seal eye	MALL	1		
@@ -3601,11 +3659,14 @@
 [6875]post-holiday sale coupon	MALL	0		
 [6876]dry cleaning receipt	MALL	0		
 [6877]pocket lint (blue)	MALL	0		
+[6878]pocket lint (green)	MALL	0		
+[6879]pocket lint (white)	MALL	0		
+[6880]pocket lint (orange)	MALL	0		
 [6881]bowl of petunias	KEEP	0		
 [6883]wool sock	MALL	0		
 [6885]spirit gum	MALL	0		
 [6891]spirit bell	KEEP	0		
-[6899]Thwaitgold ant statuette	KEEP	0		
+[6899]Thwaitgold ant statuette	DISP	0		
 [6900]experimental carbon fiber pasta additive	KEEP	0		
 [6901]hazardous sauce dosimeter	KEEP	0		
 [6902]flask flops	MALL	0		
@@ -3622,6 +3683,7 @@
 [7004]Flaskfull of Hollow	MALL	3		
 [7005]lump of Brituminous coal	MALL	0		
 [7006]handful of Smithereens	MALL	0		
+[7010]Irish Coffee, English Heart	MALL	0		
 [7013]Golden Light	MALL	0		
 [7014]Louder Than Bomb	MALL	1		
 [7015]Handsome Devil	MALL	0		
@@ -3640,6 +3702,7 @@
 [7028]Frankly Mr. Shank	MALL	2		
 [7029]Shakespeare's Sister's Accordion	MALL	2		
 [7030]third-hand lantern	AUTO	0		
+[7032]pickled egg	MALL	0		
 [7036]warbear high-efficiency still	KEEP	0		
 [7037]warbear LP-ROM burner	KEEP	0		
 [7038]warbear gyrocopter	KEEP	0		
@@ -3683,6 +3746,7 @@
 [7106]snakebite	MALL	0		
 [7107]candy stick	MALL	0		
 [7108]candied pecan	MALL	0		
+[7109]pecan pie	MALL	0		
 [7110]chocolate-stained collar	MALL	1		
 [7111]candy mountain oyster	MALL	0		
 [7112]chocotini	MALL	0		
@@ -3699,6 +3763,7 @@
 [7127]chocolate cow bone	MALL	0		
 [7128]gummi fang	MALL	0		
 [7129]leftover canap&eacute;s	MALL	0		
+[7130]magnum of fancy champagne	MALL	0		
 [7131]silver cow creamer	KEEP	0		
 [7132]Outer Wolf&trade; cologne	MALL	0		
 [7133]lupine appetite hormones	MALL	0		
@@ -3747,6 +3812,7 @@
 [7198]red silk skirt	MALL	0		
 [7199]blowdart	MALL	0		
 [7200]Buddy Bjorn	KEEP	0		
+[7201]The Nuge's favorite crossbow	KEEP	0		
 [7202]sweet roll Alabama	MALL	0		
 [7203]Saturday Night Special	MALL	0		
 [7204]lynyrd snare	MALL	0		
@@ -3788,7 +3854,7 @@
 [7245]red eye	MALL	0		
 [7246]glark cable	MALL	0		
 [7248]red foxglove	MALL	0		
-[7249]Thwaitgold dragonfly statuette	KEEP	0		
+[7249]Thwaitgold dragonfly statuette	DISP	0		
 [7250]Sneaky Pete's leather jacket	KEEP	0		
 [7255]mini-martini	MALL	0		
 [7259]crate of firebombs	MALL	0		
@@ -3910,6 +3976,10 @@
 [7434]Helvella Haemophilia mushroom	MALL	0		
 [7436]Tremella Tarantella mushroom	MALL	0		
 [7444]overpowering mushroom wine	MALL	0		
+[7447]blood-red mushroom wine	MALL	0		
+[7462]Brogre brorts	KEEP	0		
+[7463]Brogre brolo shirt	KEEP	0		
+[7464]Brogre bucket hat	KEEP	0		
 [7466]airplane charter: Spring Break Beach	KEEP	0		
 [7468]8-billed baseball cap	MALL	0		
 [7469]extremely wet T-shirt	MALL	0		
@@ -3924,7 +3994,7 @@
 [7482]Rompedores de Fantasmas	MALL	0		
 [7483]La Fantasma y La Oscuridad	MALL	0		
 [7484]Fantasma en la M&aacute;quina	MALL	0		
-[[7498]Thwaitgold wheel bug statuette	KEEP	0		
+[7498]Thwaitgold wheel bug statuette	DISP	0		
 [7499]Hot 'n' Scarys	MALL	0		
 [7501]black gold	MALL	0		
 [7502]Texas tea	MALL	0		
@@ -3941,6 +4011,10 @@
 [7518]wand of pigification	KEEP	0		
 [7519]glass of bourbon	MALL	0		
 [7534]alien source code printout (used)	KEEP	0		
+[7521]government cheese	MALL	0		
+[7522]pair of government shades	MALL	0		
+[7528]government-issued night-vision goggles	MALL	0		
+[7529]loaf of alien bread	MALL	0		
 [7535]stealth bomber	MALL	0		
 [7539]space beast fur hat	KEEP	0		
 [7540]space beast fur pants	KEEP	0		
@@ -3966,6 +4040,7 @@
 [7568]Time Lord Badge of Honor	KEEP	0		
 [7569]Time Bandit Badge of Courage	KEEP	0		
 [7570]Friendliness Beverage	MALL	0		
+[7572]D roll	MALL	0		
 [7574]New Zealand iced tea	MALL	0		
 [7576]future drug: Muscularactum	MALL	0		
 [7577]future drug: Smartinex	MALL	0		
@@ -4028,7 +4103,9 @@
 [7665]liquid ice	MALL	0		
 [7666]Wet Russian	MALL	0		
 [7667]filet of The Fish	MALL	0		
-[7668]Thwaitgold spider statuette	KEEP	0		
+[7668]Thwaitgold spider statuette	DISP	0		
+[7673]legitimate business on the beach	MALL	0		
+[7677]candy cigarette	MALL	0		
 [7681]unquiet spirits	MALL	0		
 [7683]blue grass	MALL	0		
 [7685]Time Bandit Time Towel	KEEP	0		
@@ -4055,6 +4132,7 @@
 [7707]rubber nubbin	MALL	0		
 [7709]Thor's Pliers	KEEP	0		
 [7712]beautiful rainbow	MALL	0	5000000	
+[7715]non-aged vinegar	MALL	0		
 [7721]salt wages	MALL	0		
 [7725]Bruno's blessing of Mars	MALL	0		
 [7726]Dennis's blessing of Minerva	MALL	0		
@@ -4113,11 +4191,16 @@
 [7789]first-aid pouch	MALL	0		
 [7790]khaki duffel bag	MALL	0		
 [7791]airborne mutagen	MALL	0		
+[7798]Jungle Juice	MALL	0		
+[7799]Amnesiac Ale	MALL	0		
+[7800]Highest Bitter	MALL	0		
 [7801]mercenary pistol	MALL	1		
+[7813]seared dino steak	MALL	0		
 [7814]bottle of drinkin' gas	MALL	0		
 [7826]iFlail	KEEP	0		
 [7830]experimental serum P-00	MALL	0		
-[7860]peppermint tailings	KEEP	0		
+[7844]special clip: graveburpers	KEEP	0		
+[7849]java cookie	MALL	0		
 [7914]Bit O' Quail Spleen	MALL	0		
 [7915]Take Eleven Bar	MALL	0		
 [7917]BOOterfinger	MALL	0		
@@ -4129,7 +4212,7 @@
 [7924]Ambitious Turkey	MALL	0		
 [7926]gamma nog	MALL	0		
 [7934]sneaky wrapping paper	KEEP	0		
-[7935]Thwaitgold nit statuette	KEEP	0		
+[7935]Thwaitgold nit statuette	DISP	0		
 [7936]picky tweezers	KEEP	0		
 [7937]Crimbo Credit	KEEP	0		
 [7938]single atom	KEEP	0		
@@ -4174,7 +4257,7 @@
 [8074]Spelunker's fedora	KEEP	0		
 [8075]Spelunker's whip	KEEP	0		
 [8076]Spelunker's khakis	KEEP	0		
-[8087]Thwaitgold scarab beetle statuette	KEEP	0		
+[8087]Thwaitgold scarab beetle statuette	DISP	0		
 [8089]headless sparrow	MALL	0		
 [8090]mangled squirrel	MALL	0		
 [8091]rat carcass	MALL	0		
@@ -4268,6 +4351,7 @@
 [8257]nasty gum	MALL	0		
 [8259]The Lot's engagement ring	MALL	0		
 [8260]portable Mayo Clinic	KEEP	0		
+[8271]uninteresting mayolus	MALL	0		
 [8272]acceptable mayolus	MALL	0		
 [8273]enticing mayolus	MALL	0		
 [8274]mouth-watering mayolus	MALL	0		
@@ -4283,8 +4367,9 @@
 [8293]dice-shaped backpack	KEEP	0		
 [8294]dice-print do-rag	KEEP	0		
 [8295]dice sunglasses	KEEP	0		
-[8296]Thwaitgold caterpillar statuette	KEEP	0		
+[8296]Thwaitgold caterpillar statuette	DISP	0		
 [8298]yellow pixel	MALL	0		
+[8299]pixel coin	MALL	0		
 [8300]power pill	MALL	0		
 [8305]blue pumps	MALL	1		
 [8306]sludgesicle	MALL	0		
@@ -4357,6 +4442,7 @@
 [8373]captured boozles	MALL	0		
 [8374]drinks tray	MALL	0		
 [8375]eyebrow lifter	MALL	0		
+[8378]pixel daiquiri	MALL	0		
 [8382]Deck of Every Card	KEEP	0		
 [8384]bubblegum heart	MALL	0		
 [8385]cubic zirconia	MALL	0		
@@ -4376,9 +4462,12 @@
 [8405]talking spade	KEEP	0		
 [8407]pestopiary	MALL	0		
 [8408]ectoplasmic orbs	MALL	0		
+[8411]spaghetti with ghost balls	MALL	0		
 [8412]succulent marrow	MALL	0		
 [8413]salacious crumbs	MALL	0		
+[8415]suggestive strozzapreti	MALL	0		
 [8417]Mt. McLargeHuge oyster	MALL	0		
+[8420]shells a la shellfish	MALL	0		
 [8422]high-temperature mining drill	KEEP	0		
 [8423]unsmoothed velvet	MALL	0		
 [8424]1,970 carat gold	MALL	0		
@@ -4443,6 +4532,7 @@
 [8522]superduperheated metal	MALL	0		
 [8524]superheated metal	MALL	0		
 [8526]pink slime	MALL	0		
+[8535]turkish mostaccioli	MALL	0		
 [8537]Hersey&trade; SMOOCH	MALL	0		
 [8546]bag of grain	MALL	0		
 [8547]pocket maze	MALL	0		
@@ -4540,6 +4630,7 @@
 [8696]ancient medicinal herbs	MALL	0		
 [8697]ice rice	MALL	0		
 [8698]iced plum wine	MALL	0		
+[8702]training scroll:  Shattering Punch	MALL	0		
 [8703]training scroll:  Snokebomb	MALL	0		
 [8704]training scroll:  Shivering Monkey Technique	MALL	0		
 [8708]abstraction: action	MALL	2		
@@ -4567,15 +4658,19 @@
 [8730]VYKEA instructions	MALL	0		
 [8731]tin of submardines	MALL	0		
 [8732]bottle of norwhiskey	MALL	0		
+[8733]octolus oculus	MALL	0		
 [8734]sardine can key	MALL	0		
+[8737]perfect cosmopolitan	MALL	0		
 [8738]perfect negroni	MALL	0		
+[8740]perfect mimosa	MALL	0		
 [8741]perfect old-fashioned	MALL	0		
+[8742]perfect paloma	MALL	0		
 [8749]Deep Machine Tunnels snowglobe	MALL	0		
 [8752]Crimbo salad	MALL	0		
 [8753]bread line	MALL	0		
 [8754]bark rootbeer	MALL	0		
 [8755]red ale	MALL	0		
-[8763]BACON	MALL	111		
+[8763]BACON	MALL	111	450	
 [8770]pitted sheet metal	MALL	0		
 [8771]sparking robo-battery	MALL	0		
 [8772]overloaded micro-reactor	MALL	0		
@@ -4586,9 +4681,14 @@
 [8792]green face paint	KEEP	0		
 [8793]red face paint	KEEP	0		
 [8795]Batfellow comic	KEEP	0		
+[8825]The Jokester's gun	MALL	1		
+[8826]The Jokester's wig	MALL	0		
+[8827]The Jokester's pants	MALL	0		
 [8828]Jokester makeup	MALL	0		
 [8829]replica bat-oomerang	KEEP	0		
 [8833]robin's egg	MALL	0		
+[8834]robin flan	MALL	0		
+[8835]robin nog	MALL	0		
 [8840]Kudzu slaw	MALL	0		
 [8841]Mansquito's blood	MALL	0		
 [8842]infrablack lipstick	MALL	0		
@@ -4617,7 +4717,9 @@
 [8876]plate of Heimz Fortified Kidney Beans	MALL	0		
 [8877]plate of Tesla's Electroplated Beans	MALL	0		
 [8878]plate of Mixed Garbanzos and Chickpeas	MALL	0		
+[8879]plate of Hellfire Spicy Beans	MALL	0		
 [8880]plate of Frigid Northern Beans	MALL	0		
+[8881]plate of World's Blackest-Eyed Peas	MALL	0		
 [8885]plate of Shrub's Premium Baked Beans	MALL	0		
 [8886]Fancy Jeff's fancy pocket square	KEEP	0		
 [8887]Daisy's unclean bloomers	KEEP	0		
@@ -4662,24 +4764,124 @@
 [8943]shuddering cow skull	MALL	0		
 [8945]silver cow skull	MALL	0		
 [8946]jangly spurs	MALL	0		
+[8954]special edition Batfellow comic	KEEP	0		
 [8970]toy sixgun	KEEP	0		
 [8971]snake oil	MALL	0		
 [8972]skin oil	MALL	0		
 [8973]unusual oil	MALL	0		
 [8974]eldritch oil	MALL	0		
+[8977]patent invisibility tonic	MALL	0		
+[8980]patent avarice tonic	MALL	0		
+[8981]patent alacrity tonic	MALL	0		
 [8982]corrupted marrow	MALL	0		
 [8983]rodeo whiskey	MALL	0		
-[8984]Thwaitgold scorpion statuette	KEEP	0		
+[8984]Thwaitgold scorpion statuette	DISP	0		
 [8992]armored prawn	MALL	0		
 [8993]jumping horseradish	MALL	0		
 [8994]Sacramento wine	MALL	0		
 [8995]Greek fire	MALL	0		
 [9008]wriggling worm	KEEP	0		
+[9009]bottle of Fishhead 900-Day IPA	MALL	0		
 [9011]fishin' hat	MALL	1		
 [9012]Trout Fishing in Loathing	MALL	0		
+[9013]sonar fishfinder	MALL	1		
 [9015]antique tacklebox	MALL	1		
 [9020]plus one	MALL	0		
+[9021]gallon of milk	MALL	0		
 [9022]print screen button	MALL	0	160000	
 [9025]infinite BACON machine	KEEP	0		
-[9031]Thwaitgold moth statuette	KEEP	0		
+[9031]Thwaitgold moth statuette	DISP	0		
 [9032]bowl of Tastee-Wheet&trade;	MALL	0	0	
+[9034]Source essence	MALL	10000		
+[9035]browser cookie	MALL	0		
+[9036]hacked gibson	MALL	0		
+[9037]Source shades	KEEP	0		
+[9046]Source terminal INGRAM chip	MALL	0		
+[9047]Source terminal DIAGRAM chip	MALL	0		
+[9048]Source terminal ASHRAM chip	MALL	0		
+[9049]Source terminal SCRAM chip	MALL	0		
+[9050]Source terminal TRIGRAM chip	MALL	0		
+[9051]Source terminal file: substats.enh	MALL	0		
+[9052]Source terminal file: damage.enh	MALL	0		
+[9053]Source terminal file: critical.enh	MALL	0		
+[9054]Source terminal file: protect.enq	MALL	0		
+[9055]Source terminal file: stats.enq	MALL	0		
+[9056]Source terminal file: compress.edu	MALL	0		
+[9057]Source terminal file: duplicate.edu	MALL	0		
+[9058]Source terminal file: portscan.edu	MALL	0		
+[9059]Source terminal file: turbo.edu	MALL	0		
+[9060]Source terminal file: familiar.ext	MALL	0		
+[9061]Source terminal file: pram.ext	MALL	0		
+[9062]Source terminal file: gram.ext	MALL	0		
+[9063]Source terminal file: spam.ext	MALL	0		
+[9064]Source terminal file: cram.ext	MALL	0		
+[9065]Source terminal file: dram.ext	MALL	0		
+[9066]Source terminal file: tram.ext	MALL	0		
+[9072]cop dollar	KEEP	0		
+[9074]detective roscoe	KEEP	0		
+[9078]Falcon&trade; Maltese Liquor	MALL	0		
+[9079]hardboiled egg	MALL	0		
+[9082]protonic accelerator pack	KEEP	0		
+[9083]almost-dead walkie-talkie	MALL	0		
+[9084]Adventurer bobblehead	DISP	1		
+[9085]psychokinetic energy blob	MALL	0		
+[9086]haunted bindle	DISP	0		
+[9087]fleshy lump	DISP	0		
+[9088]smoldering bagel punch	DISP	0		
+[9090]frigid derringer	DISP	0		
+[9091]Mr. Screege's spectacles	DISP	0		
+[9092]Spookyraven signet	DISP	0		
+[9093]tie-dyed fannypack	DISP	0		
+[9094]burnt snowpants	DISP	0		
+[9095]standards and practices guide	DISP	0		
+[9096]Carpathian longsword	DISP	0		
+[9097]Liam's mail	DISP	0		
+[9098]Unfortunato's foolscap	DISP	0		
+[9099]Thwaitgold cockroach statuette	DISP	0		
+[9104]Time-Spinner	KEEP	0		
+[9105]compounded experience	KEEP	0		
+[9108]lead umbrella	MALL	0		
+[9116]time residue	MALL	0		
+[9118]Riker's Search History	MALL	0		
+[9119]Shot of Kardashian Gin	MALL	0		
+[9121]Memory Disk, Alpha	MALL	0		
+[9122]Tea, Earl Grey, Hot	MALL	0		
+[9123]School of Hard Knocks Diploma	KEEP	0		
+[9126]unidentified drink	MALL	0		
+[9130]charisma potion	MALL	0		
+[9133]KoL Con 13 snowglobe	KEEP	0		
+[9134]leftover pasty	MALL	0		
+[9137]li'l knight costume	MALL	1		
+[9138]li'l unicorn costume	MALL	1		
+[9139]li'l candy corn costume	MALL	1		
+[9147]Prunets	MALL	0		
+[9153]raw sweet potato	MALL	0		
+[9154]raw green beans	MALL	0		
+[9155]raw stuffing	MALL	0		
+[9156]raw cranberry sauce	MALL	0		
+[9157]raw turkey	MALL	0		
+[9158]raw mincemeat	MALL	0		
+[9159]raw potato	MALL	0		
+[9160]raw gravy	MALL	0		
+[9161]raw bread	MALL	0		
+[9172]green bean casserole	MALL	0		
+[9178]warm gravy	MALL	0		
+[9180]leftovers	MALL	0		
+[9183]cornucopia	MALL	0		
+[9184]megacopia	MALL	0		
+[9186]packet of thanksgarden seeds	KEEP	0		
+[9187]cashew	MALL	0		
+[9192]eldritch extract	MALL	0		
+[9193]Official Council Aide Pin	KEEP	0		
+[9197]eldritch hat	KEEP	0		
+[9198]eldritch pants	KEEP	0		
+[9205]sprinkles	KEEP	0		
+[9206]The Gingerbread Vigilante's Handbook	MALL	0		
+[9207]sour ball and chain	MALL	1		
+[9219]animal part cracker	MALL	0		
+[9220]gingerbread wine	MALL	0		
+[9221]gingerbread mug	MALL	0		
+[9222]gingerbread mask	MALL	0		
+[9224]tainted icing	MALL	0		
+[9226]gingerbread smartphone	MALL	1		
+[9227]gingerbread hoodie	MALL	1		
