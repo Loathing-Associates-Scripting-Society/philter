@@ -233,11 +233,11 @@ void styles() {
 	
 void load_OCD() {
 	if(count(fields) > 0) return;
-	string OCDfile = "OCDdata_"+vars["BaleOCD_DataFile"]+".txt";
+	string OCDfile = "OCDdata_"+getvar("BaleOCD_DataFile")+".txt";
 	string OCDfileOld = "OCD_"+my_name()+"_Data.txt";
 	if((!file_to_map(OCDfile, OCD) || count(OCD) == 0) && (!file_to_map(OCDfileOld, OCD) || count(OCD) == 0))
 		print("All item information is corrupted or missing. Either you have not yet saved any item data or you lost it.", "red");
-	if((!file_to_map("OCDstock_"+vars["BaleOCD_StockFile"]+".txt", stock) || count(stock) == 0) && vars["BaleOCD_Stock"] == "1")
+	if((!file_to_map("OCDstock_"+getvar("BaleOCD_StockFile")+".txt", stock) || count(stock) == 0) && getvar("BaleOCD_Stock") == "1")
 		print("All item stocking information is corrupted or missing. Either you have not yet saved any item stocking data or you lost it.", "red");
 }
 
@@ -389,7 +389,7 @@ void save_ocd() {
 			break;
 		}
 	if(OCD contains $item[none]) remove OCD[$item[none]];
-	map_to_file(OCD, "OCDdata_"+vars["BaleOCD_DataFile"]+".txt");
+	map_to_file(OCD, "OCDdata_"+getvar("BaleOCD_DataFile")+".txt");
 }
 
 int curr_items() {
@@ -446,13 +446,13 @@ void add_items() {
 				
 				page.append("<table border=0 cellpadding=1>");
 				page.append("<tr><th colspan=2>Item</th><th>Have</th>");
-				if(count(stock) > 0 && vars["BaleOCD_Stock"].to_int() > 0)
+				if(count(stock) > 0 && getvar("BaleOCD_Stock").to_int() > 0)
 					page.append("<th>Stock</th>");
 				page.append("<th>Price</th><th>Keep</th><th>Action</th><th>... information</th></tr>");
 				table_started = true;
 			}
 			page.append("<tr valign=center class='item'");
-			if(count(stock) > 0 && vars["BaleOCD_Stock"].to_int() > 0 
+			if(count(stock) > 0 && getvar("BaleOCD_Stock").to_int() > 0 
 			  && stock contains doodad && stock[doodad].q >= item_amount(doodad))
 				page.append(" style='background-color:E3E3E3'");
 			page.append("><td>"+imagedesc(doodad)+"</a></td>");
@@ -465,7 +465,7 @@ void add_items() {
 				info = OCD[doodad].info;
 			}
 			page.append("<td align=center>"+item_amount(doodad)+"</td>");
-			if(count(stock) > 0 && vars["BaleOCD_Stock"].to_int() > 0) {
+			if(count(stock) > 0 && getvar("BaleOCD_Stock").to_int() > 0) {
 				page.append("<td align=center>");
 				if(stock contains doodad) page.append(stock[doodad].q);
 				else page.append("0");
@@ -515,13 +515,13 @@ void edit_items(string act) {
 					OCD[doodad].message = (kBayList contains doodad)? kBayList[doodad].type: "Buy my stuff";
 					fields["i_"+doodad.to_int()] = kPrice(doodad);
 				}
-				map_to_file(OCD, "OCDdata_"+vars["BaleOCD_DataFile"]+".txt");
+				map_to_file(OCD, "OCDdata_"+getvar("BaleOCD_DataFile")+".txt");
 			}
 			page.append("</tr></table>");
 			page.append("<table class='zlib' border=0 cellpadding=1><tr><td align=right>kBay Status: </td><td>");
-			if(vars["BaleOCD_kBay"] != "0" && vars["BaleOCD_kBay"] != "1") vars["BaleOCD_kBay"] = 1;
-			vars["BaleOCD_kBay"] = write_radio(vars["BaleOCD_kBay"], "EnableKBay", "Send Items to kBay,", 1);
-			write_radio(vars["BaleOCD_kBay"], "EnableKBay", "Hold kBay items in inventory", 0);
+			if(getvar("BaleOCD_kBay") != "0" && getvar("BaleOCD_kBay") != "1") vars["BaleOCD_kBay"] = 1;
+			vars["BaleOCD_kBay"] = write_radio(getvar("BaleOCD_kBay"), "EnableKBay", "Send Items to kBay,", 1);
+			write_radio(getvar("BaleOCD_kBay"), "EnableKBay", "Hold kBay items in inventory", 0);
 			page.append("</td></tr></table>");
 		}
 		if(act == "Search") {
@@ -683,11 +683,11 @@ void stock_items() {
 	page.append("<fieldset><legend>Items to keep in stock</legend>"); // write_box()
 	
 	page.append("What to do with items on this list?<ul class='stock'><li>");
-	vars["BaleOCD_Stock"] = write_radio(vars["BaleOCD_Stock"], "stock", " Acquire these items for future use", 1);
+	vars["BaleOCD_Stock"] = write_radio(getvar("BaleOCD_Stock"), "stock", " Acquire these items for future use", 1);
 	page.append("</li><li>");
-	write_radio(vars["BaleOCD_Stock"], "stock", " Keep them... if they <i>happen</i> to be in inventory", 2);
+	write_radio(getvar("BaleOCD_Stock"), "stock", " Keep them... if they <i>happen</i> to be in inventory", 2);
 	page.append("</li><li>");
-	write_radio(vars["BaleOCD_Stock"], "stock", " Ignore this stock list", 0);
+	write_radio(getvar("BaleOCD_Stock"), "stock", " Ignore this stock list", 0);
 	page.append("</li></ul>");
 	
 	page.append("<table border=0 cellpadding=1><tr><td align=right>");
@@ -704,7 +704,7 @@ void stock_items() {
 			foreach key in fields
 				if(key.contains_text("stock_"))
 					remove fields[key];
-			map_to_file(stock, "OCDstock_"+vars["BaleOCD_StockFile"]+".txt");
+			map_to_file(stock, "OCDstock_"+getvar("BaleOCD_StockFile")+".txt");
 		}
 		page.append("</td><td>Delete <i>all</i> entries in the following list!</td></tr>");
 	}
@@ -801,42 +801,42 @@ void zlib_vars() {
 	
 	page.append("<table class='zlib' border=0 cellpadding=1>");
 	page.append("<tr><td align=right>Empty Closet First: </td><td>");
-	if(vars["BaleOCD_EmptyCloset"] != "-1" && vars["BaleOCD_EmptyCloset"] != "0") vars["BaleOCD_EmptyCloset"] = 0;
-	vars["BaleOCD_EmptyCloset"] = write_radio(vars["BaleOCD_EmptyCloset"], "EmptyCloset", "Never,", -1);
-	write_radio(vars["BaleOCD_EmptyCloset"], "EmptyCloset", "Before Emptying Hangk's (recommended)", 0);
+	if(getvar("BaleOCD_EmptyCloset") != "-1" && getvar("BaleOCD_EmptyCloset") != "0") vars["BaleOCD_EmptyCloset"] = 0;
+	vars["BaleOCD_EmptyCloset"] = write_radio(getvar("BaleOCD_EmptyCloset"), "EmptyCloset", "Never,", -1);
+	write_radio(getvar("BaleOCD_EmptyCloset"), "EmptyCloset", "Before Emptying Hangk's (recommended)", 0);
 	page.append("<tr><td align=right>kBay Status: </td><td>");
-	if(vars["BaleOCD_kBay"] != "0" && vars["BaleOCD_kBay"] != "1") vars["BaleOCD_kBay"] = 1;
-	vars["BaleOCD_kBay"] = write_radio(vars["BaleOCD_kBay"], "EnableKBay", "Send Items to kBay,", 1);
-	write_radio(vars["BaleOCD_kBay"], "EnableKBay", "Hold kBay items in inventory", 0);
+	if(getvar("BaleOCD_kBay") != "0" && getvar("BaleOCD_kBay") != "1") vars["BaleOCD_kBay"] = 1;
+	vars["BaleOCD_kBay"] = write_radio(getvar("BaleOCD_kBay"), "EnableKBay", "Send Items to kBay,", 1);
+	write_radio(getvar("BaleOCD_kBay"), "EnableKBay", "Hold kBay items in inventory", 0);
 	page.append("</td></tr><tr><td align=right>Mall Pricing: </td><td>");
-	vars["BaleOCD_Pricing"] = write_radio(vars["BaleOCD_Pricing"], "Pricing", "Automatic,", "auto");
-	write_radio(vars["BaleOCD_Pricing"], "Pricing", "999,999,999 meat.", "max");
+	vars["BaleOCD_Pricing"] = write_radio(getvar("BaleOCD_Pricing"), "Pricing", "Automatic,", "auto");
+	write_radio(getvar("BaleOCD_Pricing"), "Pricing", "999,999,999 meat.", "max");
 	page.append("</td></tr></table>");
 	
 	page.append("<p class='zlib'>");
-	vars["BaleOCD_Sim"] = write_check(vars["BaleOCD_Sim"], "Sim", "Simulate Only ");
+	vars["BaleOCD_Sim"] = write_check(getvar("BaleOCD_Sim"), "Sim", "Simulate Only ");
 	page.append(" <font size=1>(no actions will be taken)</font></p>");
 	
 	page.append("<table class='zlib' border=0 cellpadding=1><tr><td align=right>My Mall Multi:</td><td>");
-	vars["BaleOCD_MallMulti"] = write_field(vars["BaleOCD_MallMulti"], "MallMulti", 14);
+	vars["BaleOCD_MallMulti"] = write_field(getvar("BaleOCD_MallMulti"), "MallMulti", 14);
 	page.append("</td><td align=right>&nbsp;&nbsp;Mall Multi kMail Text</td><td>");
-	vars["BaleOCD_MultiMessage"] = write_field(vars["BaleOCD_MultiMessage"], "MultiMessage", 14);
+	vars["BaleOCD_MultiMessage"] = write_field(getvar("BaleOCD_MultiMessage"), "MultiMessage", 14);
 	page.append("</td></tr><tr><td colspan=2>");
-	vars["BaleOCD_UseMallMulti"] = write_check(vars["BaleOCD_UseMallMulti"], "UseMulti", "Use Mall Multi");
+	vars["BaleOCD_UseMallMulti"] = write_check(getvar("BaleOCD_UseMallMulti"), "UseMulti", "Use Mall Multi");
 	page.append("</td></tr></table>");
 	
 	page.append("<p class='zlib'>Data file: OCDdata_");
-	vars["BaleOCD_DataFile"] = write_field(vars["BaleOCD_DataFile"], "DataFile", 10);
-	if(vars["BaleOCD_DataFile"] == "")
+	vars["BaleOCD_DataFile"] = write_field(getvar("BaleOCD_DataFile"), "DataFile", 10);
+	if(getvar("BaleOCD_DataFile") == "")
 		vars["BaleOCD_DataFile"] = my_name();
 	page.append("<br />Stock file: OCDstock_");
-	vars["BaleOCD_StockFile"] = write_field(vars["BaleOCD_StockFile"], "StockFile", 10);
-	if(vars["BaleOCD_StockFile"] == "")
+	vars["BaleOCD_StockFile"] = write_field(getvar("BaleOCD_StockFile"), "StockFile", 10);
+	if(getvar("BaleOCD_StockFile") == "")
 		vars["BaleOCD_StockFile"] = my_name();
 	page.append("<br />Change file names without writing any data: ");
 	if(write_button("change", "Change Filename!")) {
-		string DataFile = vars["BaleOCD_DataFile"];
-		string StockFile = vars["BaleOCD_StockFile"];
+		string DataFile = getvar("BaleOCD_DataFile");
+		string StockFile = getvar("BaleOCD_StockFile");
 		// Restore zlib values so only file name is changed!
 		file_to_map("vars_"+replace_string(my_name()," ","_")+".txt",vars);
 		vars["BaleOCD_DataFile"] = DataFile;
@@ -1016,8 +1016,8 @@ void main() {
 	if(fields["tab"] == "Configure Script") {
 		zlib_vars();
 	} else {
-		write_hidden(vars["BaleOCD_Sim"], "Sim");
-		write_hidden(vars["BaleOCD_UseMallMulti"], "UseMulti");
+		write_hidden(getvar("BaleOCD_Sim"), "Sim");
+		write_hidden(getvar("BaleOCD_UseMallMulti"), "UseMulti");
 		switch(fields["tab"]) {
 		case "Information":
 			information();
@@ -1062,7 +1062,7 @@ void main() {
 				remove fields["newt_"+i];
 			}
 		clear(newstock1);
-		map_to_file(stock, "OCDstock_"+vars["BaleOCD_StockFile"]+".txt");
+		map_to_file(stock, "OCDstock_"+getvar("BaleOCD_StockFile")+".txt");
 		updatevars();
 		vprint("Item(s) have been categorized.", "green", 3);
 		page.append("<div style='font-weight:bold; color:blue;'>Last save @ ");

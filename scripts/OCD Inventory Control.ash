@@ -115,7 +115,7 @@ int full_amount(item it) {
 // Wrapping the entire script in ocd_control() to reduce variable conflicts if the script is imported to another.
 // StopForMissingItems is a parameter in case someone wants to include this script.
 // StopForMissingItems = FALSE to prevent a pop-up confirmation.
-// DataFile can be used to supplement vars["BaleOCD_DataFile"]. This is completely optional. (See far below)
+// DataFile can be used to supplement getvar("BaleOCD_DataFile"). This is completely optional. (See far below)
 int ocd_control(boolean StopForMissingItems, string extraData) {
 	int FinalSale;
 
@@ -163,9 +163,9 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	boolean autoSatisfyWithStorage = get_property("autoSatisfyWithStorage").to_boolean();
 	boolean autoSatisfyWithStash = get_property("autoSatisfyWithStash").to_boolean();
 	
-	boolean use_multi = vars["BaleOCD_MallMulti"] != "" && to_boolean(vars["BaleOCD_UseMallMulti"]);
+	boolean use_multi = getvar("BaleOCD_MallMulti") != "" && to_boolean(getvar("BaleOCD_UseMallMulti"));
 	if(use_multi)
-		command ["MALL"] = "send to mallmulti "+ vars["BaleOCD_MallMulti"] + ": ";
+		command ["MALL"] = "send to mallmulti "+ getvar("BaleOCD_MallMulti") + ": ";
 
 	int [item] price;
 	int kBidTot;
@@ -173,7 +173,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 
 	boolean load_OCD() {
 		clear(OCD);
-		if(!file_to_map("OCDdata_"+vars["BaleOCD_DataFile"]+".txt", OCD) && !file_to_map("OCD_"+my_name()+"_Data.txt", OCD))
+		if(!file_to_map("OCDdata_"+getvar("BaleOCD_DataFile")+".txt", OCD) && !file_to_map("OCD_"+my_name()+"_Data.txt", OCD))
 			return vprint("Something went wrong trying to load OCDdata!", -1);
 		OCDinfo [item] extraOCD;
 		if(extraData != "" && file_to_map(extraData+".txt", extraOCD) && count(extraOCD) > 0)
@@ -212,7 +212,8 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		if(full > OCD[it].q && available_amount(it) > item_amount(it))
 			retrieve_item(min(full - OCD[it].q, available_amount(it)), it);
 		// Don't OCD items that are part of stock. Stock can always be satisfied by closet.
-		int keep = max(ocd[it].q, stock[it].q - (get_property("autoSatisfyWithCloset") == "false"? 0: closet_amount(it)));
+		int keep = getvar("BaleOCD_Stock") == "0" ? ocd[it].q: 
+			max(ocd[it].q, stock[it].q - (get_property("autoSatisfyWithCloset") == "false"? 0: closet_amount(it)));
 		// OCD is limited by item_amount(it) since we don't want to purchase anything and closeted items
 		// may be off-limit, but if there's something in the closet, it counts against the amount you own.
 		return min(full - keep, item_amount(it));
@@ -305,7 +306,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 				if(stop_for_relay(doodad))
 					return false;
 				// Potentially disasterous, but this will cause the script to sell off unlisted items, just like it used to. 
-				if(vars["BaleOCD_MallDangerously"].to_boolean())
+				if(getvar("BaleOCD_MallDangerously").to_boolean())
 					mall[doodad] = excess;   // Backwards compatibility FTW!
 			}
 		}
@@ -389,7 +390,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			if(act == "MALL") {
 				if(!use_multi) {
 					price[it] = sale_price(it);
-					if(vars["BaleOCD_Pricing"] == "auto")
+					if(getvar("BaleOCD_Pricing") == "auto")
 						queue.append(" @ "+ rnum(price[it]));
 				}
 				linevalue += quant * price[it];
@@ -634,7 +635,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		return vprint("kBay is currently defunct, but may return soon!", "red", 3);
 		/*
 		// If kBaying has been disabled, don't do this
-		if(vars["BaleOCD_kBay"] == "0") return true;
+		if(getvar("BaleOCD_kBay") == "0") return true;
 		int [item] goodies;
 		int kBid;
 		boolean auction() {
@@ -673,13 +674,13 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			print("");
 		else
 			print_cat(cat, act, to);
-		if(vars["BaleOCD_Sim"].to_boolean()) return true;
+		if(getvar("BaleOCD_Sim").to_boolean()) return true;
 		switch(act) {
 		case "PULV":
 			return pulverize();
 		case "MALL":
 			if(use_multi)
-				return kmail(vars["BaleOCD_MallMulti"], vars["BaleOCD_MultiMessage"], 0, cat);
+				return kmail(getvar("BaleOCD_MallMulti"), getvar("BaleOCD_MultiMessage"), 0, cat);
 		case "AUTO":
 		case "DISP":
 		case "CLST":
@@ -700,7 +701,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 					visit_url("inventory.php?action=breakbricko&pwd&ajax=1&whichitem="+to_int(it));
 				break;
 			case "MALL":
-				if(vars["BaleOCD_Pricing"] == "auto") {
+				if(getvar("BaleOCD_Pricing") == "auto") {
 					if(price[it]> 0)  // If price is -1, then there was an error.
 						put_shop(price[it], 0, quant, it);  // price[it] was found during print_cat()
 				} else
@@ -763,8 +764,8 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 
 	boolean ocd_inventory(boolean StopForMissingItems) {
 		if(!load_OCD()) return false;
-		if((!file_to_map("OCDstock_"+vars["BaleOCD_StockFile"]+".txt", stock) || count(stock) == 0)
-		  && vars["BaleOCD_Stock"] == "1") {
+		if((!file_to_map("OCDstock_"+getvar("BaleOCD_StockFile")+".txt", stock) || count(stock) == 0)
+		  && getvar("BaleOCD_Stock") == "1") {
 			print("You are missing item stocking information.", "red");
 			return false;
 		}
@@ -802,12 +803,12 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			FinalSale += kBidTot; */
 		}
 		
-		if(vars["BaleOCD_Stock"] == "1" && !vars["BaleOCD_Sim"].to_boolean())
+		if(getvar("BaleOCD_Stock") == "1" && !getvar("BaleOCD_Sim").to_boolean())
 			stock();
 
 		act_cat(todo, "TODO", "");
 
-		if(vars["BaleOCD_Sim"].to_boolean())
+		if(getvar("BaleOCD_Sim").to_boolean())
 			vprint("This was only a test. Had this been an actual OCD incident your inventory would be clean right now.", "green", 3);
 		return true;
 	}
@@ -818,8 +819,8 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	cli_execute("inventory refresh");
 	
 	// Empty closet before emptying out Hangks, otherwise it may interfere with which Hangk's items go to closet
-	if(to_int(vars["BaleOCD_EmptyCloset"]) >= 0 && get_property("lastEmptiedStorage").to_int() != my_ascensions() 
-	  && vars["BaleOCD_Sim"] == "false")
+	if(to_int(getvar("BaleOCD_EmptyCloset")) >= 0 && get_property("lastEmptiedStorage").to_int() != my_ascensions() 
+	  && getvar("BaleOCD_Sim") == "false")
 		empty_closet();
 	
 	// Empty out Hangks, so it can be accounted for by what follows.
@@ -835,7 +836,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		if(autoSatisfyWithStorage && get_property("lastEmptiedStorage").to_int() != my_ascensions())
 			set_property("autoSatisfyWithStorage", "false");
 		// Yay! Get rid of the excess inventory!
-		success = ocd_inventory(StopForMissingItems && !vars["BaleOCD_MallDangerously"].to_boolean());
+		success = ocd_inventory(StopForMissingItems && !getvar("BaleOCD_MallDangerously").to_boolean());
 	} finally { // Ensure properties are restored, even if the user aborted execution
 		if(autoSatisfyWithCloset)  set_property("autoSatisfyWithCloset", "true");
 		if(autoSatisfyWithStorage) set_property("autoSatisfyWithStorage", "true");
