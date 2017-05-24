@@ -1,10 +1,7 @@
 // Relay OCD Inventory dB Manager by Bale
 
-since r14923;
+since r18040; // When you define a map with value as a zero-length array, file_to_map can now populate it
 import "OCD Inventory Control";
-string thread = "http://kolmafia.us/showthread.php?1818-OCD-Inventory-control&p=11138&viewfull=1#post11138";
-string scriptname = "Bales's OCD dB Manager";
-string title = "<a class='version' href='"+thread+"' target='_blank'>"+scriptname+"</a>, by <a href='showplayer.php?who=754005'>Bale</a>";
 
 OCDinfo [item] OCD;
 OCDinfo [item] OCDefault;
@@ -265,6 +262,8 @@ boolean discard_bait(item it) {
 }
 
 item item_name(string doodad) {
+	if(doodad.is_integer()) // Integers are not items
+		return $item[none];
 	if(doodad.to_item() != $item[none]) return doodad.to_item();
 	matcher find_item = create_matcher("([A-Za-z0-9' ]+)(\\(\\d+\\))?" , doodad);
 	if(find_item.find())
@@ -273,22 +272,17 @@ item item_name(string doodad) {
 }
 
 void set_craftable() {
-	record concoctions {
-		string method;
-		string mix1;
-		string mix2;
-		string mix3;
-		string mix4;
-		string mix5;
-	};
-	concoctions [string] crafty;
+	typedef string[] type_c;
+	type_c [string] crafty;
 	file_to_map("concoctions.txt", crafty);
-	foreach key, value in crafty {
-		is_craftable[ item_name(value.mix1) ] = true;
-		is_craftable[ item_name(value.mix2) ] = true;
-		is_craftable[ item_name(value.mix3) ] = true;
-		is_craftable[ item_name(value.mix4) ] = true;
-		is_craftable[ item_name(value.mix5) ] = true;
+	foreach product, mix in crafty {
+		boolean method = true; // First item in a concoction is the method of crafting.
+		foreach x,it in mix {
+			if(method)
+				method = false;
+			else
+				is_craftable[ item_name(it) ] = true;
+		}
 	}
 	foreach it in $items[hot nuggets, cold nuggets, spooky nuggets, stench nuggets, sleaze nuggets, titanium assault umbrella]
 		is_craftable[it] = true;
@@ -851,7 +845,8 @@ void zlib_vars() {
 }
 
 void information() {
-	page.append("<fieldset><legend>"+title+"</legend>"); // write_box()
+	page.append("<fieldset><legend><a class='version' href='http://kolmafia.us/showthread.php?1818-OCD-Inventory-control&p=11138&viewfull=1#post11138' target='_blank'>");
+	page.append("Bales's OCD dB Manager</a>, by <a href='showplayer.php?who=754005'>Bale</a></legend>"); // write_box()
 	int AddQ;
 	foreach key in OCDefault
 		if(!(OCD contains key) && item_amount(key) > 0) AddQ += 1; #{AddQ += 1; print(key);}
