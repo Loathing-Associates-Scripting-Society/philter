@@ -418,13 +418,13 @@ void add_items() {
 
 	int AddQ;
 	foreach key in OCDefault
-		if(!(OCD contains key) && item_amount(key) > 0) AddQ += 1; #{AddQ += 1; print(key);}
+		if(!(OCD contains key) && (item_amount(key) > 0 || equipped_amount(key) > 0 || closet_amount(key) > 0 || storage_amount(key) > 0 || display_amount(key) > 0)) AddQ += 1; #{AddQ += 1; print(key);}
 	int curr_items = curr_items();
 	if(curr_items > 0 && AddQ > 0) {
 		page.append("<p>");
 		if(write_button("defaultdata", "Add default")) {
 			foreach key in OCDefault
-				if(!(OCD contains key) && item_amount(key) > 0) OCD[key] = OCDefault[key];
+				if(!(OCD contains key) && (item_amount(key) > 0 || equipped_amount(key) > 0 || closet_amount(key) > 0 || storage_amount(key) > 0 || display_amount(key) > 0)) OCD[key] = OCDefault[key];
 			save_ocd();
 			curr_items = curr_items();
 		}
@@ -432,14 +432,29 @@ void add_items() {
 	}
 
 	boolean table_started = false;
-	foreach doodad in get_inventory()
+	int[item] doodads;
+	foreach doodad in $items[]
+	{
+		if (item_amount(doodad) > 0)
+			doodads[doodad] += item_amount(doodad);
+		if (equipped_amount(doodad) > 0)
+			doodads[doodad] += equipped_amount(doodad);
+		if (closet_amount(doodad) > 0)
+			doodads[doodad] += closet_amount(doodad);
+		if (storage_amount(doodad) > 0)
+			doodads[doodad] += storage_amount(doodad);
+		if (display_amount(doodad) > 0)
+			doodads[doodad] += display_amount(doodad);
+	}
+
+	foreach doodad in doodads
 		// Quest items are the only items that cannot be displayed, so check for is_OCDable()
 		if(is_OCDable(doodad) && !(OCD contains doodad && OCD[doodad].action != "UNKN")) {
 			if(!table_started) {
 				page.add_catbuttons();
 				
 				page.append("<table border=0 cellpadding=1>");
-				page.append("<tr><th colspan=2>Item</th><th>Have</th>");
+				page.append("<tr><th colspan=2>Item</th><th>Have</th><th>Closet</th><th>Storage</th><th>Display</th>");
 				if(count(stock) > 0 && getvar("BaleOCD_Stock").to_int() > 0)
 					page.append("<th>Stock</th>");
 				page.append("<th>Price</th><th>Keep</th><th>Action</th><th>... information</th></tr>");
@@ -458,7 +473,10 @@ void add_items() {
 				act = OCD[doodad].action;
 				info = OCD[doodad].info;
 			}
-			page.append("<td align=center>"+item_amount(doodad)+"</td>");
+			page.append("<td align=center>"+(item_amount(doodad)+equipped_amount(doodad))+"</td>");
+			page.append("<td align=center>"+closet_amount(doodad)+"</td>");
+			page.append("<td align=center>"+storage_amount(doodad)+"</td>");
+			page.append("<td align=center>"+display_amount(doodad)+"</td>");
 			if(count(stock) > 0 && getvar("BaleOCD_Stock").to_int() > 0) {
 				page.append("<td align=center>");
 				if(stock contains doodad) page.append(stock[doodad].q);
@@ -531,8 +549,14 @@ void edit_items(string act) {
 			page.append("<table border=0 cellpadding=1>");
 			page.append("<tr><th colspan=2>Item</th>");
 			page.append("<th>Price</th>");
-			if(act == "Keep")
+			if(act == "Keep" || act == "Search")
 				page.append("<th>Have</th>");
+			if(act == "Closet" || act == "Search")
+				page.append("<th>Closet</th>");
+			if(act == "Storage" || act == "Search")
+				page.append("<th>Storage</th>");
+			if(act == "Display" || act == "Search")
+				page.append("<th>Display</th>");
 			page.append("<th>Keep</th><th>Action</th>");
 			switch(act) {
 			case "Mall":
@@ -561,8 +585,14 @@ void edit_items(string act) {
 				page.append("<td align=right>");
 				page.append_price(doodad);
 				page.append("&nbsp;</td>");
-				if(act == "Keep")
-					page.append("<td align=center>"+item_amount(doodad)+"</td>");
+				if(act == "Keep" || act == "Search")
+					page.append("<td align=center>"+(item_amount(doodad)+equipped_amount(doodad))+"</td>");
+				if(act == "Closet" || act == "Search")
+					page.append("<td align=center>"+closet_amount(doodad)+"</td>");
+				if(act == "Storage" || act == "Search")
+					page.append("<td align=center>"+storage_amount(doodad)+"</td>");
+				if(act == "Display" || act == "Search")
+					page.append("<td align=center>"+display_amount(doodad)+"</td>");
 				page.append("<td>");
 				OCD[doodad].q = write_field(OCD[doodad].q, "q_"+to_int(doodad));
 				page.append("</td><td>");
@@ -848,19 +878,25 @@ void information() {
 	page.append("<fieldset><legend><a class='version' href='http://kolmafia.us/showthread.php?1818-OCD-Inventory-control&p=11138&viewfull=1#post11138' target='_blank'>");
 	page.append("Bales's OCD dB Manager</a>, by <a href='showplayer.php?who=754005'>Bale</a></legend>"); // write_box()
 	int AddQ;
+	string[item] defaults;
 	foreach key in OCDefault
-		if(!(OCD contains key) && item_amount(key) > 0) AddQ += 1; #{AddQ += 1; print(key);}
+		if(!(OCD contains key) && (item_amount(key) > 0 || equipped_amount(key) > 0 || closet_amount(key) > 0 || display_amount(key) > 0)) {AddQ += 1; defaults[key] = OCDefault[key].action; } #{AddQ += 1; print(key);}
 	if(count(OCD) > 0) {
 		int curr_items = curr_items();
 		if(curr_items > 0 && AddQ > 0) {
 			page.append("<p>");
 			if(write_button("defaultdata", "Add data")) {
 				foreach key in OCDefault
-					if(!(OCD contains key) && item_amount(key) > 0) OCD[key] = OCDefault[key];
+					if(!(OCD contains key) && (item_amount(key) > 0 || equipped_amount(key) > 0 || closet_amount(key) > 0 || display_amount(key) > 0)) OCD[key] = OCDefault[key];
 				save_ocd();
 				curr_items = curr_items();
 			}
 			page.append(" Add default information for "+AddQ+" common item"+(AddQ == 1? " that is": "s that are")+" not already in your data.</p>");
+			page.append("<table border=0 cellpadding=1>");
+			page.append("<tr><th>Item</th><th>Default</th></tr>");
+			foreach key in defaults
+				page.append("<tr><td>" + key + "</td><th>" + defaults[key] + "</th></tr>");
+			page.append("</table>");
 		}
 		page.append("<table border=0 cellpadding=1>");
 		page.append("<tr");
