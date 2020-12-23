@@ -565,7 +565,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			case $item[eyedrops of the ocelot]:
 			case $item[peach lozenge]:
 			case $item[cologne of contempt]:
-			case $item[potion of temporary gr8tness]:
+			case $item[potion of temporary gr8ness]:
 			case $item[blackberry polite]:
 				return 3;
 			}
