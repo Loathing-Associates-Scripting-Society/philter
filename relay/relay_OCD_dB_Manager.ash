@@ -189,7 +189,7 @@ void styles() {
 	
 	page.append("<script language=Javascript>"+
 	"function wikiitem(desc) {"+
-	"	newwindow=window.open('http://kol.coldfront.net/thekolwiki/index.php/Special:Search?search=' + desc + '&go=Go');"+
+	"	newwindow=window.open('https://kol.coldfront.net/thekolwiki/index.php/Special:Search?search=' + desc + '&go=Go');"+
 	"		if (window.focus) {newwindow.focus()}"+
 	"}"+
 	"</script>");
