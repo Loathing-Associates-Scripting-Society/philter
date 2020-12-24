@@ -454,7 +454,12 @@ void add_items() {
 				page.add_catbuttons();
 				
 				page.append("<table border=0 cellpadding=1>");
-				page.append("<tr><th colspan=2>Item</th><th>Have</th><th>Closet</th><th>Storage</th><th>Display</th>");
+				page.append("<tr>");
+				page.append("<th colspan=2>Item</th>");
+				page.append("<th>Have</th>");
+				page.append('<th><abbr title="Closet">C</abbr></th>');
+				page.append('<th><abbr title="Storage">S</abbr></th>');
+				page.append('<th><abbr title="Display Case">DC</abbr></th>');
 				if(count(stock) > 0 && getvar("BaleOCD_Stock").to_int() > 0)
 					page.append("<th>Stock</th>");
 				page.append("<th>Price</th><th>Keep</th><th>Action</th><th>... information</th></tr>");
