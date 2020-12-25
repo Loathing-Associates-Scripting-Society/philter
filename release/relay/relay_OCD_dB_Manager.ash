@@ -180,20 +180,7 @@ string write_hidden(string ov, string name) {
 }
 
 void styles() {
-	page.append("<script language=Javascript>"+
-	"function descitem(desc) {"+
-	"	newwindow=window.open('/desc_item.php?whichitem='+desc,'name','height=200,width=214');"+
-	"		if (window.focus) {newwindow.focus()}"+
-	"}"+
-	"</script>");
-
-	page.append("<script language=Javascript>"+
-	"function wikiitem(desc) {"+
-	"	newwindow=window.open('https://kol.coldfront.net/thekolwiki/index.php/Special:Search?search=' + desc + '&go=Go');"+
-	"		if (window.focus) {newwindow.focus()}"+
-	"}"+
-	"</script>");
-
+	page.append('<script src="/ocd-db-manager/ocd-db-manager.web.js"></script>\n');
 	page.append('<link rel="stylesheet" href="/ocd-db-manager/styles.css">\n');
 }
 
