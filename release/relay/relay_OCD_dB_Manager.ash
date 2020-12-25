@@ -409,7 +409,7 @@ void add_items() {
 			if(!table_started) {
 				page.add_catbuttons();
 
-				page.append("<table border=0 cellpadding=1>");
+				page.append("<table class=\"ocd-item-table\" border=0 cellpadding=1>");
 				page.append("<tr>");
 				page.append("<th colspan=2>Item</th>");
 				page.append("<th>Have</th>");
@@ -507,7 +507,7 @@ void edit_items(string act) {
 		if(count(cat) > 0) {
 			if(act == "Search")
 				page.add_catbuttons();
-			page.append("<table border=0 cellpadding=1>");
+			page.append("<table class=\"ocd-item-table\" border=0 cellpadding=1>");
 			page.append("<tr><th colspan=2>Item</th>");
 			page.append("<th>Price</th>");
 			if(act == "Keep" || act == "Search")
@@ -696,7 +696,7 @@ void stock_items() {
 	page.append("</table><br />");
 
 	if(count(stock) > 0) {
-		page.append("<table border=0 cellpadding=1>");
+		page.append("<table class=\"ocd-item-table\" border=0 cellpadding=1>");
 		page.append("<tr><th>Purpose</th><th colspan=2>Item</th><th>Have</th><th>Stock</th><th>Delete?</th></tr>");
 		foreach doodad in stock
 			ostock[count(ostock)] = doodad;
@@ -718,7 +718,7 @@ void stock_items() {
 		page.append("</table>");
 	} else page.append("<p style='text-align:center; font-size:110%; font-weight:bold; color:#0000BB;'>Your stock list is completely empty!<br />Click the above button to create a list, or you can add items below.<br />When done, click \"Save All\"</p>");
 	page.append("<p></p>");
-	page.append("<table border=0 cellpadding=1>");
+	page.append("<table class=\"ocd-item-table\" border=0 cellpadding=1>");
 	page.append("<tr><th>Add New Item</th><th>Acquire</th><th>Purpose</th></tr>");
 	for i from 1 to 11 {
 		page.append("<tr><td valign=top>");
@@ -853,7 +853,7 @@ void information() {
 				curr_items = curr_items();
 			}
 			page.append(" Add default information for "+AddQ+" common item"+(AddQ == 1? " that is": "s that are")+" not already in your data.</p>");
-			page.append("<table border=0 cellpadding=1>");
+			page.append("<table class=\"ocd-item-table\" border=0 cellpadding=1>");
 			page.append("<tr><th>Item</th><th>Default</th></tr>");
 			foreach key in defaults
 				page.append("<tr><td>" + key + "</td><th>" + defaults[key] + "</th></tr>");

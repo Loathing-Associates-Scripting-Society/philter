@@ -63,8 +63,16 @@ table.zlib {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.ocd-item-table tr:nth-child(2n+1) {
+  background-color: #eeeeee;
+}
+
 tr.item:hover {
   background-color: silver;
+}
+
+tr.item:hover:nth-child(2n+1) {
+  background-color: #bbbbbb;
 }
 
 ul.stock {
