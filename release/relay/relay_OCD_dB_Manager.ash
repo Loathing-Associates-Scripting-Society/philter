@@ -194,38 +194,7 @@ void styles() {
 	"}"+
 	"</script>");
 
-	page.append("<style type='text/css'>"+
-	"th {background-color:blue; color:white; font-family:Arial,Helvetica,sans-serif;}"+
-
-	"fieldset {background-color:white; margin-top: 3px; padding-top:10px; padding-bottom:15px;}"+
-	"legend {font-size:110%; color:black;}"+
-
-	"a:link {color:black; text-decoration:none;}"+
-	"a:visited {color:black; text-decoration:none;}"+
-	"a:hover {color:blue; text-decoration:underline;}"+
-	"a.red:link {color:red}"+
-	"a.red:visited {color:red}"+
-	"a.version:link {color:#0000CD}"+
-	"a.version:visited {color:#0000CD}"+
-	"a.version:hover {color:red;}"+
-
-	"p.zlib {margin:5px 20px; font-size:88%; font-family:Arial,Helvetica,sans-serif;}"+
-	"table.zlib {margin:0px 20px; font-size:88%; font-family:Arial,Helvetica,sans-serif;}"+
-	"tr.item:hover {background-color:silver;}"+
-
-	"ul.stock {list-style-type:none;margin-bottom:20;margin-top:0;padding:0;position: relative;top:5;left:10;width:100%;}"+
-
-	"input {margin-bottom:-2;}"+   // This corrects for buttons adding extra margin onto the bottom of a table. :(
-	"input.nav {margin-bottom:-1; padding: 0; font-size:100%;}"+
-
-	"ul.tabbernav {margin:0; padding: 3px 1px 0; border-bottom: 1px solid black; font: bold 12px Verdana, sans-serif;}"+
-	"ul.tabbernav li {list-style: none; margin: 0; display: inline;}"+
-	"ul.tabbernav li input {padding: 3px 0.5em; margin-left: 3px; border: 1px solid black;"+
-		" border-bottom: 1px solid black; background: #DDDDEE; text-decoration: none;}"+
-	"ul.tabbernav li input:hover {color: #000000; background: #AAAAEE; border-color: black;}"+
-	"ul.tabbernav li.tabberactive input {background-color: white; border-bottom: 1px solid white;}"+
-	"ul.tabbernav li.tabberactive input:hover {color: #000000; background: white; border-bottom: 1px solid white;}"+
-	"</style>");
+	page.append('<link rel="stylesheet" href="/ocd-db-manager/styles.css">\n');
 }
 
 void load_OCD() {
