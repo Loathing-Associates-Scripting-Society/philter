@@ -1,5 +1,5 @@
 // OCD Inventory by Bale
-script "OCD Inventory Control.ash";
+script "ocd-cleanup.ash";
 notify <Bale>;
 import "zlib.ash";
 #check_version("Bale's OCD Inventory Control", "BaleOCD", "3.10", 1818);
@@ -24,7 +24,7 @@ setvar("BaleOCD_MallDangerously", FALSE);  // If this set to TRUE, any uncategor
 string __OCD_PROJECT_NAME__ = "Loathing-Associates-Scripting-Society-OCD-Inventory-Control-trunk-release";
 if(svn_exists(__OCD_PROJECT_NAME__) && get_property("_svnUpdated") == "false" && get_property("_ocdUpdated") != "true") {
 	if(!svn_at_head(__OCD_PROJECT_NAME__)) {
-		print("OCD Inventory Control has become outdated. Automatically updating from SVN...", "red");
+		print("OCD-Cleanup has become outdated. Automatically updating from SVN...", "red");
 		cli_execute("svn update " + __OCD_PROJECT_NAME__);
 		print("On the script's next invocation it will be up to date.", "green");
 	}

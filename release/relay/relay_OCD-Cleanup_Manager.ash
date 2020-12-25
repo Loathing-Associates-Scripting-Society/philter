@@ -1,7 +1,7 @@
 // Relay OCD Inventory dB Manager by Bale
 
 since r18040; // When you define a map with value as a zero-length array, file_to_map can now populate it
-import "OCD Inventory Control";
+import "ocd-cleanup.ash";
 
 OCDinfo [item] OCD;
 OCDinfo [item] OCDefault;
@@ -180,8 +180,8 @@ string write_hidden(string ov, string name) {
 }
 
 void styles() {
-	page.append('<script src="/ocd-db-manager/ocd-db-manager.web.js"></script>\n');
-	page.append('<link rel="stylesheet" href="/ocd-db-manager/styles.css">\n');
+	page.append('<script src="/ocd-cleanup-manager/ocd-cleanup-manager.web.js"></script>\n');
+	page.append('<link rel="stylesheet" href="/ocd-cleanup-manager/styles.css">\n');
 }
 
 void load_OCD() {
