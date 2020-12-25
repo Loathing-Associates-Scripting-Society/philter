@@ -4,6 +4,19 @@ This is a fork of [OCD Inventory Control](https://kolmafia.us/threads/ocd-invent
 
 ## Installing
 
+### Migrating from Bale's OCD Inventory Control
+
+If you are upgrading from Bale's original script, run the following commands in KoLmafia to delete old versions of OCD:
+
+```
+svn delete bale-ocd
+svn delete Loathing-Associates-Scripting-Society-OCD-Inventory-Control-trunk
+```
+
+Then proceed below.
+
+### New Users
+
 To install this script, type the following into KoLmafia's gCLI:
 
 ```
