@@ -5,14 +5,14 @@ import "ocd-cleanup.ash";
 
 OCDinfo [item] OCD;
 OCDinfo [item] OCDefault;
-file_to_map("OCDefault.txt", OCDefault);
+file_to_map("ocd-cleanup-default.txt", OCDefault);
 
 // kBay info
 record {
 	string type;
 	string price;
 } [item] kBayList;
-file_to_map("OCDkBay.txt", kBayList);
+file_to_map("ocd-cleanup-kbay.txt", kBayList);
 
 record {
 	string type;
@@ -678,7 +678,7 @@ void stock_items() {
 	page.append("<table border=0 cellpadding=1><tr><td align=right>");
 	if(write_button("stocknew", " New ")) {
 		clear(stock);
-		if(!file_to_map("OCDstock.txt", stock) || count(stock) == 0)
+		if(!file_to_map("ocd-cleanup-stock.txt", stock) || count(stock) == 0)
 			print("Error loading default stock data.","red");
 	}
 	page.append("</td><td>Create a default stock list for softcore pulls!</td></tr>");
