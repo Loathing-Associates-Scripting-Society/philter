@@ -186,7 +186,7 @@ void styles() {
 	"		if (window.focus) {newwindow.focus()}"+
 	"}"+
 	"</script>");
-	
+
 	page.append("<script language=Javascript>"+
 	"function wikiitem(desc) {"+
 	"	newwindow=window.open('https://kol.coldfront.net/thekolwiki/index.php/Special:Search?search=' + desc + '&go=Go');"+
@@ -196,10 +196,10 @@ void styles() {
 
 	page.append("<style type='text/css'>"+
 	"th {background-color:blue; color:white; font-family:Arial,Helvetica,sans-serif;}"+
-	
+
 	"fieldset {background-color:white; margin-top: 3px; padding-top:10px; padding-bottom:15px;}"+
 	"legend {font-size:110%; color:black;}"+
-	
+
 	"a:link {color:black; text-decoration:none;}"+
 	"a:visited {color:black; text-decoration:none;}"+
 	"a:hover {color:blue; text-decoration:underline;}"+
@@ -208,16 +208,16 @@ void styles() {
 	"a.version:link {color:#0000CD}"+
 	"a.version:visited {color:#0000CD}"+
 	"a.version:hover {color:red;}"+
-	
+
 	"p.zlib {margin:5px 20px; font-size:88%; font-family:Arial,Helvetica,sans-serif;}"+
 	"table.zlib {margin:0px 20px; font-size:88%; font-family:Arial,Helvetica,sans-serif;}"+
 	"tr.item:hover {background-color:silver;}"+
-	
+
 	"ul.stock {list-style-type:none;margin-bottom:20;margin-top:0;padding:0;position: relative;top:5;left:10;width:100%;}"+
 
 	"input {margin-bottom:-2;}"+   // This corrects for buttons adding extra margin onto the bottom of a table. :(
 	"input.nav {margin-bottom:-1; padding: 0; font-size:100%;}"+
-	
+
 	"ul.tabbernav {margin:0; padding: 3px 1px 0; border-bottom: 1px solid black; font: bold 12px Verdana, sans-serif;}"+
 	"ul.tabbernav li {list-style: none; margin: 0; display: inline;}"+
 	"ul.tabbernav li input {padding: 3px 0.5em; margin-left: 3px; border: 1px solid black;"+
@@ -227,7 +227,7 @@ void styles() {
 	"ul.tabbernav li.tabberactive input:hover {color: #000000; background: white; border-bottom: 1px solid white;}"+
 	"</style>");
 }
-	
+
 void load_OCD() {
 	if(count(fields) > 0) return;
 	string OCDfile = "OCDdata_"+getvar("BaleOCD_DataFile")+".txt";
@@ -346,7 +346,7 @@ string image(item doodad) {
 }
 
 string desc(item doodad) {
-	return  "<a title = \"Open wiki page in a new window\" href=\"javascript:wikiitem('" 
+	return  "<a title = \"Open wiki page in a new window\" href=\"javascript:wikiitem('"
 		+ replace_string(to_string(doodad), "'", "\\'")
 		+ "');\">" + doodad +"</a>";
 }
@@ -452,7 +452,7 @@ void add_items() {
 		if(is_OCDable(doodad) && !(OCD contains doodad && OCD[doodad].action != "UNKN")) {
 			if(!table_started) {
 				page.add_catbuttons();
-				
+
 				page.append("<table border=0 cellpadding=1>");
 				page.append("<tr>");
 				page.append("<th colspan=2>Item</th>");
@@ -466,7 +466,7 @@ void add_items() {
 				table_started = true;
 			}
 			page.append("<tr valign=center class='item'");
-			if(count(stock) > 0 && getvar("BaleOCD_Stock").to_int() > 0 
+			if(count(stock) > 0 && getvar("BaleOCD_Stock").to_int() > 0
 			  && stock contains doodad && stock[doodad].q >= item_amount(doodad))
 				page.append(" style='background-color:E3E3E3'");
 			page.append("><td>"+imagedesc(doodad)+"</a></td>");
@@ -633,11 +633,11 @@ void edit_items(string act) {
 				page.append("</td></tr>");
 			}
 			page.append("</table>");
-		} else if(act == "Search" && fields["searchbox"].length() > 0) 
+		} else if(act == "Search" && fields["searchbox"].length() > 0)
 			page.append("<p style='text-indent:3%; color:#FF6666'>No search results found. Try searching for a partial match.</p>");
 		page.append("</fieldset>"); 	// finish_box()
 	}
-	
+
 	switch(act) {
 	case "Keep":
 		fieldset = "Manage Items to Keep";
@@ -708,9 +708,9 @@ void edit_items(string act) {
 
 void stock_items() {
 	item [int] ostock;
-	
+
 	page.append("<fieldset><legend>Items to keep in stock</legend>"); // write_box()
-	
+
 	page.append("What to do with items on this list?<ul class='stock'><li>");
 	vars["BaleOCD_Stock"] = write_radio(getvar("BaleOCD_Stock"), "stock", " Acquire these items for future use", 1);
 	page.append("</li><li>");
@@ -718,7 +718,7 @@ void stock_items() {
 	page.append("</li><li>");
 	write_radio(getvar("BaleOCD_Stock"), "stock", " Ignore this stock list", 0);
 	page.append("</li></ul>");
-	
+
 	page.append("<table border=0 cellpadding=1><tr><td align=right>");
 	if(write_button("stocknew", " New ")) {
 		clear(stock);
@@ -738,7 +738,7 @@ void stock_items() {
 		page.append("</td><td>Delete <i>all</i> entries in the following list!</td></tr>");
 	}
 	page.append("</table><br />");
-				
+
 	if(count(stock) > 0) {
 		page.append("<table border=0 cellpadding=1>");
 		page.append("<tr><th>Purpose</th><th colspan=2>Item</th><th>Have</th><th>Stock</th><th>Delete?</th></tr>");
@@ -827,7 +827,7 @@ void set_cats() {
 
 void zlib_vars() {
 	page.append("<fieldset><legend>Configure Character Settings</legend>"); // write_box()
-	
+
 	page.append("<table class='zlib' border=0 cellpadding=1>");
 	page.append("<tr><td align=right>Empty Closet First: </td><td>");
 	if(getvar("BaleOCD_EmptyCloset") != "-1" && getvar("BaleOCD_EmptyCloset") != "0") vars["BaleOCD_EmptyCloset"] = 0;
@@ -841,11 +841,11 @@ void zlib_vars() {
 	vars["BaleOCD_Pricing"] = write_radio(getvar("BaleOCD_Pricing"), "Pricing", "Automatic,", "auto");
 	write_radio(getvar("BaleOCD_Pricing"), "Pricing", "999,999,999 meat.", "max");
 	page.append("</td></tr></table>");
-	
+
 	page.append("<p class='zlib'>");
 	vars["BaleOCD_Sim"] = write_check(getvar("BaleOCD_Sim"), "Sim", "Simulate Only ");
 	page.append(" <font size=1>(no actions will be taken)</font></p>");
-	
+
 	page.append("<table class='zlib' border=0 cellpadding=1><tr><td align=right>My Mall Multi:</td><td>");
 	vars["BaleOCD_MallMulti"] = write_field(getvar("BaleOCD_MallMulti"), "MallMulti", 14);
 	page.append("</td><td align=right>&nbsp;&nbsp;Mall Multi kMail Text</td><td>");
@@ -853,7 +853,7 @@ void zlib_vars() {
 	page.append("</td></tr><tr><td colspan=2>");
 	vars["BaleOCD_UseMallMulti"] = write_check(getvar("BaleOCD_UseMallMulti"), "UseMulti", "Use Mall Multi");
 	page.append("</td></tr></table>");
-	
+
 	page.append("<p class='zlib'>Data file: OCDdata_");
 	vars["BaleOCD_DataFile"] = write_field(getvar("BaleOCD_DataFile"), "DataFile", 10);
 	if(getvar("BaleOCD_DataFile") == "")
@@ -875,7 +875,7 @@ void zlib_vars() {
 		page.append("<script language='javascript'>ourDate = new Date();document.write(' at '+ ourDate.toLocaleString() + '.<br/>');</script></div>");
 	}
 	page.append("</p>");
-	
+
 	page.append("</fieldset>"); 	// finish_box()
 }
 
@@ -957,7 +957,7 @@ void subcat_tabs() {
 	if(count(todos) > 0) write_tab("editTab", "Reminders");
 	write_tab("editTab", "Search");
 	page.append("<li></ul>");
-	
+
 	edit_items(fields["editTab"]);
 }
 
@@ -998,7 +998,7 @@ void main() {
 	styles();
 	page.append("</head><body><form name='relayform' method='POST' action=''>");
 	page.append("<input type='submit' name='no show' value='donothing' style='position: absolute; left: -9999px'/>");  // Catches enter in a text field without saving
-	
+
 	if(!(fields contains "tab")) {
 		if(fields contains "last_tab")
 			fields["tab"] = fields["last_tab"];
@@ -1013,9 +1013,9 @@ void main() {
 			fields["editTab"] = fields["last_editTab"];
 		else fields["editTab"] = "Search";
 	}
-	if(fields contains "searchbox") 
+	if(fields contains "searchbox")
 		search = search_items(fields["searchbox"]);
-	
+
 	# foreach x,y in fields print(x + " - "+ y); print("==============================");
 	boolean noSave = fields["tab"] == "Information" || (fields["tab"] == "Edit Database" && fields["editTab"] == "Search" && (count(search) == 0));
 
@@ -1031,7 +1031,7 @@ void main() {
 		} else if(!noSave) page.append("Save all changes above");
 		page.append("</td></tr></table>");
 	}
-	
+
 	page.append("<ul class='tabbernav'>");
 	write_tab("tab", "Information");
 	write_tab("tab", "Add Items");
@@ -1072,7 +1072,7 @@ void main() {
 			break;
 		}
 	}
-	
+
 	if(noSave)
 		page.append("&nbsp;");
 	else {
@@ -1106,13 +1106,13 @@ void main() {
 	} else if(!noSave) page.append("Save all changes above");
 	if(!noSave)
 		page.append("</td></tr></table>");
-	
+
 	// Ensure nothing is forgotten when tabs are switched
 	if(success)
 		foreach key, value in fields
 			 if(!(page.contains_text(key) || key.contains_text("tab")))
 				write_hidden(value, key);
-	
+
 	page.append("</form></body></html>"); 	// finish_page()
 	writeln(page);
 }

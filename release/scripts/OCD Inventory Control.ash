@@ -72,7 +72,7 @@ boolean is_wadable(item it) {
 	switch(it) {
 	case $item[sewer nuggets]:
 	case $item[floaty sand]:
-	case $item[floaty pebbles]: 
+	case $item[floaty pebbles]:
 	case $item[floaty gravel]:
 		return true;
 	}
@@ -157,12 +157,12 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	command ["CLAN"]  = "stash put ";
 	command ["GIFT"] = "send gift to ";
 	command ["KBAY"] = "kBay ";
-	
+
 	// Save these so they can be screwed with safely
 	boolean autoSatisfyWithCloset = get_property("autoSatisfyWithCloset").to_boolean();
 	boolean autoSatisfyWithStorage = get_property("autoSatisfyWithStorage").to_boolean();
 	boolean autoSatisfyWithStash = get_property("autoSatisfyWithStash").to_boolean();
-	
+
 	boolean use_multi = getvar("BaleOCD_MallMulti") != "" && to_boolean(getvar("BaleOCD_UseMallMulti"));
 	if(use_multi)
 		command ["MALL"] = "send to mallmulti "+ getvar("BaleOCD_MallMulti") + ": ";
@@ -212,13 +212,13 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		if(full > OCD[it].q && available_amount(it) > item_amount(it))
 			retrieve_item(min(full - OCD[it].q, available_amount(it)), it);
 		// Don't OCD items that are part of stock. Stock can always be satisfied by closet.
-		int keep = getvar("BaleOCD_Stock") == "0" ? ocd[it].q: 
+		int keep = getvar("BaleOCD_Stock") == "0" ? ocd[it].q:
 			max(ocd[it].q, stock[it].q - (get_property("autoSatisfyWithCloset") == "false"? 0: closet_amount(it)));
 		// OCD is limited by item_amount(it) since we don't want to purchase anything and closeted items
 		// may be off-limit, but if there's something in the closet, it counts against the amount you own.
 		return min(full - keep, item_amount(it));
 	}
-	
+
 	boolean AskUser = true;  // Once this has been set false, it will be false for all successive calls to the function
 	boolean check_inventory(boolean StopForMissingItems) {
 		AskUser = AskUser && StopForMissingItems;
@@ -305,7 +305,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			} else {
 				if(stop_for_relay(doodad))
 					return false;
-				// Potentially disasterous, but this will cause the script to sell off unlisted items, just like it used to. 
+				// Potentially disasterous, but this will cause the script to sell off unlisted items, just like it used to.
 				if(getvar("BaleOCD_MallDangerously").to_boolean())
 					mall[doodad] = excess;   // Backwards compatibility FTW!
 			}
@@ -323,15 +323,15 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			return max(to_int(ocd[it].info), price);
 		return price;
 	}
-	
+
 	void print_cat(int [item] cat, string act, string to) {
 		if(count(cat) < 1) return;
-	
+
 		item [int] catOrder;
 		foreach it in cat
 			catOrder[ count(catOrder) ] = it;
 		sort catOrder by to_lower_case(to_string(value));
-		
+
 		int len, total, linevalue;
 		buffer queue;
 		int [item] kBayCount, kBayClear;
@@ -422,18 +422,18 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		#	vprint("Minimum biding for all auctions = "+rnum(total), "blue", 3);
 		FinalSale += total;
 	}
-	
+
 	item other_clover(item it) {
 		if(it == $item[ten-leaf clover]) return $item[disassembled clover];
 		return $item[ten-leaf clover];
 	}
-	
+
 	// This is only called if the player has both kinds of clovers, so no need to check if stock contains both
 	int clovers_needed() {
 		return stock[$item[ten-leaf clover]].q + stock[$item[disassembled clover]].q
 		  - full_amount($item[ten-leaf clover]) - full_amount($item[disassembled clover]);
 	}
-	
+
 	boolean stock() {
 		boolean success = true;
 		boolean first = true;
@@ -443,7 +443,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			if(first) first = !vprint("Stocking up on required items!", "blue", 3);
 			return retrieve_item(q, it);
 		}
-		
+
 		load_OCD();
 		batch_open();
 		foreach it in stock {
@@ -458,7 +458,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			}
 			// Closet everything (except for gear) that is stocked so it won't get accidentally used.
 			if(it.to_slot() == $slot[none] && stock[it].q - ocd[it].q > closet_amount(it) && item_amount(it) > ocd[it].q)
-				put_closet(min(item_amount(it) - ocd[it].q, stock[it].q - ocd[it].q - closet_amount(it)), it); 
+				put_closet(min(item_amount(it) - ocd[it].q, stock[it].q - ocd[it].q - closet_amount(it)), it);
 			// If you got clovers, closet them before they get protected into disassembled clovers.
 			//if(it == $item[ten-leaf clover] && to_boolean(get_property("cloverProtectActive")))
 			//	put_closet(item_amount(it), it);
@@ -473,7 +473,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			for x from 1438 to 1443 if(OCD[to_item(x)].action == "PULV") return "nuggets";
 			return "";
 		}
-		
+
 		boolean malusOnly = true;
 		foreach thing, quant in pulverize
 			if(thing.is_wadable()) {
@@ -662,12 +662,12 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	}
 
 	boolean act_cat(int [item] cat, string act, string to) {
-	
+
 		item [int] catOrder;
 		foreach it in cat
 			catOrder[ count(catOrder) ] = it;
 		sort catOrder by to_lower_case(to_string(value));
-		
+
 		if(count(cat) == 0) return false;
 		int i = 0;
 		if(act == "TODO" && count(todo) > 0)
@@ -769,7 +769,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			print("You are missing item stocking information.", "red");
 			return false;
 		}
-		
+
 		if(!check_inventory(StopForMissingItems)) return false;
 		if(act_cat(brak, "BREAK", "") && !check_inventory(StopForMissingItems))
 			return false;
@@ -783,7 +783,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			return false;
 		if(act_cat(pulv, "PULV", "") && !check_inventory(StopForMissingItems))
 			return false;
-		
+
 		act_cat(mall, "MALL", "");
 		act_cat(auto, "AUTO", "");
 		act_cat(disc, "DISC", "");
@@ -802,7 +802,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 				vprint("Minimum biding for all auctions = "+rnum(kBidTot), "blue", 3);
 			FinalSale += kBidTot; */
 		}
-		
+
 		if(getvar("BaleOCD_Stock") == "1" && !getvar("BaleOCD_Sim").to_boolean())
 			stock();
 
@@ -815,18 +815,18 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 
 // *******  Finally, here is the main for ocd_control()
 // int ocd_control(boolean StopForMissingItems) {
-	
+
 	cli_execute("inventory refresh");
-	
+
 	// Empty closet before emptying out Hangks, otherwise it may interfere with which Hangk's items go to closet
-	if(to_int(getvar("BaleOCD_EmptyCloset")) >= 0 && get_property("lastEmptiedStorage").to_int() != my_ascensions() 
+	if(to_int(getvar("BaleOCD_EmptyCloset")) >= 0 && get_property("lastEmptiedStorage").to_int() != my_ascensions()
 	  && getvar("BaleOCD_Sim") == "false")
 		empty_closet();
-	
+
 	// Empty out Hangks, so it can be accounted for by what follows.
 	if(autoSatisfyWithStorage && get_property("lastEmptiedStorage").to_int() != my_ascensions())
 		 visit_url("storage.php?action=pullall&pwd");
-	
+
 	boolean success;
 	try {
 		if(autoSatisfyWithCloset)
