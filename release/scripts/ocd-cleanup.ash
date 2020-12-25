@@ -1,8 +1,6 @@
 // OCD Inventory by Bale
 script "ocd-cleanup.ash";
-notify <Bale>;
 import "zlib.ash";
-#check_version("Bale's OCD Inventory Control", "BaleOCD", "3.10", 1818);
 
 // The following variables should be set from the relay script.
 setvar("BaleOCD_MallMulti", "");           // If mall_multi is not empty, then all MALL items will be sent to this multi.
