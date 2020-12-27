@@ -1,18 +1,18 @@
 // Relay OCD Inventory dB Manager by Bale
 
 since r18040; // When you define a map with value as a zero-length array, file_to_map can now populate it
-import "OCD Inventory Control";
+import "ocd-cleanup.ash";
 
 OCDinfo [item] OCD;
 OCDinfo [item] OCDefault;
-file_to_map("OCDefault.txt", OCDefault);
+file_to_map("ocd-cleanup-default.txt", OCDefault);
 
 // kBay info
 record {
 	string type;
 	string price;
 } [item] kBayList;
-file_to_map("OCDkBay.txt", kBayList);
+file_to_map("ocd-cleanup-kbay.txt", kBayList);
 
 record {
 	string type;
@@ -180,8 +180,8 @@ string write_hidden(string ov, string name) {
 }
 
 void styles() {
-	page.append('<script src="/ocd-db-manager/ocd-db-manager.web.js"></script>\n');
-	page.append('<link rel="stylesheet" href="/ocd-db-manager/styles.css">\n');
+	page.append('<script src="/ocd-cleanup-manager/ocd-cleanup-manager.web.js"></script>\n');
+	page.append('<link rel="stylesheet" href="/ocd-cleanup-manager/styles.css">\n');
 }
 
 void load_OCD() {
@@ -678,7 +678,7 @@ void stock_items() {
 	page.append("<table border=0 cellpadding=1><tr><td align=right>");
 	if(write_button("stocknew", " New ")) {
 		clear(stock);
-		if(!file_to_map("OCDstock.txt", stock) || count(stock) == 0)
+		if(!file_to_map("ocd-cleanup-stock.txt", stock) || count(stock) == 0)
 			print("Error loading default stock data.","red");
 	}
 	page.append("</td><td>Create a default stock list for softcore pulls!</td></tr>");
