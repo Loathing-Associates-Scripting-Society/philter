@@ -21,10 +21,11 @@ setvar("BaleOCD_MallDangerously", FALSE);  // If this set to TRUE, any uncategor
 
 // Check version! This will check both scripts and data files.
 // This code is at base level so that the relay script's importation will automatically cause it to be run.
-if(svn_exists("bale-ocd") && get_property("_svnUpdated") == "false" && get_property("_ocdUpdated") != "true") {
-	if(!svn_at_head("bale-ocd")) {
+string __OCD_PROJECT_NAME__ = "Loathing-Associates-Scripting-Society-OCD-Inventory-Control-trunk-release";
+if(svn_exists(__OCD_PROJECT_NAME__) && get_property("_svnUpdated") == "false" && get_property("_ocdUpdated") != "true") {
+	if(!svn_at_head(__OCD_PROJECT_NAME__)) {
 		print("OCD Inventory Control has become outdated. Automatically updating from SVN...", "red");
-		cli_execute("svn update bale-ocd");
+		cli_execute("svn update " + __OCD_PROJECT_NAME__);
 		print("On the script's next invocation it will be up to date.", "green");
 	}
 	set_property("_ocdUpdated", "true");
