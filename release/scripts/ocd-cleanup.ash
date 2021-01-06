@@ -9,7 +9,6 @@ setvar("BaleOCD_MultiMessage", "Mall multi dump");
 setvar("BaleOCD_DataFile", my_name());     // The name of the file that holds OCD data for this character.
 setvar("BaleOCD_StockFile", my_name());    // The name of the file that holds OCD stocking data for this character.
 setvar("BaleOCD_Stock", 0);                // Should items be acquired for stock
-setvar("BaleOCD_kBay", 1);                 // Enable items for kBay. If 0, then kBay is temporarily disabled
 setvar("BaleOCD_Pricing", "auto");         // How to handle mall pricing. "auto" will use mall_price(). "max" will price at maximum.
 setvar("BaleOCD_Sim", FALSE);              // If you set this to true, it won't actually do anything. It'll only inform you.
 setvar("BaleOCD_EmptyCloset", 0);          // Should the closet be emptied and its contents disposed of?
@@ -138,7 +137,6 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	int [item] clan;
 	int [item] todo;
 	int [string][item] gift;
-	int [string][item] kbay;
 
 	int [item] make_q;
 
@@ -155,7 +153,6 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	command ["CLST"] = "closet ";
 	command ["CLAN"]  = "stash put ";
 	command ["GIFT"] = "send gift to ";
-	command ["KBAY"] = "kBay ";
 
 	// Save these so they can be screwed with safely
 	boolean autoSatisfyWithCloset = get_property("autoSatisfyWithCloset").to_boolean();
@@ -167,8 +164,6 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		command ["MALL"] = "send to mallmulti "+ getvar("BaleOCD_MallMulti") + ": ";
 
 	int [item] price;
-	int kBidTot;
-	int kBayDuration = 120;  // kBay auction will last 120 hours (5 days)
 
 	boolean load_OCD() {
 		clear(OCD);
@@ -289,14 +284,15 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 					case "GIFT":
 						gift[OCD[doodad].info][doodad] = excess;
 						break;
-					case "KBAY":
-						kbay[OCD[doodad].message][doodad] = excess;
-						break;
 					case "TODO":
 						todo[doodad] = excess;
 						break;
 					case "KEEP":
 						break;
+					case "KBAY":
+						// Treat KBAY as uncategorized items
+						vprint(`KBAY is deprecated. {doodad} is treated as uncategorized.`, -1);
+						// fall through
 					default:
 						if(stop_for_relay(doodad))
 							return false;
@@ -333,43 +329,11 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 
 		int len, total, linevalue;
 		buffer queue;
-		int [item] kBayCount, kBayClear;
 		string com = command[act];
 		if(act == "GIFT") com = com + to + ": ";
-		else if(act == "KBAY") com = com + "\""+ to + "\" ";
-		int kBayCount() {
-			float tot;
-			foreach key,q in kBayCount {
-				switch(key) { // These have exception for rarity
-				case $item[stuffed Hodgman]:
-				case $item[designer handbag]:
-				case $item[Jack-in-the-box]:
-					return 999999;
-				}
-				// Items selling for less than 300 meat will require more quantity to make them worthwhile.
-				if(to_float(OCD[key].info) < 300)
-					tot += (q/4 * max(to_float(OCD[key].info)/300, .2));
-				else tot += 1;
-			}
-			return tot;
-		}
-		boolean kBayClear() {
-			vprint("Waiting for more items to "+com + queue, "gray", 3);
-			foreach key, i in kBayCount
-				kBayClear [key] = i;
-			clear(kBayCount);
-			linevalue = 0;
-			return true;
-		}
 		boolean print_line() {
-			if(act == "KBAY" && kBayCount() < 4)
-				return kBayClear();
 			vprint(com + queue, "blue", 3);
-			if(act == "KBAY") {
-				clear(kBayCount);
-				vprint("Minimum bid for this lot: "+rnum(linevalue), "blue", 3);
-				kBidTot += linevalue;
-			} else if(act == "MALL")
+			if (act == "MALL")
 				vprint("Sale price for this line: "+rnum(linevalue), "blue", 3);
 			vprint(" ", 3);
 			len = 0;
@@ -397,10 +361,6 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 				queue.append(" into "+ OCD[it].info);
 			} else if(act == "AUTO") {
 				linevalue += quant * autosell_price(it);
-			} else if(act == "KBAY") {
-				kBayCount[it] = quant;
-				queue.append(" @ "+ rnum(to_int(OCD[it].info)));
-				linevalue += quant * to_int(OCD[it].info);
 			}
 			len = len + 1;
 			if(len == 11)
@@ -408,8 +368,6 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		}
 		if(len > 0)
 			print_line();
-		foreach key in kBayClear
-			remove kbay [to][key];
 
 		if(act == "MALL") {
 			if(!use_multi)
@@ -417,8 +375,6 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			#else vprint("Current mall price = "+rnum(total), "blue", 3);
 		} else if(act == "AUTO")
 			vprint("Total autosale = "+rnum(total), "blue", 3);
-		#else if(act == "KBAY" && kBidTot > 0)
-		#	vprint("Minimum biding for all auctions = "+rnum(total), "blue", 3);
 		FinalSale += total;
 	}
 
@@ -628,38 +584,14 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		return "";
 	}
 
-
-	// Break kBay into separate auctions because 100 meat needs to be sent with each.
-	boolean kBayStuff(string group, int [item] cat) {
-		return vprint("kBay is currently defunct, but may return soon!", "red", 3);
-		/*
-		// If kBaying has been disabled, don't do this
-		if(getvar("BaleOCD_kBay") == "0") return true;
-		int [item] goodies;
-		int kBid;
-		boolean auction() {
-			if(count(goodies) == 1 || length(group) < 1)  // If there's only one type of item (or group is blank), make it the title of the auction
-				foreach it,q in cat
-					group = q > 1? it.plural: to_string(it);
-			string message = "list "+kBayDuration+"h "+kBid+"\n"+group;
-			kBayDuration += 4;  // Each successive auction will be 4 hours later
-			kBid = 0;
-			return kmail("kBay", message, 100, goodies);
-		}
-		foreach it in cat {
-			goodies[it] = cat[it];
-			kBid += to_int(OCD[it].info) * cat[it];
-			if(count(goodies) > 10) {
-				if(!auction()) return false;
-				clear(goodies);
-			}
-		}
-		if(count(goodies) > 0 && !auction())
-			return false;
-		return true;
-		*/
-	}
-
+	/**
+	 * Process a collection of items using a given action.
+	 * @param cat Collection of items and their amounts to be processed
+	 * @param act Item action ID
+	 * @param Receiving player ID. Used for actions that involve another player
+	 * 	  (e.g. "GIFT")
+	 * @return Whether all items were processed successfully
+	 */
 	boolean act_cat(int [item] cat, string act, string to) {
 
 		item [int] catOrder;
@@ -690,7 +622,8 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			string message = message(cat);
 			return kmail(to, message, 0, cat, message);
 		case "KBAY":
-			return kBayStuff(to, cat);
+			// This should be unreachable
+			abort("KBAY action is no longer available");
 		}
 		foreach x, it in catOrder {
 			int quant = cat[it];
@@ -792,15 +725,6 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		if(count(gift) > 0)
 			foreach person in gift
 				act_cat(gift[person], "GIFT", person);
-		if(count(kbay) > 0) {
-			vprint("You have stuff to kBay. kBay is currently defunct, but may return soon!", "red", 3);
-			/*foreach type in kbay
-				act_cat(kbay[type], "KBAY", type);
-			vprint("", 3);
-			if(kBidTot > 0)  // Auctions might have been invalidated for lack of quantity
-				vprint("Minimum biding for all auctions = "+rnum(kBidTot), "blue", 3);
-			FinalSale += kBidTot; */
-		}
 
 		if(getvar("BaleOCD_Stock") == "1" && !getvar("BaleOCD_Sim").to_boolean())
 			stock();
