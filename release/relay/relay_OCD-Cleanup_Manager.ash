@@ -159,6 +159,9 @@ string write_check(string ov, string name, string label) {
 	return write_check(ov.to_boolean(), name, label).to_string();
 }
 
+/**
+ * Checks if a submit button named `name` was clicked.
+ */
 boolean test_button(string name) {
 	if(name == "")	return false;
 	return success && fields contains name;
@@ -252,6 +255,13 @@ string kPrice(item doodad) {
 	return floor(.75* autosell_price(doodad));
 }
 
+/**
+ * Renders a drop-down menu of available actions for the given item.
+ * Returns `act` for further processing.
+ * @param act Initially selected action ID
+ * @param doodat
+ * @return Unchanged value of `act`
+ */
 string action_drop(string act, item doodad) {
 	if(is_tradeable(doodad) && test_button("mall"))
 		fields["_"+doodad.to_int()] = "MALL";
@@ -342,6 +352,9 @@ void save_ocd() {
 	map_to_file(OCD, "OCDdata_"+getvar("BaleOCD_DataFile")+".txt");
 }
 
+/**
+ * Returns the number (not amount) of uncategorized items in inventory.
+ */
 int curr_items() {
 	int total;
 	foreach key in get_inventory()
