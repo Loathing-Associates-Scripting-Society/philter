@@ -1,6 +1,7 @@
 // OCD Inventory by Bale
 script "ocd-cleanup.ash";
 import "zlib.ash";
+import "relay/ocd-cleanup-manager/ocd-cleanup.util.ash";
 
 // The following variables should be set from the relay script.
 setvar("BaleOCD_MallMulti", "");           // If mall_multi is not empty, then all MALL items will be sent to this multi.
@@ -22,9 +23,9 @@ setvar("BaleOCD_MallDangerously", FALSE);  // If this set to TRUE, any uncategor
 string __OCD_PROJECT_NAME__ = "Loathing-Associates-Scripting-Society-OCD-Inventory-Control-trunk-release";
 if(svn_exists(__OCD_PROJECT_NAME__) && get_property("_svnUpdated") == "false" && get_property("_ocdUpdated") != "true") {
 	if(!svn_at_head(__OCD_PROJECT_NAME__)) {
-		print("OCD-Cleanup has become outdated. Automatically updating from SVN...", "red");
+		print("OCD-Cleanup has become outdated. Automatically updating from SVN...", _ocd_color_error());
 		cli_execute("svn update " + __OCD_PROJECT_NAME__);
-		print("On the script's next invocation it will be up to date.", "green");
+		print("On the script's next invocation it will be up to date.", _ocd_color_success());
 	}
 	set_property("_ocdUpdated", "true");
 }
@@ -173,7 +174,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	boolean load_OCD() {
 		clear(OCD);
 		if(!file_to_map("OCDdata_"+getvar("BaleOCD_DataFile")+".txt", OCD) && !file_to_map("OCD_"+my_name()+"_Data.txt", OCD))
-			return vprint("Something went wrong trying to load OCDdata!", -1);
+			return vprint("Something went wrong trying to load OCDdata!", _ocd_color_error(), -1);
 		OCDinfo [item] extraOCD;
 		if(extraData != "" && file_to_map(extraData+".txt", extraOCD) && count(extraOCD) > 0)
 			foreach it in extraOCD
@@ -183,8 +184,13 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 					OCD[it].info = extraOCD[it].info;
 					OCD[it].message = extraOCD[it].message;
 				}
-		if(count(OCD) == 0)
-			return vprint("All item information is corrupted or missing. Whoooah! I hope you didn't lose any data...", -1);
+		if(count(OCD) == 0) {
+			return vprint(
+				"All item information is corrupted or missing. Whoooah! I hope you didn't lose any data...",
+				_ocd_color_error(),
+				-1
+			);
+		}
 		return true;
 	}
 
@@ -225,8 +231,13 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		boolean stop_for_relay(item doodad) {
 			if(!AskUser || !is_OCDable(doodad) || (stock contains doodad && full_amount(doodad) <= stock[doodad].q))
 				return false;
-			if(user_confirm("Uncategorized item(s) have been found in inventory.\nAbort to categorize those items with the relay script?"))
-				return vprint("Please use the relay script to categorize missing items in inventory.", "red", 1);
+			if(user_confirm("Uncategorized item(s) have been found in inventory.\nAbort to categorize those items with the relay script?")) {
+				return vprint(
+					"Please use the relay script to categorize missing items in inventory.",
+					_ocd_color_error(),
+					1
+				);
+			}
 			AskUser = false;
 			return false;
 		}
@@ -243,7 +254,11 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 					case "MAKE":
 						make_q[doodad] = count_ingredient(doodad, to_item(ocd[doodad].info));
 						if(make_q[doodad] == 0) {
-							vprint("You cannot transform a "+doodad+" into a "+ocd[doodad].info+". There's a problem with your data file or your crafting ability.", -3);
+							vprint(
+								"You cannot transform a "+doodad+" into a "+ocd[doodad].info+". There's a problem with your data file or your crafting ability.",
+								_ocd_color_error(),
+								-3
+							);
 							break;
 						}
 						make[doodad] = excess;
@@ -354,7 +369,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			return tot;
 		}
 		boolean kBayClear() {
-			vprint("Waiting for more items to "+com + queue, "gray", 3);
+			vprint("Waiting for more items to "+com + queue, _ocd_color_debug(), 3);
 			foreach key, i in kBayCount
 				kBayClear [key] = i;
 			clear(kBayCount);
@@ -364,13 +379,13 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		boolean print_line() {
 			if(act == "KBAY" && kBayCount() < 4)
 				return kBayClear();
-			vprint(com + queue, "blue", 3);
+			vprint(com + queue, _ocd_color_info(), 3);
 			if(act == "KBAY") {
 				clear(kBayCount);
-				vprint("Minimum bid for this lot: "+rnum(linevalue), "blue", 3);
+				vprint("Minimum bid for this lot: "+rnum(linevalue), _ocd_color_info(), 3);
 				kBidTot += linevalue;
 			} else if(act == "MALL")
-				vprint("Sale price for this line: "+rnum(linevalue), "blue", 3);
+				vprint("Sale price for this line: "+rnum(linevalue), _ocd_color_info(), 3);
 			vprint(" ", 3);
 			len = 0;
 			total += linevalue;
@@ -413,12 +428,12 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 
 		if(act == "MALL") {
 			if(!use_multi)
-				vprint("Total mall sale = "+rnum(total), "blue", 3);
-			#else vprint("Current mall price = "+rnum(total), "blue", 3);
+				vprint("Total mall sale = "+rnum(total),_ocd_color_info(), 3);
+			#else vprint("Current mall price = "+rnum(total), _ocd_color_info(), 3);
 		} else if(act == "AUTO")
-			vprint("Total autosale = "+rnum(total), "blue", 3);
+			vprint("Total autosale = "+rnum(total), _ocd_color_info(), 3);
 		#else if(act == "KBAY" && kBidTot > 0)
-		#	vprint("Minimum biding for all auctions = "+rnum(total), "blue", 3);
+		#	vprint("Minimum biding for all auctions = "+rnum(total), _ocd_color_info(), 3);
 		FinalSale += total;
 	}
 
@@ -439,7 +454,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		boolean stockit(int q, item it) {
 			q = q - closet_amount(it) - storage_amount(it) - equipped_amount(it);
 			if(q < 1) return true;
-			if(first) first = !vprint("Stocking up on required items!", "blue", 3);
+			if(first) first = !vprint("Stocking up on required items!", _ocd_color_info(), 3);
 			return retrieve_item(q, it);
 		}
 
@@ -453,7 +468,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 				  + to_string(clovers_needed() - available_amount(it)) +" it");
 			if(full_amount(it) < stock[it].q && !stockit(stock[it].q, it)) {
 				success = false;
-				print("Failed to stock "+(stock[it].q > 1? stock[it].q + " "+ it.plural: "a "+it), "red");
+				print("Failed to stock "+(stock[it].q > 1? stock[it].q + " "+ it.plural: "a "+it), _ocd_color_error());
 			}
 			// Closet everything (except for gear) that is stocked so it won't get accidentally used.
 			if(it.to_slot() == $slot[none] && stock[it].q - ocd[it].q > closet_amount(it) && item_amount(it) > ocd[it].q)
@@ -480,19 +495,25 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 				if(quant < 1) remove pulv[thing];
 			} else malusOnly = false;
 		if(count(pulv) < 1) {
-			vprint("Nothing to pulverize after all.", "blue", 3);
+			vprint("Nothing to pulverize after all.", _ocd_color_info(), 3);
 			return false;
 		}
 		if(can_interact() && is_online("smashbot")) {
-			vprint("Sending pulverizables to: Smashbot", "blue", 3);
+			vprint("Sending pulverizables to: Smashbot", _ocd_color_info(), 3);
 			kmail("smashbot", wadmessage(), 0, pulv);
 		} else if(is_online("wadbot")) {
-			vprint("Sending pulverizables to: Wadbot", "blue", 3);
+			vprint("Sending pulverizables to: Wadbot", _ocd_color_info(), 3);
 			kmail("wadbot", "", 0, pulv);
-		} else return vprint("Neither Wadbot nor Smashbot are currently online! Pulverizables will not be sent at this time, just in case.", "olive", -3);
+		} else {
+			return vprint(
+				"Neither Wadbot nor Smashbot are currently online! Pulverizables will not be sent at this time, just in case.",
+				_ocd_color_warning(),
+				-3
+			);
+		}
 		# if(malusOnly)
-			# return vprint("Asked wadbot to malus some wads.", "blue", 3);
-		# return vprint("Sent your pulverizables to wadbot.", "blue", 3);
+			# return vprint("Asked wadbot to malus some wads.", _ocd_color_info(), 3);
+		# return vprint("Sent your pulverizables to wadbot.", _ocd_color_info(), 3);
 		return true;
 	}
 
@@ -631,7 +652,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 
 	// Break kBay into separate auctions because 100 meat needs to be sent with each.
 	boolean kBayStuff(string group, int [item] cat) {
-		return vprint("kBay is currently defunct, but may return soon!", "red", 3);
+		return vprint("kBay is currently defunct, but may return soon!", _ocd_color_error(), 3);
 		/*
 		// If kBaying has been disabled, don't do this
 		if(getvar("BaleOCD_kBay") == "0") return true;
@@ -765,7 +786,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		if(!load_OCD()) return false;
 		if((!file_to_map("OCDstock_"+getvar("BaleOCD_StockFile")+".txt", stock) || count(stock) == 0)
 		  && getvar("BaleOCD_Stock") == "1") {
-			print("You are missing item stocking information.", "red");
+			print("You are missing item stocking information.", _ocd_color_error());
 			return false;
 		}
 
@@ -793,12 +814,12 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			foreach person in gift
 				act_cat(gift[person], "GIFT", person);
 		if(count(kbay) > 0) {
-			vprint("You have stuff to kBay. kBay is currently defunct, but may return soon!", "red", 3);
+			vprint("You have stuff to kBay. kBay is currently defunct, but may return soon!", _ocd_color_error(), 3);
 			/*foreach type in kbay
 				act_cat(kbay[type], "KBAY", type);
 			vprint("", 3);
 			if(kBidTot > 0)  // Auctions might have been invalidated for lack of quantity
-				vprint("Minimum biding for all auctions = "+rnum(kBidTot), "blue", 3);
+				vprint("Minimum biding for all auctions = "+rnum(kBidTot), _ocd_color_info(), 3);
 			FinalSale += kBidTot; */
 		}
 
@@ -808,7 +829,11 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		act_cat(todo, "TODO", "");
 
 		if(getvar("BaleOCD_Sim").to_boolean())
-			vprint("This was only a test. Had this been an actual OCD incident your inventory would be clean right now.", "green", 3);
+			vprint(
+				"This was only a test. Had this been an actual OCD incident your inventory would be clean right now.",
+				_ocd_color_success(),
+				3
+			);
 		return true;
 	}
 
@@ -853,9 +878,15 @@ void main() {
 	if(can_interact()) {
 		int todaysFarming = ocd_control(true);
 		if(todaysFarming < 0)
-			vprint("OCD Control was unable to obssessively control your entire inventory.", -1);
+			vprint("OCD Control was unable to obssessively control your entire inventory.", _ocd_color_error(), -1);
 		else if(todaysFarming == 0)
-			vprint("Nothing to do. I foresee no additional meat in your future.", "olive", 3);
-		else vprint("Anticipated monetary gain from inventory cleansing: "+rnum(todaysFarming)+" meat.", "green", 3);
-	} else vprint("Whoa! Don't run this until you break the prism!", -3);
+			vprint("Nothing to do. I foresee no additional meat in your future.", _ocd_color_warning(), 3);
+		else {
+			vprint(
+				"Anticipated monetary gain from inventory cleansing: "+rnum(todaysFarming)+" meat.",
+				_ocd_color_success(),
+				3
+			);
+		}
+	} else vprint("Whoa! Don't run this until you break the prism!", _ocd_color_error(), -3);
 }

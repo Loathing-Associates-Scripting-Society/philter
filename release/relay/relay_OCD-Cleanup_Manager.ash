@@ -189,9 +189,16 @@ void load_OCD() {
 	string OCDfile = "OCDdata_"+getvar("BaleOCD_DataFile")+".txt";
 	string OCDfileOld = "OCD_"+my_name()+"_Data.txt";
 	if((!file_to_map(OCDfile, OCD) || count(OCD) == 0) && (!file_to_map(OCDfileOld, OCD) || count(OCD) == 0))
-		print("All item information is corrupted or missing. Either you have not yet saved any item data or you lost it.", "red");
-	if((!file_to_map("OCDstock_"+getvar("BaleOCD_StockFile")+".txt", stock) || count(stock) == 0) && getvar("BaleOCD_Stock") == "1")
-		print("All item stocking information is corrupted or missing. Either you have not yet saved any item stocking data or you lost it.", "red");
+		print(
+			"All item information is corrupted or missing. Either you have not yet saved any item data or you lost it.",
+			_ocd_color_error()
+		);
+	if((!file_to_map("OCDstock_"+getvar("BaleOCD_StockFile")+".txt", stock) || count(stock) == 0) && getvar("BaleOCD_Stock") == "1") {
+		print(
+			"All item stocking information is corrupted or missing. Either you have not yet saved any item stocking data or you lost it.",
+			_ocd_color_error()
+		);
+	}
 }
 
 boolean is_pulverizable(item it) {
@@ -679,7 +686,7 @@ void stock_items() {
 	if(write_button("stocknew", " New ")) {
 		clear(stock);
 		if(!file_to_map("ocd-cleanup-stock.txt", stock) || count(stock) == 0)
-			print("Error loading default stock data.","red");
+			print("Error loading default stock data.", _ocd_color_error());
 	}
 	page.append("</td><td>Create a default stock list for softcore pulls!</td></tr>");
 	if(count(stock) > 0) {
@@ -1056,7 +1063,7 @@ void main() {
 		clear(newstock1);
 		map_to_file(stock, "OCDstock_"+getvar("BaleOCD_StockFile")+".txt");
 		updatevars();
-		vprint("Item(s) have been categorized.", "green", 3);
+		vprint("Item(s) have been categorized.", _ocd_color_success(), 3);
 		page.append("<div style='font-weight:bold; color:blue;'>Last save @ ");
 		page.append("<script language='javascript'>ourDate = new Date();document.write(' at '+ ourDate.toLocaleString() + '.<br/>');</script></div>");
 	} else if(!noSave) page.append("Save all changes above");
