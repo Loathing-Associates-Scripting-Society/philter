@@ -457,7 +457,7 @@ void add_items() {
 	if(table_started)
 		page.append("</table>");
 	else
-		page.append("<p style='text-align:center; font-size:110%; font-weight:bold; color:#0000BB;'>Your entire inventory has already been categorized.<br />Nothing to see here, please move along.</p>");
+		page.append(`<div class="ocd-alert ocd-alert--info">Your entire inventory has already been categorized.<br>Nothing to see here, please move along.</div>`);
 
 	page.append("</fieldset>"); 	// finish_box()
 }
@@ -716,7 +716,15 @@ void stock_items() {
 			page.append("</td></tr>");
 		}
 		page.append("</table>");
-	} else page.append("<p style='text-align:center; font-size:110%; font-weight:bold; color:#0000BB;'>Your stock list is completely empty!<br />Click the above button to create a list, or you can add items below.<br />When done, click \"Save All\"</p>");
+	} else {
+		page.append(
+			`<div class="ocd-alert ocd-alert--info">`
+			+ `Your stock list is completely empty!`
+			+ `<br>Click the above button to create a list, or you can add items below.`
+			+ `<br>When done, click "Save All".`
+			+ `</div>`
+		);
+	}
 	page.append("<p></p>");
 	page.append("<table class=\"ocd-item-table\" border=0 cellpadding=1>");
 	page.append("<tr><th>Add New Item</th><th>Acquire</th><th>Purpose</th></tr>");

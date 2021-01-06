@@ -63,7 +63,7 @@ table.zlib {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.ocd-item-table tr:nth-child(2n+1) {
+.ocd-item-table tr:nth-child(2n + 1) {
   background-color: #eeeeee;
 }
 
@@ -71,7 +71,7 @@ tr.item:hover {
   background-color: silver;
 }
 
-tr.item:hover:nth-child(2n+1) {
+tr.item:hover:nth-child(2n + 1) {
   background-color: #bbbbbb;
 }
 
@@ -133,4 +133,21 @@ ul.tabbernav li.tabberactive input:hover {
   color: #000000;
   background: white;
   border-bottom: 1px solid white;
+}
+
+/* Large noticeable messages */
+.ocd-alert {
+  font-size: 110%;
+  font-weight: bold;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  text-align: center;
+}
+
+.ocd-alert--info {
+  color: #0000bb;
+}
+
+.ocd-alert--error {
+  color: red;
 }
