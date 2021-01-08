@@ -7,13 +7,6 @@ OCDinfo [item] OCD;
 OCDinfo [item] OCDefault;
 file_to_map("ocd-cleanup-default.txt", OCDefault);
 
-// kBay info
-record {
-	string type;
-	string price;
-} [item] kBayList;
-file_to_map("ocd-cleanup-kbay.txt", kBayList);
-
 record {
 	string type;
 	int q;
@@ -37,7 +30,6 @@ item [int] disps;
 item [int] clsts;
 item [int] clans;
 item [int] gifts;
-item [int] kbays;
 item [int] todos;
 item [int] keeps;
 item [int] search;
@@ -159,6 +151,9 @@ string write_check(string ov, string name, string label) {
 	return write_check(ov.to_boolean(), name, label).to_string();
 }
 
+/**
+ * Checks if a submit button named `name` was clicked.
+ */
 boolean test_button(string name) {
 	if(name == "")	return false;
 	return success && fields contains name;
@@ -251,14 +246,21 @@ void set_craftable() {
 		is_craftable[it] = true;
 }
 
-string kPrice(item doodad) {
-	if(kBayList contains doodad)
-		return kBayList[doodad].price;
-	if(historical_price(doodad) > 0)
-		return floor(.75* historical_price(doodad));
-	return floor(.75* autosell_price(doodad));
+/**
+ * @return Whether the item has a categorized OCD action
+ */
+boolean has_ocd_action(item doodad) {
+	// Silently treat KBAY items as uncategorized items
+	return OCD contains doodad && OCD[doodad].action != "KBAY";
 }
 
+/**
+ * Renders a drop-down menu of available actions for the given item.
+ * Returns `act` for further processing.
+ * @param act Initially selected action ID
+ * @param doodat
+ * @return Unchanged value of `act`
+ */
 string action_drop(string act, item doodad) {
 	if(is_tradeable(doodad) && test_button("mall"))
 		fields["_"+doodad.to_int()] = "MALL";
@@ -279,7 +281,6 @@ string action_drop(string act, item doodad) {
 		write_option(act, "Discard", "DISC", "color:#FFFFFF;background-color:#FFAF00");
 	if(is_giftable(doodad)) {
 		write_option(act, "Send as gift to...", "GIFT");
-		# write_option(act, "Sell on kBay", "KBAY");
 		write_option(act, "Clan Stash", "CLAN");
 	}
 	if(is_pulverizable(doodad)) {
@@ -338,21 +339,18 @@ void save_ocd() {
 				remove fields["_"+key.to_int()];
 			}
 			break;
-		case "KBAY":
-			if(OCD[key].message == "")
-				OCD[key].message = (kBayList contains key)? kBayList[key].type: "Buy my stuff";
-			if(OCD[key].info == "")
-				OCD[key].info = kPrice(key);
-			break;
 		}
 	if(OCD contains $item[none]) remove OCD[$item[none]];
 	map_to_file(OCD, "OCDdata_"+getvar("BaleOCD_DataFile")+".txt");
 }
 
+/**
+ * Returns the number (not amount) of uncategorized items in inventory.
+ */
 int curr_items() {
 	int total;
 	foreach key in get_inventory()
-		if(!(OCD contains key) && is_OCDable(key))
+		if(!has_ocd_action(key) && is_OCDable(key))
 			total = total + 1;
 	return total;
 }
@@ -381,13 +379,13 @@ void add_items() {
 
 	int AddQ;
 	foreach key in OCDefault
-		if(!(OCD contains key) && (item_amount(key) > 0 || equipped_amount(key) > 0 || closet_amount(key) > 0 || storage_amount(key) > 0 || display_amount(key) > 0)) AddQ += 1; #{AddQ += 1; print(key);}
+		if(!has_ocd_action(key) && (item_amount(key) > 0 || equipped_amount(key) > 0 || closet_amount(key) > 0 || storage_amount(key) > 0 || display_amount(key) > 0)) AddQ += 1; #{AddQ += 1; print(key);}
 	int curr_items = curr_items();
 	if(curr_items > 0 && AddQ > 0) {
 		page.append("<p>");
 		if(write_button("defaultdata", "Add default")) {
 			foreach key in OCDefault
-				if(!(OCD contains key) && (item_amount(key) > 0 || equipped_amount(key) > 0 || closet_amount(key) > 0 || storage_amount(key) > 0 || display_amount(key) > 0)) OCD[key] = OCDefault[key];
+				if(!has_ocd_action(key) && (item_amount(key) > 0 || equipped_amount(key) > 0 || closet_amount(key) > 0 || storage_amount(key) > 0 || display_amount(key) > 0)) OCD[key] = OCDefault[key];
 			save_ocd();
 			curr_items = curr_items();
 		}
@@ -412,7 +410,7 @@ void add_items() {
 
 	foreach doodad in doodads
 		// Quest items are the only items that cannot be displayed, so check for is_OCDable()
-		if(is_OCDable(doodad) && !(OCD contains doodad && OCD[doodad].action != "UNKN")) {
+		if(is_OCDable(doodad) && !(has_ocd_action(doodad) && OCD[doodad].action != "UNKN")) {
 			if(!table_started) {
 				page.add_catbuttons();
 
@@ -464,7 +462,7 @@ void add_items() {
 	if(table_started)
 		page.append("</table>");
 	else
-		page.append("<p style='text-align:center; font-size:110%; font-weight:bold; color:#0000BB;'>Your entire inventory has already been categorized.<br />Nothing to see here, please move along.</p>");
+		page.append(`<div class="ocd-alert ocd-alert--info">Your entire inventory has already been categorized.<br>Nothing to see here, please move along.</div>`);
 
 	page.append("</fieldset>"); 	// finish_box()
 }
@@ -485,25 +483,6 @@ void edit_items(string act) {
 	void this_tab(item [int] cat) {
 		sort cat by to_string(value);
 		page.append("<fieldset><legend>"+fieldset+"</legend>");
-		if(act == "kBay") {
-			page.append("<table border=0 cellpadding=1><tr><td>");
-			write_button("kbayReset", "Reset");
-			page.append("</td><td>Reset all auction bidding to default values!</td>");
-			if(test_button("kbayReset")) {
-				page.append("<td><span style=\"color:blue\">&nbsp;Reset!</span></td>");
-				foreach x, doodad in cat {
-					OCD[doodad].message = (kBayList contains doodad)? kBayList[doodad].type: "Buy my stuff";
-					fields["i_"+doodad.to_int()] = kPrice(doodad);
-				}
-				map_to_file(OCD, "OCDdata_"+getvar("BaleOCD_DataFile")+".txt");
-			}
-			page.append("</tr></table>");
-			page.append("<table class='zlib' border=0 cellpadding=1><tr><td align=right>kBay Status: </td><td>");
-			if(getvar("BaleOCD_kBay") != "0" && getvar("BaleOCD_kBay") != "1") vars["BaleOCD_kBay"] = 1;
-			vars["BaleOCD_kBay"] = write_radio(getvar("BaleOCD_kBay"), "EnableKBay", "Send Items to kBay,", 1);
-			write_radio(getvar("BaleOCD_kBay"), "EnableKBay", "Hold kBay items in inventory", 0);
-			page.append("</td></tr></table>");
-		}
 		if(act == "Search") {
 			page.append("<table border=0 cellpadding=1><tr><td>");
 			write_field(fields["searchbox"], "searchbox", "Search for: ", 64, "", "autofocus");
@@ -538,9 +517,6 @@ void edit_items(string act) {
 				break;
 			case "Gift List":
 				page.append("<th>Send to</th><th>Message with Gift</th>");
-				break;
-			case "kBay":
-				page.append("<th>Minimum Bid</th>");
 				break;
 			case "Search":
 			case "Inventory":
@@ -586,11 +562,6 @@ void edit_items(string act) {
 					OCD[doodad].info = write_field(OCD[doodad].info, "i_"+to_int(doodad), 10);
 					page.append("</td><td>");
 					OCD[doodad].message = write_field(OCD[doodad].message, "m_"+to_int(doodad), 25);
-					break;
-				case "kBay":
-					page.append("</td><td>");
-					#OCD[doodad].message = write_hidden(OCD[doodad].message, "m_"+doodad.to_int());
-					OCD[doodad].info = write_field(OCD[doodad].info, "i_"+to_int(doodad), "", 12, "intvalidator");
 					break;
 				}
 				page.append("</td></tr>");
@@ -641,10 +612,6 @@ void edit_items(string act) {
 	case "Gift List":
 		fieldset = "Manage Gift List";
 		this_tab(gifts);
-		break;
-	case "kBay":
-		fieldset = "Manage <a class='version' href='http://kbay.turias.net/' target='_blank'>kBay Auctions</a>";
-		this_tab(kbays);
 		break;
 	case "Display":
 		fieldset = "Manage Display Case";
@@ -723,7 +690,15 @@ void stock_items() {
 			page.append("</td></tr>");
 		}
 		page.append("</table>");
-	} else page.append("<p style='text-align:center; font-size:110%; font-weight:bold; color:#0000BB;'>Your stock list is completely empty!<br />Click the above button to create a list, or you can add items below.<br />When done, click \"Save All\"</p>");
+	} else {
+		page.append(
+			`<div class="ocd-alert ocd-alert--info">`
+			+ `Your stock list is completely empty!`
+			+ `<br>Click the above button to create a list, or you can add items below.`
+			+ `<br>When done, click "Save All".`
+			+ `</div>`
+		);
+	}
 	page.append("<p></p>");
 	page.append("<table class=\"ocd-item-table\" border=0 cellpadding=1>");
 	page.append("<tr><th>Add New Item</th><th>Acquire</th><th>Purpose</th></tr>");
@@ -779,9 +754,6 @@ void set_cats() {
 		case "GIFT":
 			gifts[ count(gifts) ] = key;
 			break;
-		case "KBAY":
-			kbays[ count(kbays) ] = key;
-			break;
 		case "TODO":
 			todos[ count(todos) ] = key;
 			break;
@@ -796,10 +768,6 @@ void zlib_vars() {
 	if(getvar("BaleOCD_EmptyCloset") != "-1" && getvar("BaleOCD_EmptyCloset") != "0") vars["BaleOCD_EmptyCloset"] = 0;
 	vars["BaleOCD_EmptyCloset"] = write_radio(getvar("BaleOCD_EmptyCloset"), "EmptyCloset", "Never,", -1);
 	write_radio(getvar("BaleOCD_EmptyCloset"), "EmptyCloset", "Before Emptying Hangk's (recommended)", 0);
-	page.append("<tr><td align=right>kBay Status: </td><td>");
-	if(getvar("BaleOCD_kBay") != "0" && getvar("BaleOCD_kBay") != "1") vars["BaleOCD_kBay"] = 1;
-	vars["BaleOCD_kBay"] = write_radio(getvar("BaleOCD_kBay"), "EnableKBay", "Send Items to kBay,", 1);
-	write_radio(getvar("BaleOCD_kBay"), "EnableKBay", "Hold kBay items in inventory", 0);
 	page.append("</td></tr><tr><td align=right>Mall Pricing: </td><td>");
 	vars["BaleOCD_Pricing"] = write_radio(getvar("BaleOCD_Pricing"), "Pricing", "Automatic,", "auto");
 	write_radio(getvar("BaleOCD_Pricing"), "Pricing", "999,999,999 meat.", "max");
@@ -848,14 +816,14 @@ void information() {
 	int AddQ;
 	string[item] defaults;
 	foreach key in OCDefault
-		if(!(OCD contains key) && (item_amount(key) > 0 || equipped_amount(key) > 0 || closet_amount(key) > 0 || display_amount(key) > 0)) {AddQ += 1; defaults[key] = OCDefault[key].action; } #{AddQ += 1; print(key);}
+		if(!has_ocd_action(key) && (item_amount(key) > 0 || equipped_amount(key) > 0 || closet_amount(key) > 0 || display_amount(key) > 0)) {AddQ += 1; defaults[key] = OCDefault[key].action; } #{AddQ += 1; print(key);}
 	if(count(OCD) > 0) {
 		int curr_items = curr_items();
 		if(curr_items > 0 && AddQ > 0) {
 			page.append("<p>");
 			if(write_button("defaultdata", "Add data")) {
 				foreach key in OCDefault
-					if(!(OCD contains key) && (item_amount(key) > 0 || equipped_amount(key) > 0 || closet_amount(key) > 0 || display_amount(key) > 0)) OCD[key] = OCDefault[key];
+					if(!has_ocd_action(key) && (item_amount(key) > 0 || equipped_amount(key) > 0 || closet_amount(key) > 0 || display_amount(key) > 0)) OCD[key] = OCDefault[key];
 				save_ocd();
 				curr_items = curr_items();
 			}
@@ -881,7 +849,6 @@ void information() {
 		page.append("<tr><td>&nbsp;</td><td align=right>"+count(makes) + "&nbsp;</td><td>Items to craft</td></tr>");
 		page.append("<tr><td>&nbsp;</td><td align=right>"+count(untinks)+"&nbsp;</td><td>Items to untinker</td></tr>");
 		page.append("<tr><td>&nbsp;</td><td align=right>"+count(gifts) + "&nbsp;</td><td>Items to send as gifts</td></tr>");
-		page.append("<tr><td>&nbsp;</td><td align=right>"+count(kbays) + "&nbsp;</td><td>Items to trade on kBay</td></tr>");
 		page.append("<tr><td>&nbsp;</td><td align=right>"+count(disps) + "&nbsp;</td><td>Items to display</td></tr>");
 		page.append("<tr><td>&nbsp;</td><td align=right>"+count(todos) + "&nbsp;</td><td>Items to remind me about</td></tr>");
 		page.append("</table>");
@@ -914,7 +881,6 @@ void subcat_tabs() {
 	if(count(makes) > 0) write_tab("editTab", "Crafting");
 	if(count(untinks) > 0) write_tab("editTab", "Untinkering");
 	if(count(gifts) > 0) write_tab("editTab", "Gift List");
-	if(count(kbays) > 0) write_tab("editTab", "kBay");
 	if(count(disps) > 0) write_tab("editTab", "Display");
 	if(count(autos) > 0) write_tab("editTab", "Dispose");
 	if(count(todos) > 0) write_tab("editTab", "Reminders");
