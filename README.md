@@ -22,20 +22,19 @@ Then proceed below.
 To install OCD-Cleanup, type the following into KoLmafia's gCLI:
 
 ```
-svn checkout https://github.com/Loathing-Associates-Scripting-Society/OCD-Inventory-Control/trunk/release/
+svn checkout https://github.com/Loathing-Associates-Scripting-Society/OCD-Cleanup/trunk/release/
 ```
 
 ## Usage
 
 OCD-Cleanup provides a relay script for configuration.
 
-1. Open the relay browser. In the top menu, click the "-run script-" dropdown, then "OCD dB Manager".
-2. If this is your first time, OCD will display "**All item information is corrupted or missing.**"
-   Don't worry! Click on the "Add Items" tab to proceed.
-3. You will be presented with a gigantic table of `(uncategorized)` items.
-4. For each item, choose what you want to do with the item.
-   - _You don't need to categorize everything now_. You can always come back and finish the list later.
-5. When you're done, click the "Save All" button at the top (or bottom) of the table.
+1. Open the relay browser. In the top menu, click the "-run script-" dropdown, then "OCD-Cleanup Manager".
+2. If this is your first time, you will see "**All item information is corrupted or missing.**"
+   Don't worry! This is normal.
+3. Click on the "Add Items" tab. You will see a table of uncategorized items.
+4. Select what you want to do (autosell, mall, etc.) for each item. Note that you can always come back and do this later.
+5. When you're done, click the "Save All" button.
    - Your changes are not saved until you hit "Save All". To discard your changes, click any other link (e.g. Main Map) to exit the script.
    - You can also click the "Edit Database" tab to modify your choices.
 
