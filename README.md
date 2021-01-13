@@ -6,6 +6,8 @@ OCD-Cleanup is a fork of [OCD Inventory Control](https://kolmafia.us/threads/ocd
 
 ## Installing
 
+**OCD-Cleanup requires KoLmafia r20566 or later.**
+
 ### Migrating from OCD Inventory Control
 
 If you are upgrading from Bale's original script, run the following commands in KoLmafia to delete old versions of OCD:
