@@ -1,0 +1,10 @@
+// "Solution" tsconfig. Also used to compile build scripts, e.g. Webpack config
+{
+  "extends": "./tsconfig.base.json",
+  "files": [],
+  "references": [
+    {
+      "path": "test/e2e"
+    }
+  ]
+}

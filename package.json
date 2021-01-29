@@ -1,0 +1,31 @@
+{
+  "name": "OCD-Cleanup",
+  "version": "0.0.0",
+  "description": "OCD-Cleanup allows you to configure how to sell, pulverize, use, or dispose every item in KoL.",
+  "private": true,
+  "scripts": {
+    "clean": "gts clean",
+    "compile": "tsc -b",
+    "fix": "gts fix",
+    "lint": "gts lint",
+    "prepare": "npm run compile",
+    "pretest": "npm run compile",
+    "test": "echo \"Error: no test specified\"",
+    "posttest": "npm run lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Loathing-Associates-Scripting-Society/OCD-Cleanup.git"
+  },
+  "keywords": [],
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/Loathing-Associates-Scripting-Society/OCD-Cleanup/issues"
+  },
+  "homepage": "https://github.com/Loathing-Associates-Scripting-Society/OCD-Cleanup#readme",
+  "devDependencies": {
+    "gts": "^3.1.0",
+    "kolmafia": "npm:kolmafia-types@0.0.6",
+    "typescript": "^4.2.2"
+  }
+}
