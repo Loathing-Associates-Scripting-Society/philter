@@ -16,6 +16,10 @@ setvar("BaleOCD_EmptyCloset", 0);          // Should the closet be emptied and i
 setvar("BaleOCD_EmptyHangks", 0);          // Should Hangk's Storange be emptied?
 setvar("BaleOCD_MallDangerously", FALSE);  // If this set to TRUE, any uncategorized items will be malled instead of kept! OH NOES!
 	// This last one can only be set by editing the vars file. It's too dangerous to make it easily accessible. Exists for backwards compatibility.
+setvar("BaleOCD_RunIfRoninOrHC", "ask");   // Controls whether to run OCD-Cleanup if the player is in Ronin/Hardcore.
+                                           // If set to "ask", the script will prompt the user.
+                                           // If set to "never", the script will never run if in Ronin/Hardcore.
+                                           // If set to "always", the script will always run even if in Ronin/Hardcore.
 
 // Check version! This will check both scripts and data files.
 // This code is at base level so that the relay script's importation will automatically cause it to be run.
@@ -799,7 +803,16 @@ int ocd_control(boolean StopForMissingItems) {
 }
 
 void main() {
-	if(can_interact()) {
+	boolean can_interact_check() {
+		if (can_interact()) return true;
+
+		string action = getvar("BaleOCD_RunIfRoninOrHC");
+		if (action == "never") return false;
+		if (action == "always") return true;
+		return user_confirm("You are in Ronin/Hardcore. Do you want to run OCD Cleanup anyway?");
+	}
+
+	if(can_interact_check()) {
 		int todaysFarming = ocd_control(true);
 		if(todaysFarming < 0)
 			vprint("OCD Control was unable to obssessively control your entire inventory.", _ocd_color_error(), -1);
