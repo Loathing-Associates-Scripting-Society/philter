@@ -122,8 +122,6 @@ int full_amount(item it) {
 int ocd_control(boolean StopForMissingItems, string extraData) {
 	int FinalSale;
 
-	OCDinfo [item] OCD;
-
 	record {
 		string type;
 		int q;
@@ -170,27 +168,47 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 
 	int [item] price;
 
-	boolean load_OCD() {
-		clear(OCD);
-		if(!file_to_map("OCDdata_"+getvar("BaleOCD_DataFile")+".txt", OCD) && !file_to_map("OCD_"+my_name()+"_Data.txt", OCD))
-			return vprint("Something went wrong trying to load OCDdata!", _ocd_color_error(), -1);
+	/**
+	 * Result of loading OCD data from the disk.
+	 */
+	record LoadOcdResult {
+		/** Whether the OCD data was loaded successfully. */
+		boolean success;
+		/**
+		 * Data loaded. If an error occurred or the file was empty, this map is
+		 * empty.
+		 */
+		OCDinfo [item] ocd_data;
+	};
+
+	LoadOcdResult load_OCD() {
+		LoadOcdResult result = new LoadOcdResult(true);
+		if (
+			!file_to_map(`OCDdata_{getvar("BaleOCD_DataFile")}.txt`, result.ocd_data) &&
+			!file_to_map(`OCD_{my_name()}_Data.txt`, result.ocd_data)
+		) {
+			vprint("Something went wrong trying to load OCDdata!", _ocd_color_error(), -1);
+			result.success = false;
+			return result;
+		}
 		OCDinfo [item] extraOCD;
 		if(extraData != "" && file_to_map(extraData+".txt", extraOCD) && count(extraOCD) > 0)
 			foreach it in extraOCD
-				if(!(OCD contains it)) {
-					OCD[it].action = extraOCD[it].action;
-					OCD[it].q = extraOCD[it].q;
-					OCD[it].info = extraOCD[it].info;
-					OCD[it].message = extraOCD[it].message;
+				if(!(result.ocd_data contains it)) {
+					result.ocd_data[it].action = extraOCD[it].action;
+					result.ocd_data[it].q = extraOCD[it].q;
+					result.ocd_data[it].info = extraOCD[it].info;
+					result.ocd_data[it].message = extraOCD[it].message;
 				}
-		if(count(OCD) == 0) {
-			return vprint(
+		if (count(result.ocd_data) == 0) {
+			vprint(
 				"All item information is corrupted or missing. Whoooah! I hope you didn't lose any data...",
 				_ocd_color_error(),
 				-1
 			);
+			result.success = false;
 		}
-		return true;
+		return result;
 	}
 
 	boolean[item] under_consideration; // prevent infinite recursion
@@ -209,22 +227,22 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	}
 
 	// Amount to OCD. Consider equipment in terrarium (but not equipped) as OCDable.
-	int ocd_amount(item it) {
-		if(OCD[it].action == "KEEP") return 0;
+	int ocd_amount(item it, string action, int keep_amount) {
+		if(action == "KEEP") return 0;
 		int full = full_amount(it);
 		// Unequip item from terrarium or equipment if necessary to OCD it.
-		if(full > OCD[it].q && available_amount(it) > item_amount(it))
-			retrieve_item(min(full - OCD[it].q, available_amount(it)), it);
+		if(full > keep_amount && available_amount(it) > item_amount(it))
+			retrieve_item(min(full - keep_amount, available_amount(it)), it);
 		// Don't OCD items that are part of stock. Stock can always be satisfied by closet.
-		int keep = getvar("BaleOCD_Stock") == "0" ? ocd[it].q:
-			max(ocd[it].q, stock[it].q - (get_property("autoSatisfyWithCloset") == "false"? 0: closet_amount(it)));
+		int keep = getvar("BaleOCD_Stock") == "0" ? keep_amount:
+			max(keep_amount, stock[it].q - (get_property("autoSatisfyWithCloset") == "false"? 0: closet_amount(it)));
 		// OCD is limited by item_amount(it) since we don't want to purchase anything and closeted items
 		// may be off-limit, but if there's something in the closet, it counts against the amount you own.
 		return min(full - keep, item_amount(it));
 	}
 
 	boolean AskUser = true;  // Once this has been set false, it will be false for all successive calls to the function
-	boolean check_inventory(boolean StopForMissingItems) {
+	boolean check_inventory(boolean StopForMissingItems, OCDinfo [item] ocd_data) {
 		AskUser = AskUser && StopForMissingItems;
 		// Don't stop if "don't ask user" or it is a quest item, or it is being stocked.
 		boolean stop_for_relay(item doodad) {
@@ -243,18 +261,18 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 
 		int excess;
 		foreach doodad in get_inventory() {
-			excess = ocd_amount(doodad);
-			if(OCD contains doodad) {
+			excess = ocd_amount(doodad, ocd_data[doodad].action, ocd_data[doodad].q);
+			if(ocd_data contains doodad) {
 				if(excess > 0)
-					switch(OCD[doodad].action) {
+					switch(ocd_data[doodad].action) {
 					case "BREAK":
 						brak[doodad] = excess;
 						break;
 					case "MAKE":
-						make_q[doodad] = count_ingredient(doodad, to_item(ocd[doodad].info));
+						make_q[doodad] = count_ingredient(doodad, to_item(ocd_data[doodad].info));
 						if(make_q[doodad] == 0) {
 							vprint(
-								"You cannot transform a "+doodad+" into a "+ocd[doodad].info+". There's a problem with your data file or your crafting ability.",
+								"You cannot transform a "+doodad+" into a "+ocd_data[doodad].info+". There's a problem with your data file or your crafting ability.",
 								_ocd_color_error(),
 								-3
 							);
@@ -263,8 +281,8 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 						make[doodad] = excess;
 						if(make_q[doodad] > 1)
 							make[doodad] = make[doodad] - (make[doodad] % make_q[doodad]);
-						if(to_boolean(OCD[doodad].message))
-							make[doodad] = min(make[doodad], creatable_amount(to_item(ocd[doodad].info)) * make_q[doodad]);
+						if(to_boolean(ocd_data[doodad].message))
+							make[doodad] = min(make[doodad], creatable_amount(to_item(ocd_data[doodad].info)) * make_q[doodad]);
 						if(make[doodad] == 0) remove make[doodad];
 						break;
 					case "UNTN":
@@ -301,7 +319,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 						clan[doodad] = excess;
 						break;
 					case "GIFT":
-						gift[OCD[doodad].info][doodad] = excess;
+						gift[ocd_data[doodad].info][doodad] = excess;
 						break;
 					case "TODO":
 						todo[doodad] = excess;
@@ -327,18 +345,28 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		return true;
 	}
 
-	int sale_price(item it) {
+	/**
+	 * Computes an appropriate selling price for an item at the mall, based on
+	 * its current (or historical) mall price.
+	 * @param it Item to check
+	 * @param min_price_str If this contains a valid integer, it is used as the
+	 *      minimum price.
+	 * @return Appropriate selling price for the item, or zero if the item is
+	 *		not available in the mall.
+	 *		The returned price is guaranteed to be at least 0.
+	 */
+	int sale_price(item it, string min_price_str) {
 		int price;
 		if(historical_age(it) < 1 && historical_price(it) > 0)
 			price = historical_price(it);
 		else price = mall_price(it);
 		if(price < 1) price = 0;
-		if(is_integer(ocd[it].info))
-			return max(to_int(ocd[it].info), price);
+		if(is_integer(min_price_str))
+			return max(to_int(min_price_str), price);
 		return price;
 	}
 
-	void print_cat(int [item] cat, string act, string to) {
+	void print_cat(int [item] cat, string act, string to, OCDinfo [item] ocd_data) {
 		if(count(cat) < 1) return;
 
 		item [int] catOrder;
@@ -371,13 +399,13 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			queue.append(quant + " "+ it);
 			if(act == "MALL") {
 				if(!use_multi) {
-					price[it] = sale_price(it);
+					price[it] = sale_price(it, ocd_data[it].info);
 					if(getvar("BaleOCD_Pricing") == "auto")
 						queue.append(" @ "+ rnum(price[it]));
 				}
 				linevalue += quant * price[it];
 			} else if(act == "MAKE") {
-				queue.append(" into "+ OCD[it].info);
+				queue.append(" into "+ ocd_data[it].info);
 			} else if(act == "AUTO") {
 				linevalue += quant * autosell_price(it);
 			}
@@ -408,7 +436,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		  - full_amount($item[ten-leaf clover]) - full_amount($item[disassembled clover]);
 	}
 
-	boolean stock() {
+	boolean stock(OCDinfo [item] ocd_data) {
 		boolean success = true;
 		boolean first = true;
 		boolean stockit(int q, item it) {
@@ -418,7 +446,15 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			return retrieve_item(q, it);
 		}
 
-		load_OCD();
+		// Load OCD data again and *overwrite* the previous OCD data.
+		// This sounds insane, but it's how OCD Inventory Control used to work
+		// and I'm not about to change that.
+		OCDinfo [item] new_ocd_data = load_OCD().ocd_data;
+		clear(ocd_data);
+		foreach it, ocd_data_entry in new_ocd_data {
+			ocd_data[it] = ocd_data_entry;
+		}
+
 		batch_open();
 		foreach it in stock {
 			// Someone might want both assembled and disassembled clovers. Esure there are enough of combined tot
@@ -431,8 +467,8 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 				print("Failed to stock "+(stock[it].q > 1? stock[it].q + " "+ it.plural: "a "+it), _ocd_color_error());
 			}
 			// Closet everything (except for gear) that is stocked so it won't get accidentally used.
-			if(it.to_slot() == $slot[none] && stock[it].q - ocd[it].q > closet_amount(it) && item_amount(it) > ocd[it].q)
-				put_closet(min(item_amount(it) - ocd[it].q, stock[it].q - ocd[it].q - closet_amount(it)), it);
+			if(it.to_slot() == $slot[none] && stock[it].q - ocd_data[it].q > closet_amount(it) && item_amount(it) > ocd_data[it].q)
+				put_closet(min(item_amount(it) - ocd_data[it].q, stock[it].q - ocd_data[it].q - closet_amount(it)), it);
 			// If you got clovers, closet them before they get protected into disassembled clovers.
 			//if(it == $item[ten-leaf clover] && to_boolean(get_property("cloverProtectActive")))
 			//	put_closet(item_amount(it), it);
@@ -441,10 +477,10 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		return success;
 	}
 
-	boolean wadbot(int [item] pulverize) {
-		string wadmessage() {
-			for x from 1444 to 1449 if(OCD[to_item(x)].action == "PULV") return "wads";
-			for x from 1438 to 1443 if(OCD[to_item(x)].action == "PULV") return "nuggets";
+	boolean wadbot(int [item] pulverize, OCDinfo [item] ocd_data) {
+		string wadmessage(OCDinfo [item] ocd_data) {
+			for x from 1444 to 1449 if(ocd_data[to_item(x)].action == "PULV") return "wads";
+			for x from 1438 to 1443 if(ocd_data[to_item(x)].action == "PULV") return "nuggets";
 			return "";
 		}
 
@@ -460,7 +496,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		}
 		if(can_interact() && is_online("smashbot")) {
 			vprint("Sending pulverizables to: Smashbot", _ocd_color_info(), 3);
-			kmail("smashbot", wadmessage(), 0, pulv);
+			kmail("smashbot", wadmessage(ocd_data), 0, pulv);
 		} else if(is_online("wadbot")) {
 			vprint("Sending pulverizables to: Wadbot", _ocd_color_info(), 3);
 			kmail("wadbot", "", 0, pulv);
@@ -477,10 +513,10 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		return true;
 	}
 
-	boolean pulverize() {
+	boolean pulverize(OCDinfo [item] ocd_data) {
 		if(count(pulv) < 1) return false;
 		if(!have_skill($skill[Pulverize]))
-			return wadbot(pulv);
+			return wadbot(pulv, ocd_data);
 		int len;
 		buffer queue;
 		int [item] malus;
@@ -502,7 +538,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		if(len > 0)
 			cli_execute(command["PULV"] + queue);
 		if(count(malus) > 0)
-			wadbot(malus);
+			wadbot(malus, ocd_data);
 		return true;
 	}
 
@@ -552,8 +588,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		return 1;
 	}
 
-	boolean create_it(item it, int quant) {
-		item obj = to_item(ocd[it].info);
+	boolean create_it(item it, item obj, int quant) {
 		if(make_q[it] == 0) return false;
 		quant = quant / make_q[it] * sauce_mult(it);
 		if(quant > 0) return create(quant, obj);
@@ -603,9 +638,9 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		return use(quant, it);
 	}
 
-	string message(int [item] cat) {
+	string message(int [item] cat, OCDinfo [item] ocd_data) {
 		foreach key in cat
-			return OCD[key].message;
+			return ocd_data[key].message;
 		return "";
 	}
 
@@ -615,9 +650,10 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	 * @param act Item action ID
 	 * @param Receiving player ID. Used for actions that involve another player
 	 * 	  (e.g. "GIFT")
+	 * @param ocd_data OCD data for each item
 	 * @return Whether all items were processed successfully
 	 */
-	boolean act_cat(int [item] cat, string act, string to) {
+	boolean act_cat(int [item] cat, string act, string to, OCDinfo [item] ocd_data) {
 
 		item [int] catOrder;
 		foreach it in cat
@@ -629,11 +665,11 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		if(act == "TODO" && count(todo) > 0)
 			print("");
 		else
-			print_cat(cat, act, to);
+			print_cat(cat, act, to, ocd_data);
 		if(getvar("BaleOCD_Sim").to_boolean()) return true;
 		switch(act) {
 		case "PULV":
-			return pulverize();
+			return pulverize(ocd_data);
 		case "MALL":
 			if(use_multi)
 				return kmail(getvar("BaleOCD_MallMulti"), getvar("BaleOCD_MultiMessage"), 0, cat);
@@ -644,7 +680,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			batch_open();
 			break;
 		case "GIFT":
-			string message = message(cat);
+			string message = message(cat, ocd_data);
 			return kmail(to, message, 0, cat, message);
 		case "KBAY":
 			// This should be unreachable
@@ -678,7 +714,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 				use_it(quant, it);
 				break;
 			case "MAKE":
-				create_it(it, quant);
+				create_it(it, to_item(ocd_data[it].info), quant);
 				break;
 			case "UNTN":
 				cli_execute("untinker "+quant+" \u00B6"+ it.to_int());
@@ -693,7 +729,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 				put_stash(quant, it);
 				break;
 			case "TODO":
-				print_html("<b>"+it+" ("+quant+"): "+OCD[it].info+"</b>");
+				print_html("<b>"+it+" ("+quant+"): "+ocd_data[it].info+"</b>");
 				break;
 			}
 			i += 1;
@@ -720,39 +756,41 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	}
 
 	boolean ocd_inventory(boolean StopForMissingItems) {
-		if(!load_OCD()) return false;
+		LoadOcdResult result = load_OCD();
+		OCDinfo [item] ocd_data = result.ocd_data;
+		if(!result.success) return false;
 		if((!file_to_map("OCDstock_"+getvar("BaleOCD_StockFile")+".txt", stock) || count(stock) == 0)
 		  && getvar("BaleOCD_Stock") == "1") {
 			print("You are missing item stocking information.", _ocd_color_error());
 			return false;
 		}
 
-		if(!check_inventory(StopForMissingItems)) return false;
-		if(act_cat(brak, "BREAK", "") && !check_inventory(StopForMissingItems))
+		if(!check_inventory(StopForMissingItems, ocd_data)) return false;
+		if(act_cat(brak, "BREAK", "", ocd_data) && !check_inventory(StopForMissingItems, ocd_data))
 			return false;
-		if(act_cat(make, "MAKE", "") && !check_inventory(StopForMissingItems))
+		if(act_cat(make, "MAKE", "", ocd_data) && !check_inventory(StopForMissingItems, ocd_data))
 			return false;
-		if(act_cat(untink, "UNTN", "") && !check_inventory(StopForMissingItems))
+		if(act_cat(untink, "UNTN", "", ocd_data) && !check_inventory(StopForMissingItems, ocd_data))
 			return false;
-		if(act_cat(usex, "USE", "") && !check_inventory(StopForMissingItems))
+		if(act_cat(usex, "USE", "", ocd_data) && !check_inventory(StopForMissingItems, ocd_data))
 			return false;
-		if(act_cat(pulv, "PULV", "") && !check_inventory(StopForMissingItems))
+		if(act_cat(pulv, "PULV", "", ocd_data) && !check_inventory(StopForMissingItems, ocd_data))
 			return false;
 
-		act_cat(mall, "MALL", "");
-		act_cat(auto, "AUTO", "");
-		act_cat(disc, "DISC", "");
-		act_cat(disp, "DISP", "");
-		act_cat(clst, "CLST", "");
-		act_cat(clan, "CLAN", "");
+		act_cat(mall, "MALL", "", ocd_data);
+		act_cat(auto, "AUTO", "", ocd_data);
+		act_cat(disc, "DISC", "", ocd_data);
+		act_cat(disp, "DISP", "", ocd_data);
+		act_cat(clst, "CLST", "", ocd_data);
+		act_cat(clan, "CLAN", "", ocd_data);
 		if(count(gift) > 0)
 			foreach person in gift
-				act_cat(gift[person], "GIFT", person);
+				act_cat(gift[person], "GIFT", person, ocd_data);
 
 		if(getvar("BaleOCD_Stock") == "1" && !getvar("BaleOCD_Sim").to_boolean())
-			stock();
+			stock(ocd_data);
 
-		act_cat(todo, "TODO", "");
+		act_cat(todo, "TODO", "", ocd_data);
 
 		if(getvar("BaleOCD_Sim").to_boolean())
 			vprint(
