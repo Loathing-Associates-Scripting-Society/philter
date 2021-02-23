@@ -370,8 +370,8 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 				queue.append(", ");
 			queue.append(quant + " "+ it);
 			if(act == "MALL") {
+				price[it] = sale_price(it);
 				if(!use_multi) {
-					price[it] = sale_price(it);
 					if(getvar("BaleOCD_Pricing") == "auto")
 						queue.append(" @ "+ rnum(price[it]));
 				}
