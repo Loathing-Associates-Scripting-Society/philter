@@ -150,8 +150,6 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	if(use_multi)
 		command ["MALL"] = "send to mallmulti "+ getvar("BaleOCD_MallMulti") + ": ";
 
-	int [item] price;
-
 	/**
 	 * Result of loading OCD data from the disk.
 	 */
@@ -393,6 +391,9 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	/**
 	 * Computes an appropriate selling price for an item at the mall, based on
 	 * its current (or historical) mall price.
+	 * This caches the computed price, so that calling the function with the
+	 * same item and `min_price_str` will return the same value during the
+	 * current execution context.
 	 * @param it Item to check
 	 * @param min_price_str If this contains a valid integer, it is used as the
 	 *      minimum price.
@@ -401,14 +402,23 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	 *		The returned price is guaranteed to be at least 0.
 	 */
 	int sale_price(item it, string min_price_str) {
+		static int [item, string] price_cache;
+		if (price_cache[it] contains min_price_str) {
+			return price_cache[it, min_price_str];
+		}
+
 		int price;
-		if(historical_age(it) < 1 && historical_price(it) > 0)
+		if (historical_age(it) < 1 && historical_price(it) > 0) {
 			price = historical_price(it);
-		else price = mall_price(it);
-		if(price < 1) price = 0;
-		if(is_integer(min_price_str))
-			return max(to_int(min_price_str), price);
-		return price;
+		} else {
+			price = mall_price(it);
+		}
+		if (price < 1) price = 0;
+		if (is_integer(min_price_str)) {
+			price = max(to_int(min_price_str), price);
+		}
+
+		return price_cache[it, min_price_str] = price;
 	}
 
 	void print_cat(int [item] cat, string act, string to, OCDinfo [item] ocd_data) {
@@ -443,12 +453,13 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 				queue.append(", ");
 			queue.append(quant + " "+ it);
 			if(act == "MALL") {
+				int price;
 				if(!use_multi) {
-					price[it] = sale_price(it, ocd_data[it].info);
+					price = sale_price(it, ocd_data[it].info);
 					if(getvar("BaleOCD_Pricing") == "auto")
-						queue.append(" @ "+ rnum(price[it]));
+						queue.append(" @ "+ rnum(price));
 				}
-				linevalue += quant * price[it];
+				linevalue += quant * price;
 			} else if(act == "MAKE") {
 				queue.append(" into "+ ocd_data[it].info);
 			} else if(act == "AUTO") {
@@ -741,8 +752,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 				break;
 			case "MALL":
 				if(getvar("BaleOCD_Pricing") == "auto") {
-					if(price[it]> 0)  // If price is -1, then there was an error.
-						put_shop(price[it], 0, quant, it);  // price[it] was found during print_cat()
+					put_shop(sale_price(it, ocd_data[it].info), 0, quant, it);
 				} else
 					put_shop((shop_amount(it)>0? shop_price(it): 0), 0, quant, it);   // Set to max price of 999,999,999 meat
 				break;
