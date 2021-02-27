@@ -168,6 +168,11 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	if(use_multi)
 		command ["MALL"] = "send to mallmulti "+ getvar("BaleOCD_MallMulti") + ": ";
 
+	// Sale price cache the MALL action.
+	// This cache is populated by print_cat() with values returned by
+	// sale_price(). Later, it is accessed by act_cat(). This ensures that the
+	// sale price displayed to the user matches the actual sale price used.
+	// Note that this cache is never used when sending items to a mall multi.
 	int [item] price;
 
 	boolean load_OCD() {
@@ -224,6 +229,17 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	}
 
 	boolean AskUser = true;  // Once this has been set false, it will be false for all successive calls to the function
+	/**
+	 * Examines the inventory and generates an appropriate execution plan.
+	 * If it finds uncategorized items in inventory, it asks the user for
+	 * confirmation to proceed. If the user answers "No", it will not ask the
+	 * user again within the current `ocd_control()` call.
+	 * @param StopForMissingItems If `false`, this function will never ask for
+	 *      confirmation to proceed, even if there are uncategorized items.
+	 * @return `true` if the user answered "No" to the confirmation.
+	 *      `false` if the user answered "Yes" to the confirmation, or was not
+	 *      asked at all (i.e. there were no uncategorized items).
+	 */
 	boolean check_inventory(boolean StopForMissingItems) {
 		AskUser = AskUser && StopForMissingItems;
 		// Don't stop if "don't ask user" or it is a quest item, or it is being stocked.
@@ -615,7 +631,8 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	 * @param act Item action ID
 	 * @param Receiving player ID. Used for actions that involve another player
 	 * 	  (e.g. "GIFT")
-	 * @return Whether all items were processed successfully
+	 * @return Boolean that indicates whether the execution plan must be
+	 *    regenerated before processing another action.
 	 */
 	boolean act_cat(int [item] cat, string act, string to) {
 
@@ -624,6 +641,8 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			catOrder[ count(catOrder) ] = it;
 		sort catOrder by to_lower_case(to_string(value));
 
+		// If there are no items to process, we don't need to regenerate the
+		// execution plan.
 		if(count(cat) == 0) return false;
 		int i = 0;
 		if(act == "TODO" && count(todo) > 0)
@@ -705,6 +724,9 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			}
 		}
 		if(act == "MALL" || act == "AUTO" || act == "DISP"|| act == "CLST" || act == "CLAN") batch_close();
+
+		// It's okay to return true here, because ocd_inventory() only checks
+		// this value for actions that can create or remove additional items.
 		return true;
 	}
 
@@ -727,6 +749,10 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			return false;
 		}
 
+		// Actions that may create additional items, or remove items not
+		// included in the execution plan. If act_cat() returns true after
+		// executing such actions, the entire execution plan must be regenerated
+		// to handle such items correctly.
 		if(!check_inventory(StopForMissingItems)) return false;
 		if(act_cat(brak, "BREAK", "") && !check_inventory(StopForMissingItems))
 			return false;
@@ -739,6 +765,9 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		if(act_cat(pulv, "PULV", "") && !check_inventory(StopForMissingItems))
 			return false;
 
+		// Actions that never create or remove additional items.
+		// Currently, we do not bother to check the return value of act_cat()
+		// for them.
 		act_cat(mall, "MALL", "");
 		act_cat(auto, "AUTO", "");
 		act_cat(disc, "DISC", "");
