@@ -1,0 +1,4 @@
+// tsconfig for E2E test scripts
+{
+  "extends": "../../tsconfig.kolmafia.json"
+}

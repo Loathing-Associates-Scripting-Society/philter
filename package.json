@@ -1,0 +1,41 @@
+{
+  "name": "OCD-Cleanup",
+  "version": "0.0.0",
+  "description": "OCD-Cleanup allows you to configure how to sell, pulverize, use, or dispose every item in KoL.",
+  "private": true,
+  "scripts": {
+    "build": "webpack",
+    "clean": "gts clean",
+    "compile": "tsc -b",
+    "fix": "gts fix",
+    "lint": "gts lint",
+    "prepare": "npm run compile",
+    "pretest": "npm run compile",
+    "test": "echo \"Error: no test specified\"",
+    "posttest": "npm run lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Loathing-Associates-Scripting-Society/OCD-Cleanup.git"
+  },
+  "keywords": [],
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/Loathing-Associates-Scripting-Society/OCD-Cleanup/issues"
+  },
+  "homepage": "https://github.com/Loathing-Associates-Scripting-Society/OCD-Cleanup#readme",
+  "devDependencies": {
+    "@types/minimist": "^1.2.1",
+    "@types/node": "^12.20.4",
+    "@types/terser-webpack-plugin": "^5.0.2",
+    "gts": "^3.1.0",
+    "kolmafia": "npm:kolmafia-types@0.0.6",
+    "minimist": "^1.2.5",
+    "string-argv": "^0.3.1",
+    "ts-loader": "^8.0.17",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.2",
+    "webpack": "^5.24.2",
+    "webpack-cli": "^4.5.0"
+  }
+}

@@ -7,11 +7,12 @@
  * Open a small popup showing an item's in-game description.
  * @param {number | string} desc Item descid
  */
+// eslint-disable-next-line no-unused-vars
 function descitem(desc) {
-  newwindow = window.open(
-    "/desc_item.php?whichitem=" + desc,
-    "name",
-    "height=200,width=214"
+  const newwindow = window.open(
+    '/desc_item.php?whichitem=' + desc,
+    'name',
+    'height=200,width=214'
   );
   if (window.focus) {
     newwindow.focus();
@@ -22,13 +23,14 @@ function descitem(desc) {
  * Open a new window showing the KoL wiki page for an item.
  * @param {string} desc Item name (= KoL wiki page name)
  */
+// eslint-disable-next-line no-unused-vars
 function wikiitem(desc) {
-  newwindow = window.open(
-    "https://kol.coldfront.net/thekolwiki/index.php/Special:Search?search=" +
+  const popupWindow = window.open(
+    'https://kol.coldfront.net/thekolwiki/index.php/Special:Search?search=' +
       desc +
-      "&go=Go"
+      '&go=Go'
   );
   if (window.focus) {
-    newwindow.focus();
+    popupWindow.focus();
   }
 }
