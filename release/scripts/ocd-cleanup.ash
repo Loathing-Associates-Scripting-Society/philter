@@ -268,6 +268,12 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		 * then this map will contain 'spider web' => 4.
 		 */
 		int [item] make_q;
+
+		/**
+		 * User-defined minimum price for items to put in the shop.
+		 * Used by items with the MALL action.
+		 */
+		int [item] mall_min_price;
 	};
 
 	/**
@@ -343,6 +349,8 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 						break;
 					case "MALL":
 						plan.mall[doodad] = excess;
+						if (is_integer(ocd_data[doodad].info))
+							plan.mall_min_price[doodad] = to_int(ocd_data[doodad].info);
 						break;
 					case "AUTO":
 						plan.auto[doodad] = excess;
@@ -395,16 +403,15 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	 * same item and `min_price_str` will return the same value during the
 	 * current execution context.
 	 * @param it Item to check
-	 * @param min_price_str If this contains a valid integer, it is used as the
-	 *      minimum price.
+	 * @param min_price Minimum mall price
 	 * @return Appropriate selling price for the item, or zero if the item is
 	 *		not available in the mall.
 	 *		The returned price is guaranteed to be at least 0.
 	 */
-	int sale_price(item it, string min_price_str) {
-		static int [item, string] price_cache;
-		if (price_cache[it] contains min_price_str) {
-			return price_cache[it, min_price_str];
+	int sale_price(item it, int min_price) {
+		static int [item, int] price_cache;
+		if (price_cache[it] contains min_price) {
+			return price_cache[it, min_price];
 		}
 
 		int price;
@@ -413,15 +420,10 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		} else {
 			price = mall_price(it);
 		}
-		if (price < 1) price = 0;
-		if (is_integer(min_price_str)) {
-			price = max(to_int(min_price_str), price);
-		}
-
-		return price_cache[it, min_price_str] = price;
+		return price_cache[it, min_price] = max(price, 0, min_price);
 	}
 
-	void print_cat(int [item] cat, string act, string to, OCDinfo [item] ocd_data) {
+	void print_cat(int [item] cat, string act, string to, OcdPlan plan, OCDinfo [item] ocd_data) {
 		if(count(cat) < 1) return;
 
 		item [int] catOrder;
@@ -455,7 +457,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			if(act == "MALL") {
 				int price;
 				if(!use_multi) {
-					price = sale_price(it, ocd_data[it].info);
+					price = sale_price(it, plan.mall_min_price[it]);
 					if(getvar("BaleOCD_Pricing") == "auto")
 						queue.append(" @ "+ rnum(price));
 				}
@@ -722,7 +724,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		if (act == "TODO" && count(cat) > 0)
 			print("");
 		else
-			print_cat(cat, act, to, ocd_data);
+			print_cat(cat, act, to, plan, ocd_data);
 		if(getvar("BaleOCD_Sim").to_boolean()) return true;
 		switch(act) {
 		case "PULV":
@@ -752,7 +754,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 				break;
 			case "MALL":
 				if(getvar("BaleOCD_Pricing") == "auto") {
-					put_shop(sale_price(it, ocd_data[it].info), 0, quant, it);
+					put_shop(sale_price(it, plan.mall_min_price[it]), 0, quant, it);
 				} else
 					put_shop((shop_amount(it)>0? shop_price(it): 0), 0, quant, it);   // Set to max price of 999,999,999 meat
 				break;
