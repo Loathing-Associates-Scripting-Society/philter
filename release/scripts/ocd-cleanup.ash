@@ -270,6 +270,12 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		int [item] make_q;
 
 		/**
+		 * Maps the source item (ingredient) to the target item.
+		 * Used by items with the MAKE action.
+		 */
+		item [item] make_target;
+
+		/**
 		 * User-defined minimum price for items to put in the shop.
 		 * Used by items with the MALL action.
 		 */
@@ -318,7 +324,8 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 						plan.brak[doodad] = excess;
 						break;
 					case "MAKE":
-						plan.make_q[doodad] = count_ingredient(doodad, to_item(ocd_data[doodad].info));
+						plan.make_target[doodad] = to_item(ocd_data[doodad].info);
+						plan.make_q[doodad] = count_ingredient(doodad, plan.make_target[doodad]);
 						if(plan.make_q[doodad] == 0) {
 							vprint(
 								"You cannot transform a "+doodad+" into a "+ocd_data[doodad].info+". There's a problem with your data file or your crafting ability.",
@@ -331,7 +338,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 						if(plan.make_q[doodad] > 1)
 							plan.make[doodad] = plan.make[doodad] - (plan.make[doodad] % plan.make_q[doodad]);
 						if(to_boolean(ocd_data[doodad].message))
-							plan.make[doodad] = min(plan.make[doodad], creatable_amount(to_item(ocd_data[doodad].info)) * plan.make_q[doodad]);
+							plan.make[doodad] = min(plan.make[doodad], creatable_amount(plan.make_target[doodad]) * plan.make_q[doodad]);
 						if(plan.make[doodad] == 0) remove plan.make[doodad];
 						break;
 					case "UNTN":
@@ -423,7 +430,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		return price_cache[it, min_price] = max(price, 0, min_price);
 	}
 
-	void print_cat(int [item] cat, string act, string to, OcdPlan plan, OCDinfo [item] ocd_data) {
+	void print_cat(int [item] cat, string act, string to, OcdPlan plan) {
 		if(count(cat) < 1) return;
 
 		item [int] catOrder;
@@ -463,7 +470,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 				}
 				linevalue += quant * price;
 			} else if(act == "MAKE") {
-				queue.append(" into "+ ocd_data[it].info);
+				queue.append(" into "+ plan.make_target[it]);
 			} else if(act == "AUTO") {
 				linevalue += quant * autosell_price(it);
 			}
@@ -724,7 +731,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		if (act == "TODO" && count(cat) > 0)
 			print("");
 		else
-			print_cat(cat, act, to, plan, ocd_data);
+			print_cat(cat, act, to, plan);
 		if(getvar("BaleOCD_Sim").to_boolean()) return true;
 		switch(act) {
 		case "PULV":
@@ -772,7 +779,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 				use_it(quant, it);
 				break;
 			case "MAKE":
-				create_it(it, to_item(ocd_data[it].info), quant, plan.make_q[it]);
+				create_it(it, plan.make_target[it], quant, plan.make_q[it]);
 				break;
 			case "UNTN":
 				cli_execute("untinker "+quant+" \u00B6"+ it.to_int());
