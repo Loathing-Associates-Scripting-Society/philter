@@ -732,8 +732,6 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			return false;
 		if(act_cat(make, "MAKE", "") && !check_inventory(StopForMissingItems))
 			return false;
-		if(act_cat(untink, "BREAK", "") && !check_inventory(StopForMissingItems))
-			return false;
 		if(act_cat(untink, "UNTN", "") && !check_inventory(StopForMissingItems))
 			return false;
 		if(act_cat(usex, "USE", "") && !check_inventory(StopForMissingItems))
