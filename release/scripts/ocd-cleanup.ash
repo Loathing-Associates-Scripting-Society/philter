@@ -654,8 +654,38 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		case "PULV":
 			return pulverize();
 		case "MALL":
-			if(use_multi)
-				return kmail(getvar("BaleOCD_MallMulti"), getvar("BaleOCD_MultiMessage"), 0, cat);
+			if (use_multi) {
+				string multi_id = getvar("BaleOCD_MallMulti");
+				string multi_message = getvar("BaleOCD_MultiMessage");
+
+				// Some users have reported OCD-Cleanup occasionally sending
+				// items to an account named "False". While the exact cause is
+				// unknown, this should serve as a stopgap measure.
+				if (multi_id == "" || multi_id.to_lower_case() == "false") {
+					print(
+						`Invalid mall multi account ID ("{multi_id}"). Please report the issue at https://kolmafia.us/`,
+						_ocd_color_error()
+					);
+					int timeout = 30;
+					string warning_message =
+						`OCD-Cleanup has detected that it is about to send items to a mall multi account named "{multi_id}". ` +
+						`Since this is likely an error, OCD-Cleanup will NOT send the items.\n\n` +
+						`Do you want to abort OCD-Cleanup immediately?\n` +
+						`(If you choose "No" or wait {timeout} seconds, OCD-Cleanup will skip the MALL action and continue.)`;
+					// If the user disables user_confirm() -- possibly because
+					// they are calling OCD-Cleanup from an auto-adventuring
+					// script -- it will always return false.
+					// In this case, we will continue processing instead of
+					// aborting (which would otherwise be disruptive).
+					if (user_confirm(warning_message, timeout * 1000, false)) {
+						abort(`You decided to abort OCD-Cleanup.`);
+					}
+					print(`OCD-Cleanup has skipped the MALL action.`);
+					return false;
+				} else {
+					return kmail(multi_id, multi_message, 0, cat);
+				}
+			}
 		case "AUTO":
 		case "DISP":
 		case "CLST":
