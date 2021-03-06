@@ -257,15 +257,15 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	boolean AskUser = true;  // Once this has been set false, it will be false for all successive calls to the function
 	/**
 	 * Examines the inventory and generates an appropriate execution plan.
-	 * If it finds uncategorized items in inventory, it asks the user for
-	 * confirmation to proceed. If the user answers "No", it will not ask the
-	 * user again within the current `ocd_control()` call.
+	 * If it finds uncategorized items in inventory, it asks the user whether it
+	 * should abort. If the user answers "No", it will not ask the user again
+	 * within the current `ocd_control()` call.
 	 * @param StopForMissingItems If `false`, this function will never ask for
 	 *      confirmation to proceed, even if there are uncategorized items.
 	 * @param ocd_rules Map containing OCD rules
-	 * @return `true` if the user answered "No" to the confirmation.
-	 *      `false` if the user answered "Yes" to the confirmation, or was not
-	 *      asked at all (i.e. there were no uncategorized items).
+	 * @return `true` if the user chose to continue, or was not asked at all
+	 *      (i.e. there were no uncategorized items).
+	 *      `false` if the user chose to abort.
 	 */
 	boolean check_inventory(boolean StopForMissingItems, OCDinfo [item] ocd_rules) {
 		AskUser = AskUser && StopForMissingItems;
