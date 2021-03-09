@@ -460,11 +460,8 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 
 	/**
 	 * Stocks up on items based on the stock rules.
-	 * @param [OUT] ocd_rules   This map will be filled with the loaded OCDinfo
-	 *      records, destroying all its previous contents.
-	 *      (You read that right. This legacy code actually loads an OCD ruleset
-	 *      for whatever reason.)
-	 *      If this function returns `false`, this map will be untouched.
+	 * @param ocd_rules OCD ruleset to use
+	 * @return Whether all items were stocked successfully
 	 */
 	boolean stock(OCDinfo [item] ocd_rules) {
 		boolean success = true;
@@ -475,12 +472,6 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			if(first) first = !vprint("Stocking up on required items!", _ocd_color_info(), 3);
 			return retrieve_item(q, it);
 		}
-
-		// Load OCD data again, overwriting previous OCD data and doing no error
-		// checking whatsoever.
-		// This sounds insane, but it's how OCD Inventory Control used to work
-		// and I'm not about to change that.
-		load_OCD(ocd_rules, extraData);
 
 		batch_open();
 		foreach it in stock {
