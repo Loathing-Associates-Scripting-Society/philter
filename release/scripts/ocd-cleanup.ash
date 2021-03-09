@@ -131,7 +131,6 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	int [item] make;
 	int [item] untink;
 	int [item] usex;
-	int [item] pulv;
 	int [item] mall;
 	int [item] auto;
 	int [item] disc;
@@ -148,7 +147,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 	command ["MAKE"] = "transform ";
 	command ["UNTN"] = "untinker ";
 	command ["USE"]  = "use ";
-	command ["PULV"] = "pulverize ";
+	command ["PULV"] = "pulverize "; // Not used, "pulverize" is hardcoded now
 	command ["MALL"] = "mallsell ";
 	command ["AUTO"] = "autosell ";
 	command ["DISC"] = "discard ";
@@ -319,9 +318,7 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 						usex[doodad] = excess;
 						break;
 					case "PULV":
-						// Some pulverizable items aren't tradeable. If so, wadbot cannot be used
-						if(have_skill($skill[Pulverize]) || is_tradeable(doodad))
-							pulv[doodad] = excess;
+						// No-op since act_pulverize() does its own logging
 						break;
 					case "MALL":
 						mall[doodad] = excess;
@@ -507,69 +504,324 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		return success;
 	}
 
-	boolean wadbot(int [item] pulverize, OCDinfo [item] ocd_rules) {
-		string wadmessage(OCDinfo [item] ocd_rules) {
-			for x from 1444 to 1449 if(ocd_rules[to_item(x)].action == "PULV") return "wads";
-			for x from 1438 to 1443 if(ocd_rules[to_item(x)].action == "PULV") return "nuggets";
-			return "";
+	/**
+	 * Splits a collection of items into equal-sized chunks, sorted
+	 * alphabetically by item name.
+	 * @param items Collection of items. Only the keys (item) are used, and
+	 *      values (quantities) are ignored.
+	 * @param chunk_size Number of items per chunk (must be positive)
+	 * @return 0-indexed list of lists of items.
+	 *      If the input item collection is empty, returns an empty list.
+	 */
+	item [int, int] split_items_sorted(int [item] items, int chunk_size) {
+		if (chunk_size <= 0) {
+			abort(`chunk_size must be greater than 0 (got {chunk_size})`);
 		}
 
-		boolean malusOnly = true;
-		foreach thing, quant in pulverize
-			if(thing.is_wadable()) {
-				quant -= quant %5;
-				if(quant < 1) remove pulv[thing];
-			} else malusOnly = false;
-		if(count(pulv) < 1) {
+		item [int] sorted;
+		foreach it in items {
+			sorted[sorted.count()] = it;
+		}
+		sort sorted by value.name.to_lower_case();
+
+		item [int, int] item_chunks;
+		int index = 0;
+		foreach _, it in sorted {
+			item_chunks[index][item_chunks[index].count()] = it;
+			if (item_chunks[index].count() >= chunk_size) ++index;
+		}
+		return item_chunks;
+	}
+
+	/**
+	 * Process all malusable items with the `PULV` action.
+	 * This assumes that the player can use the Malus.
+	 * @param ocd_rules OCD ruleset to use
+	 * @return Whether any item was actually processed
+	 *      (i.e. whether any OCD plans must be evaluated again)
+	 */
+	boolean malus(OCDinfo [item] ocd_rules) {
+		/**
+		 * Returns the "Malus order" of items.
+		 * Items with the same order are processed together, and items with a
+		 * smaller order are processed first.
+		 * @param it Item to check
+		 * @return Integer beteween 1 and 3 for malusable items.
+		 *      0 if the item cannot be malused.
+		 */
+		int get_malus_order(item it) {
+			switch (it) {
+			// Process nuggets after powders
+			case $item[ twinkly nuggets ]:
+			case $item[ hot nuggets ]:
+			case $item[ cold nuggets ]:
+			case $item[ spooky nuggets ]:
+			case $item[ stench nuggets ]:
+			case $item[ sleaze nuggets ]:
+				return 2;
+			// Process floaty sand -> floaty pebbles -> floaty gravel
+			case $item[ floaty pebbles ]:
+				return 2;
+			case $item[ floaty gravel ]:
+				return 3;
+			// Non-malusable items (includes equipment that can be Pulverized)
+			default:
+				// 1 for other malusable items
+				// 0 for non-malusable items (including pulverizable equipment)
+				return is_wadable(it) ? 1 : 0;
+			}
+		}
+
+		boolean has_processed_any = false;
+
+		// Process each malus order sequentially.
+		// This allows us to process malus products that can be malused again,
+		// e.g. powders -> nuggets -> wads.
+		for malus_order from 1 upto 3 {
+			// Gather items to be malused
+			int [item] items_to_malus;
+			foreach it, rule in ocd_rules {
+				if (rule.action != "PULV") continue;
+				// This also filters out non-malusable items
+				if (get_malus_order(it) != malus_order) continue;
+
+				int amount = ocd_amount(it, "PULV", rule.q);
+				// The Malus always converts items in multiples of 5
+				amount -= amount % 5;
+				if (amount < 1) continue;
+				items_to_malus[it] = amount;
+			}
+
+			// Malus the gathered items
+			item [int, int] chunks = split_items_sorted(items_to_malus, 11);
+			foreach chunk_index in chunks {
+				string [int] tokens, tokens_shown;
+				foreach _, it in chunks[chunk_index] {
+					int amount = items_to_malus[it];
+					tokens[tokens.count()] = `{amount} \u00B6{it.to_int()}`;
+					tokens_shown[tokens_shown.count()] = `{amount} {it.name}`;
+				}
+
+				vprint(
+					`pulverize {tokens_shown.join(", ")}`, _ocd_color_info(), 3
+				);
+				vprint(" ", 3);
+				if (!getvar("BaleOCD_Sim").to_boolean()) {
+					cli_execute(`pulverize {tokens.join(", ")}`);
+				}
+				has_processed_any = true;
+			}
+		}
+
+		return has_processed_any;
+	}
+
+	/**
+	 * Sends all items with the `PULV` action to a pulverizing bot.
+	 *
+	 * Note: Multi-level malusing (i.e. converting powders directly to wads) is
+	 * not guaranteed to work. Because only 11 items can be sent per each kmail,
+	 * some malus products may not be processed.
+	 * @param ocd_rules OCD ruleset to use
+	 * @return Whether any item was actually sent
+	 */
+	boolean send_to_pulverizing_bot(OCDinfo [item] ocd_rules) {
+		int [item] items_to_send;
+		foreach it, rule in ocd_rules {
+			if (rule.action != "PULV") continue;
+			if (!is_tradeable(it)) {
+				vprint(
+					`send_to_pulverizing_bot(): Skipping {it} since it cannot be traded`,
+					_ocd_color_debug(),
+					10
+				);
+				continue;
+			}
+
+			int amount = ocd_amount(it, "PULV", rule.q);
+			// Note: Always send malusable items even if the quantity is not a
+			// multiple of 5.
+			// For example, we should be able to send 5 powders and 4 nuggets,
+			// so that the bot can combine them into 1 wad.
+			if (amount < 1) continue;
+			items_to_send[it] = amount;
+		}
+
+		if (items_to_send.count() < 1) {
 			vprint("Nothing to pulverize after all.", _ocd_color_info(), 3);
 			return false;
 		}
-		if(can_interact() && is_online("smashbot")) {
-			vprint("Sending pulverizables to: Smashbot", _ocd_color_info(), 3);
-			kmail("smashbot", wadmessage(ocd_rules), 0, pulv);
-		} else if(is_online("wadbot")) {
-			vprint("Sending pulverizables to: Wadbot", _ocd_color_info(), 3);
-			kmail("wadbot", "", 0, pulv);
-		} else {
-			return vprint(
-				"Neither Wadbot nor Smashbot are currently online! Pulverizables will not be sent at this time, just in case.",
+
+		if (!can_interact()) {
+			// Because Smashbot cannot return items to characters in
+			// Ronin/Hardcore, any items
+			vprint(
+				"You cannot send items to Smashbot while in Ronin/Hardcore.",
+				_ocd_color_info(),
+				-3
+			);
+			return false;
+		} else if (!is_online("smashbot")) {
+			vprint(
+				"Smashbot is offline! Pulverizables will not be sent at this time, just in case.",
 				_ocd_color_warning(),
 				-3
 			);
-		}
-		# if(malusOnly)
-			# return vprint("Asked wadbot to malus some wads.", _ocd_color_info(), 3);
-		# return vprint("Sent your pulverizables to wadbot.", _ocd_color_info(), 3);
-		return true;
-	}
-
-	boolean pulverize(OCDinfo [item] ocd_rules) {
-		if(count(pulv) < 1) return false;
-		if(!have_skill($skill[Pulverize]))
-			return wadbot(pulv, ocd_rules);
-		int len;
-		buffer queue;
-		int [item] malus;
-		foreach it, quant in pulv {
-			if(my_primestat() != $stat[muscle] && it.is_wadable()) {
-				malus[it] = quant;
-			} else {
-				if(len != 0)
-					queue.append(", ");
-				queue.append(quant + " \u00B6"+ it.to_int().to_string());
-				len = len + 1;
-				if(len == 11) {
-					cli_execute(command["PULV"] + queue);
-					len = 0;
-					set_length(queue, 0);
+			return false;
+		} else {
+			// Smashbot supports fine-grained malus control through the
+			// "goose_level" command.
+			// TODO: Find out if Smashbot supports floaty sand/pebbles/gravel
+			int [item] ITEM_GOOSE_LEVELS = {
+				$item[ twinkly powder ]: 1,
+				$item[ hot powder ]: 2,
+				$item[ cold powder ]: 4,
+				$item[ spooky powder ]: 8,
+				$item[ stench powder ]: 16,
+				$item[ sleaze powder ]: 32,
+				$item[ twinkly nuggets ]: 64,
+				$item[ hot nuggets ]: 128,
+				$item[ cold nuggets ]: 256,
+				$item[ spooky nuggets ]: 512,
+				$item[ stench nuggets ]: 1024,
+				$item[ sleaze nuggets ]: 2048,
+			};
+			int goose_level;
+			foreach it, it_goose_level in ITEM_GOOSE_LEVELS {
+				if (items_to_send contains it) {
+					goose_level |= it_goose_level;
 				}
 			}
+			string message = `goose_level {goose_level}`;
+
+			// Smashbot supports a single command ("rock" to malus all the way
+			// up to floaty rock) for multi-malusing floaty items.
+			// Since this is not sophisticated enough for all our needs,
+			// we should identify and warn about cases where neither "rock" nor
+			// the default behavior (no "rock") would satisfy our requirements.
+			boolean can_use_rock = false;
+			boolean should_warn_rerun = false;
+			if (
+				items_to_send contains $item[ floaty sand ] &&
+				ocd_rules[$item[ floaty pebbles ]].action == "PULV"
+			) {
+				// Default behavior:
+				//  sand -> pebbles (stop)
+				// With "rock":
+				//  sand -> pebbles -> gravel -> rock
+				if (ocd_rules[$item[ floaty gravel ]].action == "PULV") {
+					can_use_rock = true;
+				} else {
+					should_warn_rerun = true;
+				}
+			} else if (
+				items_to_send contains $item[ floaty pebbles ] &&
+				ocd_rules[$item[ floaty gravel ]].action == "PULV"
+			) {
+				// Default behavior:
+				//  pebbles -> gravel (stop)
+				// With "rock":
+				//  pebbles -> gravel -> rock
+				can_use_rock = true;
+			}
+
+			if (should_warn_rerun) {
+				vprint(
+					"Note: Smashbot cannot malus floaty sand to gravel in a single kmail." +
+					" OCD-Cleanup will convert the pebbles to gravel when you run it again.",
+					_ocd_color_warning(),
+					3
+				);
+			}
+			if (can_use_rock) {
+				message += '\nrock';
+			}
+
+			vprint("Sending pulverizables to: Smashbot", _ocd_color_info(), 3);
+			kmail("smashbot", message, 0, items_to_send);
+			return true;
 		}
-		if(len > 0)
-			cli_execute(command["PULV"] + queue);
-		if(count(malus) > 0)
-			wadbot(malus, ocd_rules);
-		return true;
+	}
+
+	/**
+	 * Ppulverize and malus all items with the `PULV` action.
+	 * @param ocd_rules OCD ruleset to use
+	 * @return Whether any item was actually processed
+	 *      (i.e. whether any OCD plans must be evaluated again)
+	 */
+	boolean act_pulverize(OCDinfo [item] ocd_rules) {
+		/**
+		 * Checks if an item can be pulverized.
+		 */
+		boolean is_pulverizable(item it) {
+			switch (it) {
+			// Workaround for some items incorrectly marked as Pulverizable
+			case $item[ Eight Days a Week Pill Keeper ]:
+			case $item[ Powerful Glove ]:
+			case $item[ Guzzlr tablet ]:
+			case $item[ Iunion Crown ]:
+			case $item[ Cargo Cultist Shorts ]:
+			case $item[ unwrapped knock-off retro superhero cape ]:
+				return true;
+			}
+
+			return get_related(it, "pulverize").count() > 0;
+		}
+
+		/**
+		 * Checks if the current player can use the Malus.
+		 */
+		boolean can_use_malus() {
+			return have_skill($skill[ Pulverize ]) &&
+				my_primestat() == $stat[ muscle ];
+		}
+
+		if (!have_skill($skill[ Pulverize ])) {
+			return send_to_pulverizing_bot(ocd_rules);
+		}
+
+		boolean has_processed_any;
+
+		// Process all pulverizable items first, so that we can malus the
+		// powders/nuggets/wads gained from pulverizing.
+
+		int [item] items_to_smash;
+		foreach it, rule in ocd_rules {
+			if (rule.action != "PULV") continue;
+			if (!is_pulverizable(it)) continue;
+
+			int amount = ocd_amount(it, "PULV", rule.q);
+			if (amount < 1) continue;
+			items_to_smash[it] = amount;
+		}
+
+		item [int, int] chunks = split_items_sorted(items_to_smash, 11);
+		foreach chunk_index in chunks {
+			string [int] tokens, tokens_shown;
+			foreach _, it in chunks[chunk_index] {
+				int amount = items_to_smash[it];
+				tokens[tokens.count()] = `{amount} \u00B6{it.to_int()}`;
+				tokens_shown[tokens_shown.count()] = `{amount} {it.name}`;
+			}
+
+			vprint(`pulverize {tokens_shown.join(", ")}`, _ocd_color_info(), 3);
+			vprint(" ", 3);
+			if (!getvar("BaleOCD_Sim").to_boolean()) {
+				cli_execute(`pulverize {tokens.join(", ")}`);
+			}
+			has_processed_any = true;
+		}
+
+		// Malus all items, including those gained from pulverizing.
+		if (can_use_malus()) {
+			if (malus(ocd_rules)) has_processed_any = true;
+		} else {
+			if (send_to_pulverizing_bot(ocd_rules)) {
+				has_processed_any = true;
+			}
+		}
+
+		return has_processed_any;
 	}
 
 	int sauce_mult(item itm) {
@@ -697,12 +949,12 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		int i = 0;
 		if(act == "TODO" && count(todo) > 0)
 			print("");
+		else if (act == "PULV")
+			abort("PULV action must be handled by act_pulverize()");
 		else
 			print_cat(cat, act, to, ocd_rules);
 		if(getvar("BaleOCD_Sim").to_boolean()) return true;
 		switch(act) {
-		case "PULV":
-			return pulverize(ocd_rules);
 		case "MALL":
 			if (use_multi) {
 				string multi_id = getvar("BaleOCD_MallMulti");
@@ -841,9 +1093,12 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 			return false;
 		if(act_cat(untink, "UNTN", "", ocd_rules) && !check_inventory(StopForMissingItems, ocd_rules))
 			return false;
+		// Note: Since the next action (act_pulverize()) does its own planning,
+		// check_inventory() is technically not needed here.
+		// I'm only keeping it to make refactoring/reordering easier.
 		if(act_cat(usex, "USE", "", ocd_rules) && !check_inventory(StopForMissingItems, ocd_rules))
 			return false;
-		if(act_cat(pulv, "PULV", "", ocd_rules) && !check_inventory(StopForMissingItems, ocd_rules))
+		if (act_pulverize(ocd_rules) && !check_inventory(StopForMissingItems, ocd_rules))
 			return false;
 
 		// Actions that never create or remove additional items.
