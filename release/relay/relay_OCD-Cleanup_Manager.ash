@@ -232,7 +232,9 @@ item item_name(string doodad) {
 void set_craftable() {
 	typedef string[] type_c;
 	type_c [string] crafty;
-	file_to_map("concoctions.txt", crafty);
+	// Don't bother checking the return value of file_to_map().
+	// It returns `true` even if the file path is incorrect.
+	file_to_map("data/concoctions.txt", crafty);
 	foreach product, mix in crafty {
 		boolean method = true; // First item in a concoction is the method of crafting.
 		foreach x,it in mix {
