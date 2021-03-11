@@ -223,19 +223,46 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		return true;
 	}
 
-	boolean[item] under_consideration; // prevent infinite recursion
-	int count_ingredient(item source, item into) {
-		int total = 0;
-		foreach key, qty in get_ingredients(into)
-			if(key == source) total += qty;
-			else {
-				#if(key == $item[flat dough]) return 0;
-				if(under_consideration contains key) return 0;
-				under_consideration[key] = true;
-				total += count_ingredient(source, key);
-				remove under_consideration[key];
+	/**
+	 * Counts how many of `source` item is needed to craft a `target` item.
+	 * If `target` requires multiple crafting steps, this checks all parent
+	 * for uses of `source`.
+	 * If `source` and `target` are the same item, this returns 0
+	 * @param source Ingredient item
+	 * @param target Item to be crafted
+	 */
+	int count_ingredient(item source, item target) {
+		boolean [item] under_consideration;
+
+		int _count_ingredient(item source, item target) {
+			// If the source and target are the same item, return 0.
+			// This prevents OCD-Cleanup from crafting an item into itself, even
+			// if a valid recipe chain exists.
+			// (e.g. flat dough -> wad of dough -> flat dough)
+			if (source == target) return 0;
+
+			int total = 0;
+			foreach ingredient, qty in get_ingredients(target) {
+				if (ingredient == source) {
+					total += qty;
+				} else if (under_consideration contains ingredient) {
+					// Prevent infinite recursion
+					// This usually happens when `target` has a circular recipe
+					// (e.g. flat dough <-> wad of dough) and `source` is an
+					// unrelated item (e.g. pail).
+					return 0;
+				} else {
+					// Recursively count how many `source` is needed to make
+					// each `ingredient`
+					under_consideration[ingredient] = true;
+					total += qty * _count_ingredient(source, ingredient);
+					remove under_consideration[ingredient];
+				}
 			}
-		return total;
+			return total;
+		}
+
+		return _count_ingredient(source, target);
 	}
 
 	// Amount to OCD. Consider equipment in terrarium (but not equipped) as OCDable.
