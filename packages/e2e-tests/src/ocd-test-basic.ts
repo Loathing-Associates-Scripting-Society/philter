@@ -7,7 +7,6 @@
  * Warning: This script spends ~3000 meat on purchasing items for testing.
  */
 
-/* eslint-disable node/no-unpublished-import */
 import {
   bufferToFile,
   cliExecute,

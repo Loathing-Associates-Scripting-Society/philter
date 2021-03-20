@@ -7,7 +7,7 @@ import typescript from '@rollup/plugin-typescript';
 /** @type {import("rollup").RollupOptions} */
 const config = {
   external: ['kolmafia', 'zlib.ash'],
-  input: 'test/e2e/ocd-test-basic.ts',
+  input: 'src/ocd-test-basic.ts',
   output: {
     dir: 'build',
     format: 'cjs',
@@ -19,7 +19,7 @@ const config = {
       outDir: 'build',
       // We don't need source maps because Rhino doesn't support them
       sourceMap: false,
-      tsconfig: 'test/e2e/tsconfig.json',
+      tsconfig: 'src/tsconfig.json',
     }),
   ],
 };

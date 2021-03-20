@@ -125,8 +125,5 @@ dist
 # Local History for Visual Studio Code
 .history/
 
-# TypeScript build artifacts
-/build/
-
 # Build cache of Rollup's TypeScript plugin
 .rollup.cache/

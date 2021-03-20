@@ -1,7 +1,11 @@
 {
-  "name": "OCD-Cleanup",
+  "name": "@ocd-cleanup/e2e-tests",
   "version": "0.0.0",
-  "description": "OCD-Cleanup allows you to configure how to sell, pulverize, use, or dispose every item in KoL.",
+  "description": "End-to-end test scripts for OCD-Cleanup",
+  "main": "index.js",
+  "repository": "https://github.com/Loathing-Associates-Scripting-Society/OCD-Cleanup",
+  "author": "Yehyoung Kang",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "build": "rollup -c",
@@ -9,21 +13,10 @@
     "compile": "tsc -b",
     "fix": "gts fix",
     "lint": "gts lint",
-    "prepare": "npm run compile",
-    "pretest": "npm run compile",
+    "pretest": "yarn run compile",
     "test": "echo \"Error: no test specified\"",
-    "posttest": "npm run lint"
+    "posttest": "yarn run lint"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Loathing-Associates-Scripting-Society/OCD-Cleanup.git"
-  },
-  "keywords": [],
-  "author": "",
-  "bugs": {
-    "url": "https://github.com/Loathing-Associates-Scripting-Society/OCD-Cleanup/issues"
-  },
-  "homepage": "https://github.com/Loathing-Associates-Scripting-Society/OCD-Cleanup#readme",
   "dependencies": {
     "@types/minimist": "^1.2.1",
     "minimist": "^1.2.5",

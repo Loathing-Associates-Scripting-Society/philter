@@ -1,10 +1,11 @@
 // tsconfig for code that targets KoLmafia
 {
-  "extends": "./tsconfig.base.json",
+  "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "..",
     "composite": true,
     "downlevelIteration": true,
+    "esModuleInterop": true,
     // JavaScript APIs supported by Rhino 1.7.13
     // See https://mozilla.github.io/rhino/compat/engines.html for more info
     "lib": [

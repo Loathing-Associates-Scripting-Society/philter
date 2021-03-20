@@ -2,10 +2,10 @@
 // Also used for type checking within VS Code
 {
   "extends": "./tsconfig.base.json",
-  "files": [],
-  "references": [
-    {
-      "path": "test/e2e"
-    }
-  ]
+  "compilerOptions": {
+    "checkJs": true,
+    "noEmit": true
+  },
+  "files": ["rollup.config.js"],
+  "references": [{"path": "src"}]
 }
