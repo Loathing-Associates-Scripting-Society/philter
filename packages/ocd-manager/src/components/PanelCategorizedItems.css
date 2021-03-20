@@ -1,0 +1,12 @@
+.PanelCategorizedItems__Tabs,
+.PanelCategorizedItems__TabItem {
+  /* Vertical Filling:
+     We "drill down" flexbox to enable Vertical Filling for descendants. */
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.PanelCategorizedItems__Table {
+  margin-bottom: 0.5em;
+}

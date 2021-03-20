@@ -1,0 +1,72 @@
+{
+  "name": "@ocd-cleanup/manager",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": ".",
+  "proxy": "http://localhost:60080",
+  "scripts": {
+    "build": "react-scripts build",
+    "lint": "eslint . && prettier --check .",
+    "start": "react-scripts start",
+    "test": "react-scripts test"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest",
+      "prettier"
+    ],
+    "ignorePatterns": [
+      "/build/"
+    ],
+    "rules": {
+      "react-hooks/exhaustive-deps": [
+        "warn",
+        {
+          "additionalHooks": "(useAsync|useAsyncCallback)"
+        }
+      ]
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {
+    "@blueprintjs/core": "^3.44.0",
+    "@blueprintjs/popover2": "^0.6.0",
+    "@ocd-cleanup/common": "*",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^13.1.5",
+    "@types/jest": "^26.0.15",
+    "@types/node": "^14.14.41",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-virtualized-auto-sizer": "^1.0.0",
+    "@types/react-window": "^1.8.2",
+    "classnames": "^2.3.1",
+    "dequal": "^2.0.2",
+    "react": "^17.0.2",
+    "react-async-hook": "^3.6.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "4.0.3",
+    "react-virtualized-auto-sizer": "^1.0.5",
+    "react-window": "^1.8.6",
+    "swr": "^0.5.5",
+    "typescript": "^4.2.4",
+    "web-vitals": "^1.0.1"
+  },
+  "devDependencies": {
+    "eslint-config-prettier": "^8.2.0",
+    "prettier": "^2.2.1"
+  }
+}

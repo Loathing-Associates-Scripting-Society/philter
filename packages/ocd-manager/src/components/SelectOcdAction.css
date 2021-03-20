@@ -1,0 +1,11 @@
+.OcdRulePicker__SelectAction {
+  font-size: 90%;
+  /* Set the width of the <select> element, so that it does not resize when some
+     actions are not available (e.g. no "Sell in mall" for untradable items) */
+  width: 10.5em;
+}
+
+/* Need specificity > (0, 1, 1) to override Blueprint styling */
+.OcdRulePicker__SelectAction.bp3-html-select select {
+  font-size: 100%;
+}

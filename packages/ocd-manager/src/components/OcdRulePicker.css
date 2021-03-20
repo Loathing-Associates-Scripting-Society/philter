@@ -1,0 +1,79 @@
+.OcdRulePicker {
+  /* Override Blueprint's styling */
+  margin-bottom: 0;
+}
+
+.OcdRulePicker__Inputs {
+  display: flex;
+}
+
+.OcdRulePicker__Child {
+  /* Prevent children from being shrunk by flexbox layout */
+  flex-shrink: 0;
+  /* Override Blueprint's styling */
+  margin-bottom: 0;
+}
+
+/* Need specificity > (0, 3, 1) to override Blueprint's styling */
+.OcdRulePicker .OcdRulePicker__Inputs .OcdRulePicker__Child > label.bp3-label {
+  margin-right: 0.3em;
+}
+
+.OcdRulePicker__Child:not(:first-child) {
+  margin-left: 0.5em;
+}
+
+.OcdRulePicker__InputText {
+  /* Since we're using the "small" prop for the inner <InputGroup>, we need to
+     ensure that the input aligns vertically with the label.
+     (align-items: center does not work because helper text would change its
+      alignment)
+   */
+  margin-top: 0.3em;
+}
+
+/* Need specificity > (0, 1, 0) to override Blueprint's styling */
+.OcdRulePicker__Child.OcdRulePicker__Checkbox {
+  /* Use flexbox to vertically align the checkbox and the label to the top of
+     the label. */
+  display: flex;
+}
+
+.OcdRulePicker__CheckBoxText {
+  font-size: 80%;
+  /* If the checkbox text from growing too long, wrap it */
+  max-width: 10em;
+}
+
+/* Need specificity > (0, 2, 0) to override Blueprint's styling */
+.OcdRulePicker__Child.OcdRulePicker__Checkbox .bp3-control-indicator {
+  /* Blueprint uses a "control indicator" elmeent to apply styles to the
+     <Checkbox> component. Let's make this componet narrower to reduce the gap
+     between the checkbox and the label. */
+  margin-right: 5px;
+  /* Due to enabling flexbox on the containing .OcdRulePicker__Checkbox, the
+     vertical alignment of the checkbox is broken. Let's fix it manually. */
+  margin-top: 0;
+}
+
+.OcdRulePicker__InputGiftRecipent {
+  width: 7em;
+}
+
+.OcdRulePicker__InputGiftMessage {
+  width: 9em;
+}
+
+.OcdRulePicker__InputMakeTarget {
+  width: 9em;
+}
+
+.OcdRulePicker__InputMallMinPrice input {
+  text-align: right;
+}
+
+/* Need 2 classes to override Blueprint's styling */
+.OcdRulePicker .OcdRulePicker__InputMallMinPrice input {
+  text-align: right;
+  width: 7em;
+}

@@ -1,0 +1,22 @@
+.PanelConfig__Section {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding-top: 1em;
+}
+
+.PanelConfig__SectionTitle {
+  color: #1f4b99; /* @cobalt */
+  font-size: 120%;
+}
+
+.PanelConfig__Divider {
+  margin-bottom: 1em;
+}
+
+.PanelConfig__FormGroupAligned > label {
+  width: 10em;
+}
+
+.PanelConfig_InputFileName {
+  width: 20em;
+}

@@ -1,0 +1,18 @@
+/* Blueprint does not provide direct access to the <input> inside the
+   <InputGroup> component. Thus, we need to use this selector to manually style
+   the inner <input>. */
+.InputGroupAffixedFileName > input {
+  font-family: monospace;
+}
+
+.InputGroupAffixedFileName__Prefix,
+.InputGroupAffixedFileName__Suffix {
+  /* Override font size of <code> set by Blueprint */
+  font-size: inherit;
+  /* Must match the line height of the <input> */
+  line-height: 30px;
+  /* Reduce padding set by Blueprint to provide more gap between the affix and
+     the user-entered text */
+  padding-left: 4px;
+  padding-right: 4px;
+}

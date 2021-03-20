@@ -1,0 +1,167 @@
+.OcdItemTable {
+  --OcdItemTable-Col-ItemName-Width: 15em;
+  --OcdItemTable-Col-ClosetAmount-Width: 3em;
+  --OcdItemTable-Col-MallPrice-Width: 5em;
+  --OcdItemTable-Col-KeepAmount-Width: 7em;
+  --OcdItemTable-Col-Action-Width: 31em;
+  /* Accounts for horizontal space occupied by vertical scrollbars */
+  --OcdItemTable-Scrollbar-Width-Hack: 20px;
+
+  --OcdItemTable-Total-Width: calc(
+    var(--OcdItemTable-Col-ItemName-Width) +
+      var(--OcdItemTable-Col-ClosetAmount-Width) +
+      var(--OcdItemTable-Col-ClosetAmount-Width) +
+      var(--OcdItemTable-Col-ClosetAmount-Width) +
+      var(--OcdItemTable-Col-MallPrice-Width) +
+      var(--OcdItemTable-Col-KeepAmount-Width) +
+      var(--OcdItemTable-Col-Action-Width) +
+      var(--OcdItemTable-Scrollbar-Width-Hack)
+  );
+
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+/* Extra <div> that wraps <AutoSizer> to make flex functionality work.
+   For an explanation of why this wrapper is needed, see:
+   https://github.com/bvaughn/react-virtualized/blob/master/docs/usingAutoSizer.md
+ */
+.OcdItemTable__TableWrapper {
+  /* For some reason, <AutoSizer> tries to eat the component below this one.
+     Add a bigger bottom margin to prevent this. */
+  margin-bottom: 2.5em;
+  margin-top: 0.5em;
+  flex-grow: 1;
+}
+
+.OcdItemTable__Inner {
+  /* Instead of letting or header row and/or body to gain their own horizontal
+   * scrollbars, we prevent them from shrinking, and let the parent container
+   * gain its own scrollbar.
+   * This way, we "synchronize" the header and body rows when the user scrolls
+   * horizontally.
+   */
+  overflow-x: auto;
+}
+
+.OcdItemTable__HeaderRow,
+.OcdItemTable__Row {
+  display: flex;
+}
+
+.OcdItemTable__HeaderRow {
+  /* Based on Blueprint.js's <HTMLTable> component style */
+  box-shadow: inset -1px -1px 0 0 rgb(0 0 0 / 15%);
+  font-weight: 600;
+  /* We _never_ want this component to shrink by itself. */
+  min-width: var(--OcdItemTable-Total-Width);
+  /* Always show a vertical scrollbar.
+   * This prevents column mis-alignment glitches that occur when the main row
+   * region has a scroll bar, but the header row does not (or vice versa).
+   */
+  overflow-y: scroll;
+}
+
+.OcdItemTable__Body {
+  /* We _never_ want this component to shrink by itself. */
+  min-width: var(--OcdItemTable-Total-Width);
+  /* Always show a vertical scrollbar.
+   * This prevents column mis-alignment glitches that occur when the main row
+   * region has a scroll bar, but the header row does not (or vice versa).
+   * The "!important" is needed to override the style attribute injected by
+   * react-window.
+   */
+  overflow-y: scroll !important;
+}
+
+.OcdItemTable__Cell,
+.OcdItemTable__HeaderCell {
+  /* Copied from Blueprint.js's <HTMLTable> component style */
+  box-shadow: inset 1px 1px 0 0 rgb(0 0 0 / 15%);
+  /* Columns should never try to shrink, even if the viewport becomes narrow. */
+  flex-shrink: 0;
+  padding: 5px;
+}
+
+.OcdItemTable__ColumnItemName {
+  /* Don't vertically stretch the item icon and buttons */
+  align-items: center;
+  /* Use flexbox to ensure that the item name always appears to the right of the
+     icon, even if the item name is very long */
+  display: flex;
+  flex-basis: var(--OcdItemTable-Col-ItemName-Width);
+  flex-grow: 5;
+  min-width: var(--OcdItemTable-Col-ItemName-Width);
+}
+
+.OcdItemTable__ColumnClosetAmount,
+.OcdItemTable__ColumnStorageAmount,
+.OcdItemTable__ColumnDisplayCaseAmount {
+  flex-basis: var(--OcdItemTable-Col-ClosetAmount-Width);
+  min-width: var(--OcdItemTable-Col-ClosetAmount-Width);
+  text-align: right;
+}
+
+.OcdItemTable__ColumnMallPrice {
+  /* Ensure that both the price and the "min" tag are right-aligned, instead of
+     stretching to the right end of the cell
+   */
+  align-items: flex-end;
+  display: flex;
+  flex-basis: var(--OcdItemTable-Col-MallPrice-Width);
+  /* Ensure that the "min" tag appears below the price */
+  flex-direction: column;
+  flex-grow: 1;
+  max-width: calc(2 * var(--OcdItemTable-Col-MallPrice-Width));
+  min-width: var(--OcdItemTable-Col-MallPrice-Width);
+  /* Break long price numbers across multiple lines */
+  overflow-wrap: break-word;
+  /* When long price numbers are broken across multiple lines, ensure that they
+     are right-aligned as well. */
+  text-align: right;
+}
+
+.OcdItemTable__ColumnKeepAmount {
+  flex-basis: var(--OcdItemTable-Col-KeepAmount-Width);
+  min-width: var(--OcdItemTable-Col-KeepAmount-Width);
+}
+
+.OcdItemTable__ColumnAction {
+  flex-basis: var(--OcdItemTable-Col-Action-Width);
+  flex-grow: 1;
+  min-width: var(--OcdItemTable-Col-Action-Width);
+}
+
+/* Need specificity > (0, 2, 0) to override Blueprint's styling */
+.OcdItemTable .OcdItemTable__Cell .OcdItemTable__ItemImageLink,
+.OcdItemTable .OcdItemTable__Cell .OcdItemTable__ItemNameLink {
+  padding: 3px;
+}
+
+.OcdItemTable__ItemImage {
+  display: block;
+  height: 30px;
+  /* If the image fails to load, don't let the alt text overflow */
+  overflow: hidden;
+  width: 30px;
+}
+
+/* Need specificity > (0, 1, 1) to override Blueprint's styling */
+.OcdItemTable .OcdItemTable__ItemNameLink {
+  /* Adjustment to vertically align the item icon and name */
+  /* align-self: center; */
+  text-align: start;
+}
+
+.OcdItemTable__InputKeepAmount input {
+  text-align: right;
+}
+
+/* Need specificity > (0, 2, 0) to override Blueprint's styling */
+.OcdItemTable .OcdItemTable__EditorButtons .OcdItemTable__PopperFix {
+  /* Due to flexbox layout, the <span> injected by the <Popover2> component
+     grows wider than it should, resulting in incorrect placement of the  popup
+     help message. This fixes it by preventing flex growth. */
+  flex-grow: 0;
+}
