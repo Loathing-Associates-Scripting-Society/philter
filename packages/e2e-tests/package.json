@@ -11,11 +11,16 @@
     "build": "rollup -c",
     "clean": "gts clean",
     "compile": "tsc -b",
-    "fix": "gts fix",
-    "lint": "gts lint",
+    "fix": "eslint --fix .",
+    "lint": "eslint .",
     "pretest": "yarn run compile",
     "test": "echo \"Error: no test specified\"",
     "posttest": "yarn run lint"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "sourceType": "module"
+    }
   },
   "dependencies": {
     "@types/minimist": "^1.2.1",

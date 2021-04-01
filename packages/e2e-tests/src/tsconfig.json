@@ -24,7 +24,7 @@
     "module": "ES2015",
     "moduleResolution": "node",
     "paths": {
-      "zlib.ash": ["node_modules/kolmafia/contrib/zlib.ash"]
+      "zlib.ash": ["../../node_modules/kolmafia/contrib/zlib.ash"]
     },
     "rootDir": ".",
     // Rhino does not support some ES2015 syntax (e.g. template strings)

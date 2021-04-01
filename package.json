@@ -1,0 +1,22 @@
+{
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "eslintConfig": {
+    "extends": "./node_modules/gts/",
+    "ignorePatterns": [
+      "/packages/*/build/"
+    ],
+    "rules": {
+      "node/no-unpublished-import": [
+        "error",
+        {
+          "allowModules": [
+            "kolmafia"
+          ]
+        }
+      ]
+    }
+  }
+}
