@@ -9,6 +9,8 @@
 // Uses is_dark_mode()
 since r20566;
 
+import "zlib.ash";
+
 /**
  * @return Appropriate color code for error messages.
  */
@@ -42,4 +44,23 @@ string _ocd_color_success() {
  */
 string _ocd_color_debug() {
     return "#808080";
+}
+
+/**
+ * Updates multiple ZLib variables.
+ * This will only update variables whose values have been changed.
+ * This is primarily intended to be called from JavaScript code.
+ * @param new_vars Names and values of variables to update
+ */
+void _update_Zlib_vars(string [string] new_vars) {
+    int changed_var_count = 0;
+    foreach varname, value in new_vars {
+        if (getvar(varname) != value) {
+            vars[varname] = value;
+            ++changed_var_count;
+        }
+    }
+    if (changed_var_count > 0) {
+        updatevars();
+    }
 }
