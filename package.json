@@ -3,10 +3,15 @@
   "workspaces": [
     "packages/*"
   ],
+  "scripts": {
+    "build:manager": "yarn workspace @ocd-cleanup/common build && yarn workspace @ocd-cleanup/api build && yarn workspace @ocd-cleanup/manager build",
+    "lint": "eslint . && prettier --check ."
+  },
   "eslintConfig": {
     "extends": "./node_modules/gts/",
     "ignorePatterns": [
-      "/packages/*/build/"
+      "/packages/*/build/",
+      "/release/"
     ],
     "rules": {
       "node/no-unpublished-import": [
