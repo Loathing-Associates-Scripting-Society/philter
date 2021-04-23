@@ -127,3 +127,6 @@ dist
 
 # TypeScript build artifacts
 /build/
+
+# Build cache of Rollup's TypeScript plugin
+.rollup.cache/

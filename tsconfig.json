@@ -1,4 +1,5 @@
-// "Solution" tsconfig. Also used to compile build scripts, e.g. Webpack config
+// "Solution" tsconfig for compiling all TS files
+// Also used for type checking within VS Code
 {
   "extends": "./tsconfig.base.json",
   "files": [],

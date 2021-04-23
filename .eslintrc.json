@@ -1,6 +1,9 @@
 {
   "extends": "./node_modules/gts/",
   "env": {"browser": true},
+  "parserOptions": {
+    "sourceType": "module"
+  },
   "rules": {
     "node/no-unpublished-import": [
       "error",
