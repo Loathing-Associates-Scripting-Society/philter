@@ -1,0 +1,14 @@
+// "Solution" tsconfig for compiling all TS files
+// Also used for type checking within VS Code
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "checkJs": true,
+    "noEmit": true,
+    // Don't include any @types/* packages, which may otherwise pull in unwanted
+    // libs (e.g. "lib.es2017.object.d.ts")
+    "types": []
+  },
+  "files": ["rollup.config.js"],
+  "references": [{"path": "src"}]
+}

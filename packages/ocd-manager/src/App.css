@@ -1,0 +1,19 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  /* Vertical Filling:
+     Take up the entire height of the viewport (minus a small adjustment to
+     prevent a scrollbar from appearing). This allows descendant components
+     to expand vertically using flex-grow.
+     The "20px" prevents a scrollbar from appearing for whatever reason. */
+  height: 100vh;
+}
+
+.App__Tabs,
+.App__TabItem {
+  /* Vertical Filling:
+     We "drill down" flexbox to enable Vertical Filling for descendants. */
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}

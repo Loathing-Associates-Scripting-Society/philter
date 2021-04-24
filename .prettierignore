@@ -1,0 +1,11 @@
+# Most packages are powered by gts, which integrates Prettier into ESLint.
+# Since we already have ESLint ignore settings in place, they don't need a
+# .prettierignore file to work.
+# However, @ocd-cleanup/manager uses a separate linting setup and requires
+# Prettier to be run manually. Since this is the setup recommended by Prettier
+# (see https://prettier.io/docs/en/integrating-with-linters.html), I do not
+# intend to manually integrate ESLint with Prettier.
+# Thus, this file still needs to exist.
+.rollup.cache
+/packages/*/build/
+/release/

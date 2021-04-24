@@ -1,0 +1,28 @@
+/*
+Blueprint stylesheets
+(see https://blueprintjs.com/docs/#blueprint/getting-started)
+*/
+@import 'normalize.css';
+@import '@blueprintjs/core';
+@import '@blueprintjs/icons';
+@import '@blueprintjs/popover2';
+
+body,
+html {
+  /* Vertical Filling:
+     Remove any vertical margins and paddings added by the browser.
+     This allows us to use height: 100vh without accidentally creating a
+     vertical scrollbar.
+     See App.css for more information.
+   */
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}

@@ -1,8 +1,0 @@
-// Base tsconfig
-{
-  "extends": "./node_modules/gts/tsconfig-google.json",
-  "compilerOptions": {
-    "esModuleInterop": true,
-    "outDir": "build"
-  }
-}

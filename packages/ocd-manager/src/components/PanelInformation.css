@@ -1,0 +1,9 @@
+.PanelInformation__VerticalTable > tr:not(:first-child) > * {
+  /* Based on Blueprint.js's <HTMLTable> component style */
+  border-top: 1px solid rgb(16 22 16 / 15%);
+}
+
+.PanelInformation__Bullet {
+  color: #999999;
+  font-weight: normal;
+}

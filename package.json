@@ -1,42 +1,27 @@
 {
-  "name": "OCD-Cleanup",
-  "version": "0.0.0",
-  "description": "OCD-Cleanup allows you to configure how to sell, pulverize, use, or dispose every item in KoL.",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "build": "rollup -c",
-    "clean": "gts clean",
-    "compile": "tsc -b",
-    "fix": "gts fix",
-    "lint": "gts lint",
-    "prepare": "npm run compile",
-    "pretest": "npm run compile",
-    "test": "echo \"Error: no test specified\"",
-    "posttest": "npm run lint"
+    "build:manager": "yarn workspace @ocd-cleanup/common build && yarn workspace @ocd-cleanup/api build && yarn workspace @ocd-cleanup/manager build",
+    "lint": "eslint . && prettier --check ."
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Loathing-Associates-Scripting-Society/OCD-Cleanup.git"
-  },
-  "keywords": [],
-  "author": "",
-  "bugs": {
-    "url": "https://github.com/Loathing-Associates-Scripting-Society/OCD-Cleanup/issues"
-  },
-  "homepage": "https://github.com/Loathing-Associates-Scripting-Society/OCD-Cleanup#readme",
-  "dependencies": {
-    "@types/minimist": "^1.2.1",
-    "minimist": "^1.2.5",
-    "string-argv": "^0.3.1"
-  },
-  "devDependencies": {
-    "@rollup/plugin-commonjs": "^18.0.0",
-    "@rollup/plugin-node-resolve": "^11.2.1",
-    "@rollup/plugin-typescript": "^8.2.1",
-    "gts": "^3.1.0",
-    "kolmafia": "npm:kolmafia-types@^0.1.0",
-    "rollup": "^2.45.2",
-    "tslib": "^2.2.0",
-    "typescript": "^4.2.4"
+  "eslintConfig": {
+    "extends": "./node_modules/gts/",
+    "ignorePatterns": [
+      "/packages/*/build/",
+      "/release/"
+    ],
+    "rules": {
+      "node/no-unpublished-import": [
+        "error",
+        {
+          "allowModules": [
+            "kolmafia"
+          ]
+        }
+      ]
+    }
   }
 }

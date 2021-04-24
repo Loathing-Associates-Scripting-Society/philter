@@ -1,0 +1,9 @@
+// "Solution" tsconfig used to compile housekeeping scripts for Node.js
+// Currently, this is used only to type-check the Rollup config in the editor.
+{
+  "extends": "gts/tsconfig-google.json",
+  // Don't try to actually compile anything with this
+  // (may change if we add custom build/maintenance scripts)
+  "files": [],
+  "references": [{"path": "../common"}]
+}

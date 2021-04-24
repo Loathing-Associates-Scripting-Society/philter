@@ -1,0 +1,10 @@
+// Base tsconfig
+{
+  // While TypeScript 3.2+ supports diving into node_modules to retrieve the
+  // base tsconfig, GTS does not. For now, we must specify a relative path.
+  "extends": "../../node_modules/gts/tsconfig-google.json",
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "outDir": "build"
+  }
+}
