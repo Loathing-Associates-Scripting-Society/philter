@@ -11,7 +11,12 @@
     "test": "yarn run lint"
   },
   "engines": {
-    "node": ">=13.2.0"
+    "node": "^12.17.0 || >=13.2.0"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "sourceType": "module"
+    }
   },
   "dependencies": {
     "@ocd-cleanup/common": "*",
