@@ -151,3 +151,23 @@ ul.tabbernav li.tabberactive input:hover {
 .ocd-alert--error {
   color: red;
 }
+
+.infobox {
+  background-color: #eef;
+  border: 1px solid #99f;
+  border-radius: 5px;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  padding: 1em 0.5em;
+}
+
+.infobox::before {
+  content: "\1F4A1";
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+
+.infobox a:not(:hover) {
+  color: #060;
+  text-decoration: underline;
+}
