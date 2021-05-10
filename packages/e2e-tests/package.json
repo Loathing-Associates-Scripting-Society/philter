@@ -28,9 +28,11 @@
     "string-argv": "^0.3.1"
   },
   "devDependencies": {
+    "@rollup/plugin-buble": "^0.21.3",
     "@rollup/plugin-commonjs": "^18.0.0",
     "@rollup/plugin-node-resolve": "^11.2.1",
     "@rollup/plugin-typescript": "^8.2.1",
+    "buble-config-rhino": "^0.1.0",
     "gts": "^3.1.0",
     "kolmafia": "npm:kolmafia-types@^0.1.0",
     "rollup": "^2.45.2",
