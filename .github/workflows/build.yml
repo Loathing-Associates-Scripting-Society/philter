@@ -1,0 +1,43 @@
+name: Build & Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '12 15 10 * *'
+
+env:
+  default-node-version: 12
+
+jobs:
+  build:
+    # Fortunately, GitHub-hosted runners come preinstalled with Yarn.
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: ['12', '14', '16']
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: yarn install --frozen-lockfile
+      - run: yarn run build
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ env.default-node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.default-node-version }}
+      - run: yarn install --frozen-lockfile
+      - run: yarn run lint
