@@ -4,6 +4,7 @@
     "packages/*"
   ],
   "scripts": {
+    "build": "yarn run build:manager && yarn workspace @ocd-cleanup/e2e-tests build",
     "build:manager": "yarn workspace @ocd-cleanup/common build && yarn workspace @ocd-cleanup/api build && yarn workspace @ocd-cleanup/manager build",
     "lint": "eslint . && prettier --check ."
   },
