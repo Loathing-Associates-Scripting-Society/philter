@@ -36,6 +36,7 @@
 /* eslint-disable node/no-unsupported-features/es-syntax */
 // Import @ocd-cleanup/common using a relative path. This is a hack, btw.
 // File extension is required to make this work in Node.js v12 AND v14.
+// eslint-disable-next-line node/no-missing-import
 import {RELAY_SCRIPT_FILE} from '../common/build/src/index.js';
 import {nodeResolve} from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
