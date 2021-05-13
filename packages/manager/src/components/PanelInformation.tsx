@@ -65,26 +65,6 @@ export const PanelInformation = (): JSX.Element => {
         </a>{' '}
         is still available.
       </Callout>
-      <div style={{height: '0.5em'}}></div>
-      <Callout intent="primary" title="OCD-Cleanup will be renamed soon">
-        Check out the{' '}
-        <a
-          href="https://kolmafia.us/threads/26002/"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          discussion thread
-        </a>{' '}
-        or join the{' '}
-        <a
-          href="https://forms.gle/tV3eK51hfk9ehEkL8"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          poll (Google Forms, requires login)
-        </a>
-        .
-      </Callout>
       {data ? (
         categorizedCount > 0 ? (
           <HTMLTable

@@ -376,17 +376,8 @@ void append_price(buffer page, item doodad) {
 	}
 }
 
-// Temporary thing, should be removed after May 7th
-void append_infobox() {
-	page.append(`<div class="infobox">`);
-	page.append(`OCD-Cleanup will be <a href="https://kolmafia.us/threads/thoughts-on-renaming-ocd-cleanup.26002/" target="_blank" rel="noreferrer noopener">renamed soon.</a>`);
-	page.append(` Care to join in our <a href="https://forms.gle/tV3eK51hfk9ehEkL8" target="_blank" rel="noreferrer noopener">poll? (Google Forms, requires login)</a>`);
-	page.append(`</div>`);
-}
-
 void add_items() {
 	page.append("<fieldset><legend>Add Actions for these Items</legend>"); // write_box()
-	append_infobox();
 
 	int AddQ;
 	foreach key in OCDefault
@@ -822,14 +813,12 @@ void zlib_vars() {
 }
 
 void information() {
-	// page.append(`<p style="">OCD-Cleanup is undergoing a </p>`);
 	page.append(`<fieldset>`);
 	page.append(`<legend>`);
 	page.append(`<a class="version" href="https://kolmafia.us/threads/26027/" target="_blank" rel="noreferrer noopener">Philter Manager classic</a>`);
 	page.append(`<small>, brought to you by <a class="version" href="https://github.com/Loathing-Associates-Scripting-Society/" target="_blank" rel="noreferrer noopener">Loathing Associates Scripting Society</a></small>`);
 	page.append(`</legend>`);
 
-	append_infobox();
 	int AddQ;
 	string[item] defaults;
 	foreach key in OCDefault
