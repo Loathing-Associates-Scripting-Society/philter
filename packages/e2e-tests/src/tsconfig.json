@@ -27,8 +27,8 @@
       "zlib.ash": ["../../node_modules/kolmafia/contrib/zlib.ash"]
     },
     "rootDir": ".",
-    // Rhino does not support some ES2015 syntax (e.g. template strings)
-    "target": "ES5",
+    // Rely on Bublé to transpile the output to Rhino-compatible ES5+
+    "target": "ES2018",
     // Don't include any @types/* packages, which may otherwise pull in unwanted
     // libs (e.g. "lib.es2017.object.d.ts")
     "types": []

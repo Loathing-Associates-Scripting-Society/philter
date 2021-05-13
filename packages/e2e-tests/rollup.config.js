@@ -3,6 +3,8 @@
 import commonjs from '@rollup/plugin-commonjs';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
+import buble from '@rollup/plugin-buble';
+import createPreset from 'buble-config-rhino';
 
 /** @type {import("rollup").RollupOptions} */
 const config = {
@@ -21,6 +23,7 @@ const config = {
       sourceMap: false,
       tsconfig: 'src/tsconfig.json',
     }),
+    buble(createPreset()),
   ],
 };
 
