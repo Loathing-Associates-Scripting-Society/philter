@@ -1,7 +1,7 @@
 /**
  * Represents Philter's configuration.
  */
-export interface OcdCleanupConfig {
+export interface PhilterConfig {
   /**
    * Whether to empty the closet before cleanup.
    * - `0` means "Never empty closet".

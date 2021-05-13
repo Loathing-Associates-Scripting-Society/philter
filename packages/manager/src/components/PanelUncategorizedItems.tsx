@@ -6,26 +6,32 @@ import {
   NonIdealState,
   Spinner,
 } from '@blueprintjs/core';
-import {CLEANUP_TABLES_UNCATEGORIZED_ROUTE, OcdRuleset} from '@philter/common';
+import {
+  CLEANUP_TABLES_UNCATEGORIZED_ROUTE,
+  CleanupRuleset,
+} from '@philter/common';
 import {dequal} from 'dequal/lite';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useAsyncCallback} from 'react-async-hook';
 import useSWR from 'swr';
-import {fetchGetCleanupTableUncategorized, fetchPatchOcdRuleset} from '../api';
+import {
+  fetchGetCleanupTableUncategorized,
+  fetchPatchCleanupRuleset,
+} from '../api';
 import {setErrorToast, setSavingToast} from '../toaster';
-import {OcdItemTable} from './OcdItemTable';
+import {TableItemCleanup} from './TableItemCleanup';
 import './PanelUncategorizedItems.css';
 
-const EMPTY_OCD_RULES = {};
+const EMPTY_CLEANUP_RULES = {};
 
 export const PanelUncategorizedItems = (): JSX.Element => {
   // Major assumptions:
   //
   // - data.items contains _only_ items that are uncategorized, i.e. the server
   //   performs the filtering for us.
-  // - ocdRules always starts as an empty ruleset. Since data.items has already
-  //   been curated, there is no need to retrieve the entire ruleset from the
-  //   server.
+  // - cleanupRules always starts as an empty ruleset. Since data.items has
+  //   already been curated, there is no need to retrieve the entire ruleset
+  //   from the server.
   const {
     data,
     error: loadingError,
@@ -38,11 +44,16 @@ export const PanelUncategorizedItems = (): JSX.Element => {
     return response.result;
   });
 
-  const [ocdRules, setOcdRules] = useState<OcdRuleset>(EMPTY_OCD_RULES);
-  const resetOcdRules = useCallback(() => setOcdRules(EMPTY_OCD_RULES), []);
+  const [cleanupRules, setCleanupRules] = useState<CleanupRuleset>(
+    EMPTY_CLEANUP_RULES
+  );
+  const resetCleanupRules = useCallback(
+    () => setCleanupRules(EMPTY_CLEANUP_RULES),
+    []
+  );
 
-  const hasChanges = useMemo(() => !dequal(ocdRules, EMPTY_OCD_RULES), [
-    ocdRules,
+  const hasChanges = useMemo(() => !dequal(cleanupRules, EMPTY_CLEANUP_RULES), [
+    cleanupRules,
   ]);
 
   const {
@@ -50,56 +61,57 @@ export const PanelUncategorizedItems = (): JSX.Element => {
     execute: doSave,
     loading: isSaving,
   } = useAsyncCallback(async () => {
-    const response = await fetchPatchOcdRuleset(ocdRules);
+    const response = await fetchPatchCleanupRuleset(cleanupRules);
     if (!response?.result?.success) {
       throw new Error(`Unexpected response: ${JSON.stringify(response)}`);
     }
     mutate();
-    resetOcdRules();
+    resetCleanupRules();
   });
 
   useEffect(
-    () => setErrorToast('savingError', savingError, 'Cannot save OCD rule'),
+    () => setErrorToast('savingError', savingError, 'Cannot save cleanup rule'),
     [savingError]
   );
-  useEffect(() => setSavingToast('isSaving', isSaving, 'Saving OCD rules...'), [
-    isSaving,
-  ]);
+  useEffect(
+    () => setSavingToast('isSaving', isSaving, 'Saving cleanup rules...'),
+    [isSaving]
+  );
 
   const setAllItemsToMall = useCallback(
     () =>
       data &&
-      setOcdRules(({...ocdRules}) => {
+      setCleanupRules(({...cleanupRules}) => {
         for (const item of data.items) {
           if (item.canMall) {
-            ocdRules[item.id] = {action: 'MALL', minPrice: 0};
+            cleanupRules[item.id] = {action: 'MALL', minPrice: 0};
           }
         }
-        return ocdRules;
+        return cleanupRules;
       }),
     [data]
   );
   const setAllItemsToCloset = useCallback(
     () =>
       data &&
-      setOcdRules(({...ocdRules}) => {
+      setCleanupRules(({...cleanupRules}) => {
         for (const item of data.items) {
           if (item.canCloset) {
-            ocdRules[item.id] = {action: 'CLST'};
+            cleanupRules[item.id] = {action: 'CLST'};
           }
         }
-        return ocdRules;
+        return cleanupRules;
       }),
     [data]
   );
   const setAllItemsToKeep = useCallback(
     () =>
       data &&
-      setOcdRules(({...ocdRules}) => {
+      setCleanupRules(({...cleanupRules}) => {
         for (const item of data.items) {
-          ocdRules[item.id] = {action: 'KEEP'};
+          cleanupRules[item.id] = {action: 'KEEP'};
         }
-        return ocdRules;
+        return cleanupRules;
       }),
     [data]
   );
@@ -116,7 +128,7 @@ export const PanelUncategorizedItems = (): JSX.Element => {
                   disabled={
                     !data.items.some(
                       item =>
-                        item.canMall && ocdRules[item.id]?.action !== 'MALL'
+                        item.canMall && cleanupRules[item.id]?.action !== 'MALL'
                     )
                   }
                   onClick={setAllItemsToMall}
@@ -127,7 +139,8 @@ export const PanelUncategorizedItems = (): JSX.Element => {
                   disabled={
                     !data.items.some(
                       item =>
-                        item.canCloset && ocdRules[item.id]?.action !== 'CLST'
+                        item.canCloset &&
+                        cleanupRules[item.id]?.action !== 'CLST'
                     )
                   }
                   onClick={setAllItemsToCloset}
@@ -137,7 +150,7 @@ export const PanelUncategorizedItems = (): JSX.Element => {
                 <Button
                   disabled={
                     !data.items.some(
-                      item => ocdRules[item.id]?.action !== 'KEEP'
+                      item => cleanupRules[item.id]?.action !== 'KEEP'
                     )
                   }
                   onClick={setAllItemsToKeep}
@@ -146,15 +159,15 @@ export const PanelUncategorizedItems = (): JSX.Element => {
                 </Button>
               </ButtonGroup>
             </FormGroup>
-            <OcdItemTable
+            <TableItemCleanup
               className="PanelUncategorizedItems__Table"
               disableReset={!hasChanges}
               disableSave={!hasChanges}
               inventory={data.inventory}
               items={data.items}
-              ocdRules={ocdRules}
-              onChange={setOcdRules}
-              onReset={resetOcdRules}
+              cleanupRules={cleanupRules}
+              onChange={setCleanupRules}
+              onReset={resetCleanupRules}
               onSave={doSave}
             />
           </>

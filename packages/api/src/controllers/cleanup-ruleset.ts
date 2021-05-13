@@ -1,33 +1,33 @@
 /**
- * @file Tools for managing `OcdRuleset` objects.
+ * @file Tools for managing `CleanupRuleset` objects.
  */
 
-import {isOcdAction, OcdRule} from '@philter/common';
+import {isCleanupAction, CleanupRule} from '@philter/common';
 import {bufferToFile, myName, toBoolean, toInt, toItem} from 'kolmafia';
 import {getvar} from 'zlib.ash';
 import {createMapLoader, encodeItem} from '../util';
-import {CONFIG_NAMES, getFullDataFileName} from './ocd-cleanup-config';
+import {CONFIG_NAMES, getFullDataFileName} from './philter-config';
 
 /**
- * Loads an OCD ruleset from a text file into a map.
+ * Loads a cleanup ruleset from a text file into a map.
  * @param filename Path to the data file
- * @return Map of each item to its OCD rule. If the user's OCD ruleset file is
- *    empty or missing, returns `null`.
+ * @return Map of each item to its cleanup rule. If the user's cleanup ruleset
+ *    file is empty or missing, returns `null`.
  * @throws {TypeError} If the file contains invalid data
  */
-const loadOcdRulesetFile = createMapLoader(
+const loadCleanupRulesetFile = createMapLoader(
   (
     [itemName, action, keepAmountStr, info, message],
     _,
     filename
-  ): [Item, OcdRule] => {
-    if (!isOcdAction(action)) {
+  ): [Item, CleanupRule] => {
+    if (!isCleanupAction(action)) {
       throw new TypeError(
-        `${action} is not a valid OCD action (file: ${filename}, entry: ${itemName})`
+        `${action} is not a valid cleanup action (file: ${filename}, entry: ${itemName})`
       );
     }
 
-    let rule: OcdRule;
+    let rule: CleanupRule;
     if (action === 'GIFT') {
       rule = {action, recipent: info, message};
     } else if (action === 'MAKE') {
@@ -45,7 +45,7 @@ const loadOcdRulesetFile = createMapLoader(
       }
       rule = {action, minPrice};
     } else if (action === 'TODO') {
-      // Curiously, OCD Inventory Control stores the message in the 'info' field
+      // Curiously, Philter stores the message in the 'info' field
       rule = {action, message: info};
     } else {
       rule = {action};
@@ -66,16 +66,16 @@ const loadOcdRulesetFile = createMapLoader(
 );
 
 /**
- * Saves a map containing an OCD ruleset to a text file.
+ * Saves a map containing a cleanup ruleset to a text file.
  * @param filepath Path to the data file
- * @param ocdRuleset Map of each item to its item info
+ * @param cleanupRulesMap Map of each item to its item info
  */
-export function saveOcdRulesetFile(
+export function saveCleanupRulesetFile(
   filepath: string,
-  ocdRuleset: ReadonlyMap<Item, Readonly<OcdRule>>
+  cleanupRulesMap: ReadonlyMap<Item, Readonly<CleanupRule>>
 ): boolean {
   // Sort entries by item ID in ascending order when saving
-  const buffer = Array.from(ocdRuleset.entries())
+  const buffer = Array.from(cleanupRulesMap.entries())
     .sort(([itemA], [itemB]) => toInt(itemA) - toInt(itemB))
     .map(([item, rule]) => {
       let info = '',
@@ -106,32 +106,32 @@ export function saveOcdRulesetFile(
 }
 
 /**
- * Loads the OCD ruleset from the ruleset file of the current player.
- * @return Map of each item to its OCD rule. If the user's OCD ruleset file is
- *    empty or missing, returns `null`.
+ * Loads the cleanup ruleset from the ruleset file of the current player.
+ * @return Map of each item to its cleanup rule. If the user's cleanup ruleset
+ *    file is empty or missing, returns `null`.
  */
-export function loadOcdRulesetForCurrentPlayer() {
-  let ocdRulesMap = loadOcdRulesetFile(
+export function loadCleanupRulesetForCurrentPlayer() {
+  let cleanupRulesMap = loadCleanupRulesetFile(
     getFullDataFileName(getvar(CONFIG_NAMES.dataFileName))
   );
-  if (!ocdRulesMap || ocdRulesMap.size === 0) {
+  if (!cleanupRulesMap || cleanupRulesMap.size === 0) {
     // Legacy file name
     // TODO: We inherited this from OCD Inventory Manager. Since nobody seems to
     // be using this anymore, we can probably remove it.
-    ocdRulesMap = loadOcdRulesetFile(`OCD_${myName()}.txt`);
+    cleanupRulesMap = loadCleanupRulesetFile(`OCD_${myName()}.txt`);
   }
-  return ocdRulesMap;
+  return cleanupRulesMap;
 }
 
 /**
- * Writes the OCD ruleset to the ruleset file of the current player.
- * @param stockingRuleset OCD ruleset to save
+ * Writes the stocking ruleset to the ruleset file of the current player.
+ * @param cleanupRulesMap Stocking ruleset to save
  */
-export function saveOcdRulesetForCurrentPlayer(
-  ocdRuleset: ReadonlyMap<Item, Readonly<OcdRule>>
+export function saveCleanupRulesetForCurrentPlayer(
+  cleanupRulesMap: ReadonlyMap<Item, Readonly<CleanupRule>>
 ) {
-  return saveOcdRulesetFile(
+  return saveCleanupRulesetFile(
     getFullDataFileName(getvar(CONFIG_NAMES.dataFileName)),
-    ocdRuleset
+    cleanupRulesMap
   );
 }

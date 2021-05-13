@@ -2,7 +2,7 @@
  * @file Utilities that don't quite fit anywhere else.
  */
 
-import {OcdAction, OcdItem} from '@philter/common';
+import {CleanupAction, ItemInfo} from '@philter/common';
 
 /**
  * Maximum possible mallsell price for any item.
@@ -17,10 +17,10 @@ export const MAX_MALL_PRICE = 999_999_999 as const;
 export const ZWSP = '\u200B';
 
 /**
- * @param action OCD leanup action
+ * @param action Cleanup action
  * @return Human-readable short name for the action
  */
-export const ocdActionToString = (action: OcdAction): string => {
+export const cleanupActionToString = (action: CleanupAction): string => {
   switch (action) {
     case 'AUTO':
       return 'Autosell';
@@ -60,7 +60,7 @@ export const ocdActionToString = (action: OcdAction): string => {
  * @param item Item type to check
  * @return Whether Philter Manager should warn about pulverizing the item
  */
-export const shouldWarnOnPulverize = (item: Readonly<OcdItem>): boolean =>
+export const shouldWarnOnPulverize = (item: Readonly<ItemInfo>): boolean =>
   !item.isTradable;
 
 /**

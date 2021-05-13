@@ -1,4 +1,4 @@
-/** Base interface for OCD stocking rule. */
+/** Base interface for stocking rule. */
 export interface StockingRule {
   /**
    * Type of stocking rule (i.e. "Purpose" in Philter manager).

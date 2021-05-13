@@ -128,7 +128,7 @@ var CLEANUP_TABLES_CATEGORIZED_ROUTE = '/cleanup-tables/categorized';
 var CLEANUP_TABLES_UNCATEGORIZED_ROUTE = '/cleanup-tables/uncategorized';
 
 /**
- * @file Defines requests and responses for OCD-Cleanup settings.
+ * @file Defines requests and responses for Philter settings.
  */
 var CONFIG_ROUTE = '/config';
 
@@ -143,7 +143,7 @@ var INVENTORY_ROUTE = '/inventory';
 var RULESET_ROUTE = '/ruleset';
 
 /**
- * @file Endpoint for general statistics about OCD-Cleanup.
+ * @file Endpoint for general statistics about Philter.
  */
 var STATISTICS_ROUTE = '/statistics';
 
@@ -152,7 +152,7 @@ var STATISTICS_ROUTE = '/statistics';
  */
 /**
  * Relative path to the directory that contains assets (HTML, CSS, JS) for
- * OCD-Cleanup Manager.
+ * Philter Manager.
  */
 var RELAY_DIR = '/philter-manager';
 /**
@@ -161,7 +161,7 @@ var RELAY_DIR = '/philter-manager';
  */
 var RELAY_HTML_FILE = 'philter-manager.index.html';
 /**
- * Relative path to the HTML skeleton page for OCD-Cleanup Manager.
+ * Relative path to the HTML skeleton page for Philter Manager.
  * The relay API script will serve this page to the user.
  */
 var RELAY_HTML_PATH = RELAY_DIR + "/" + RELAY_HTML_FILE;
@@ -1620,7 +1620,7 @@ function main() {
         if (requestParameters === null) {
             // If there are no URL parameters, this is probably a request made by a
             // user navigating to our app.
-            // We send the HTML skeleton of the OCD-Cleanup Manager.
+            // We send the HTML skeleton of the Philter Manager.
             send(generateRedirectPage(RELAY_HTML_PATH));
         }
         else {

@@ -3,8 +3,8 @@
  */
 
 import {InventoryState} from '../data/inventory-state.js';
-import {OcdItem} from '../data/ocd-item.js';
-import {OcdRuleset} from '../data/ocd-rule.js';
+import {ItemInfo} from '../data/item-info.js';
+import {CleanupRuleset} from '../data/cleanup-rule.js';
 import {RequestBase, SuccessResponseBase} from './base.js';
 
 export const CLEANUP_TABLES_CATEGORIZED_ROUTE = '/cleanup-tables/categorized';
@@ -28,13 +28,13 @@ export interface CleanupTableCategorizedGetResponse
     /** Inventory state needed to render the table. */
     inventory: InventoryState;
     /**
-     * Categorized items (i.e. has an OCD cleanup action assigned)
+     * Categorized items (i.e. has a cleanup action assigned)
      */
-    items: OcdItem[];
+    items: ItemInfo[];
     /**
-     * The entire OCD ruleset
+     * The entire cleanup ruleset
      */
-    ocdRules: OcdRuleset;
+    cleanupRules: CleanupRuleset;
   };
 }
 
@@ -59,10 +59,9 @@ export interface CleanupTableUncategorizedGetResponse
   extends SuccessResponseBase {
   result: {
     /**
-     * Uncategorized items (i.e. has no OCD cleanup action assigned) in
-     * inventory.
+     * Uncategorized items (i.e. has no cleanup action assigned) in inventory.
      */
-    items: OcdItem[];
+    items: ItemInfo[];
     /** Inventory state needed to render the table. */
     inventory: InventoryState;
   };

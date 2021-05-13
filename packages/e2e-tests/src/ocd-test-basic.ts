@@ -18,10 +18,10 @@ import {
 import minimist from 'minimist';
 import {parseArgsStringToArgv} from 'string-argv';
 import {getvar} from 'zlib.ash';
-
 import {
   AutosellTest,
   BrickoBreakTest,
+  CleanupActionTest,
   ClosetTest,
   DiscardTest,
   DisplayTest,
@@ -29,7 +29,6 @@ import {
   KeepTest,
   MakeTest,
   MallTest,
-  OcdActionTest,
   PulverizeTest,
   StashTest,
   TodoTest,
@@ -50,12 +49,12 @@ const TEST_CONFIG_FILE_NAME = 'e2e-test-config';
  * Set up the E2E test.
  * @param testCases Test cases to setup
  */
-function setup(testCases: Iterable<OcdActionTest>): void {
+function setup(testCases: Iterable<CleanupActionTest>): void {
   const configRows: string[] = [];
   /**
    * Test cases that were set up successfully. Used to roll back if setup fails.
    */
-  const setupTestCases: OcdActionTest[] = [];
+  const setupTestCases: CleanupActionTest[] = [];
 
   // KEEP
   for (const testCase of testCases) {
@@ -130,7 +129,7 @@ function withTemporaryConfig<T>(cb: () => T): T {
  * @param oldState
  */
 function verify(
-  testCases: Iterable<OcdActionTest>,
+  testCases: Iterable<CleanupActionTest>,
   oldState: InventoryState
 ): void {
   const currentState = captureInventoryState();
@@ -152,7 +151,7 @@ function verify(
  * tear down.
  * @param testCases
  */
-function teardown(testCases: Iterable<OcdActionTest>): void {
+function teardown(testCases: Iterable<CleanupActionTest>): void {
   for (const testCase of testCases) {
     try {
       testCase.teardown?.();
@@ -265,7 +264,7 @@ export function main(commands: string): void {
   print('Collecting test cases...');
 
   // Add test cases
-  const testCases = new Map<Item, OcdActionTest>(
+  const testCases = new Map<Item, CleanupActionTest>(
     [
       new AutosellTest(Item.get('ben-gal balm'), 0),
       new AutosellTest(Item.get('hair spray'), 1),

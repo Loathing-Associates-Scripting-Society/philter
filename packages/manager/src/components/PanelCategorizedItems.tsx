@@ -1,21 +1,21 @@
 import {H3, NonIdealState, Spinner, Tab, Tabs} from '@blueprintjs/core';
 import {
+  CleanupRule,
+  CleanupRuleset,
   CLEANUP_TABLES_CATEGORIZED_ROUTE,
-  OcdItem,
-  OcdRule,
-  OcdRuleset,
-  ReadonlyOcdRuleset,
+  ItemInfo,
+  ReadonlyCleanupRuleset,
 } from '@philter/common';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useAsyncCallback} from 'react-async-hook';
 import useSWR from 'swr';
-import {fetchGetCleanupTableCategorized, fetchSaveOcdRuleset} from '../api';
+import {fetchGetCleanupTableCategorized, fetchSaveCleanupRuleset} from '../api';
 import {setErrorToast, setSavingToast, showInfoToast} from '../toaster';
-import {ocdActionToString, typeCheck} from '../util';
-import {OcdItemTable, RuleChangeHandler} from './OcdItemTable';
+import {cleanupActionToString, typeCheck} from '../util';
 import './PanelCategorizedItems.css';
+import {RuleChangeHandler, TableItemCleanup} from './TableItemCleanup';
 
-const OCD_TAB_TYPES = {
+const CLEANUP_TAB_TYPES = {
   all: 0,
   closet: 0,
   craft: 0,
@@ -34,21 +34,21 @@ const OCD_TAB_TYPES = {
 };
 
 /**
- * Note: Tab types do not match OCD actions 1:1. For example, autosell (AUTO)
- * and discard (DISC) actions are shown together under "dispose".
+ * Note: Tab types do not match cleanup actions 1:1. For example, autosell
+ * (AUTO) and discard (DISC) actions are shown together under "dispose".
  */
-type OcdTabType = keyof typeof OCD_TAB_TYPES;
-const isOcdTabType = (tabId: unknown): tabId is OcdTabType =>
+type CleanupTabType = keyof typeof CLEANUP_TAB_TYPES;
+const isCleanupTabType = (tabId: unknown): tabId is CleanupTabType =>
   typeof tabId === 'string' &&
-  Object.prototype.hasOwnProperty.call(OCD_TAB_TYPES, tabId);
+  Object.prototype.hasOwnProperty.call(CLEANUP_TAB_TYPES, tabId);
 
 const categorizeItemsForTabs = (
-  items: readonly Readonly<OcdItem>[],
-  ocdRules: ReadonlyOcdRuleset
+  items: readonly Readonly<ItemInfo>[],
+  cleanupRules: ReadonlyCleanupRuleset
 ) =>
   items.reduce(
     (itemsForTabs, item) => {
-      const rule = ocdRules[item.id];
+      const rule = cleanupRules[item.id];
       if (rule) {
         itemsForTabs.all.push(item);
         switch (rule.action) {
@@ -95,25 +95,25 @@ const categorizeItemsForTabs = (
       return itemsForTabs;
     },
     {
-      /** This includes only items that have an OCD rule defined. */
-      all: [] as OcdItem[],
-      closet: [] as OcdItem[],
-      craft: [] as OcdItem[],
-      display: [] as OcdItem[],
-      dispose: [] as OcdItem[],
-      gift: [] as OcdItem[],
-      keep: [] as OcdItem[],
-      mall: [] as OcdItem[],
-      pulverize: [] as OcdItem[],
-      reminder: [] as OcdItem[],
-      stash: [] as OcdItem[],
-      untinker: [] as OcdItem[],
-      use: [] as OcdItem[],
+      /** This includes only items that have a cleanup rule defined. */
+      all: [] as ItemInfo[],
+      closet: [] as ItemInfo[],
+      craft: [] as ItemInfo[],
+      display: [] as ItemInfo[],
+      dispose: [] as ItemInfo[],
+      gift: [] as ItemInfo[],
+      keep: [] as ItemInfo[],
+      mall: [] as ItemInfo[],
+      pulverize: [] as ItemInfo[],
+      reminder: [] as ItemInfo[],
+      stash: [] as ItemInfo[],
+      untinker: [] as ItemInfo[],
+      use: [] as ItemInfo[],
     }
   );
 
-/** Empty object used as placeholder for the OCD ruleset being edited. */
-const EMPTY_OCD_RULES = Object.freeze({});
+/** Empty object used as placeholder for the cleanup ruleset being edited. */
+const EMPTY_CLEANUP_RULES = Object.freeze({});
 
 /**
  * Panel for editing the player's Philter ruleset.
@@ -129,21 +129,21 @@ export const PanelCategorizedItems = (): JSX.Element => {
     }
   );
 
-  const [activeOcdRules, setActiveOcdRules] = useState<OcdRuleset>(
-    EMPTY_OCD_RULES
+  const [activeCleanupRules, setActiveCleanupRules] = useState<CleanupRuleset>(
+    EMPTY_CLEANUP_RULES
   );
 
   useEffect(() => {
-    // When the data is loaded for the first time, populate activeOcdRules with
-    // the server-sent ruleset
-    if (data?.ocdRules && activeOcdRules === EMPTY_OCD_RULES) {
-      setActiveOcdRules(data.ocdRules);
+    // When the data is loaded for the first time, populate activeCleanupRules
+    // with the server-sent ruleset
+    if (data?.cleanupRules && activeCleanupRules === EMPTY_CLEANUP_RULES) {
+      setActiveCleanupRules(data.cleanupRules);
     }
-  }, [activeOcdRules, data?.ocdRules]);
+  }, [activeCleanupRules, data?.cleanupRules]);
 
   const handleReset = useCallback(
-    () => data?.ocdRules && setActiveOcdRules(data.ocdRules),
-    [data?.ocdRules]
+    () => data?.cleanupRules && setActiveCleanupRules(data.cleanupRules),
+    [data?.cleanupRules]
   );
 
   const {
@@ -155,59 +155,60 @@ export const PanelCategorizedItems = (): JSX.Element => {
       if (!data) {
         throw new Error("Cannot save ruleset when we don't have any data yet");
       }
-      const response = await fetchSaveOcdRuleset(activeOcdRules);
+      const response = await fetchSaveCleanupRuleset(activeCleanupRules);
       if (!response?.result?.success) {
         throw new Error(`Unexpected response: ${JSON.stringify(response)}`);
       }
-      return {...data, ocdRules: activeOcdRules};
+      return {...data, cleanupRules: activeCleanupRules};
     }, false)
   );
   useEffect(
-    () => setErrorToast('savingError', savingError, 'Cannot save OCD rule'),
+    () => setErrorToast('savingError', savingError, 'Cannot save cleanup rule'),
     [savingError]
   );
-  useEffect(() => setSavingToast('isSaving', isSaving, 'Saving OCD rules...'), [
-    isSaving,
-  ]);
+  useEffect(
+    () => setSavingToast('isSaving', isSaving, 'Saving cleanup rules...'),
+    [isSaving]
+  );
 
-  const handleOcdRuleChange: RuleChangeHandler = useCallback(
+  const handleRuleChange: RuleChangeHandler = useCallback(
     (itemId, newRuleOrReducer) =>
-      setActiveOcdRules(prevOcdRules => {
-        const prevRule = prevOcdRules[itemId] as OcdRule | undefined;
+      setActiveCleanupRules(prevCleanupRules => {
+        const prevRule = prevCleanupRules[itemId] as CleanupRule | undefined;
         const newRule =
           typeof newRuleOrReducer === 'function'
-            ? newRuleOrReducer(prevOcdRules[itemId] || null)
+            ? newRuleOrReducer(prevCleanupRules[itemId] || null)
             : newRuleOrReducer;
 
         if (prevRule?.action !== newRule?.action) {
           const itemName = data?.items[itemId]?.name;
           showInfoToast(
             newRule
-              ? `Changed action for ${itemName} to "${ocdActionToString(
+              ? `Changed action for ${itemName} to "${cleanupActionToString(
                   newRule.action
                 )}"`
               : `Removed action for ${itemName}`
           );
         }
 
-        if (newRule) return {...prevOcdRules, [itemId]: newRule};
+        if (newRule) return {...prevCleanupRules, [itemId]: newRule};
         else {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const {[itemId]: _removed, ...restOcdRules} = prevOcdRules;
-          return restOcdRules;
+          const {[itemId]: _removed, ...restCleanupRules} = prevCleanupRules;
+          return restCleanupRules;
         }
       }),
     [data?.items]
   );
 
-  const [tabId, setTabId] = useState<OcdTabType>('all');
+  const [tabId, setTabId] = useState<CleanupTabType>('all');
 
   // Item categories are based on the active copy of the ruleset being edited,
   // rather than the base copy. This allows the tabs to be updated in real time
   // when the user edits the ruleset.
   const itemsForTabs = useMemo(
-    () => categorizeItemsForTabs(data?.items ?? [], activeOcdRules || {}),
-    [data?.items, activeOcdRules]
+    () => categorizeItemsForTabs(data?.items ?? [], activeCleanupRules || {}),
+    [data?.items, activeCleanupRules]
   );
 
   const isTabAvailable = Object.prototype.hasOwnProperty.call(
@@ -218,18 +219,18 @@ export const PanelCategorizedItems = (): JSX.Element => {
     : true;
   const actualTabId = isTabAvailable ? tabId : 'all';
 
-  const hasChanges = Boolean(data && data.ocdRules !== activeOcdRules);
+  const hasChanges = Boolean(data && data.cleanupRules !== activeCleanupRules);
 
-  const makeItemTable = (items: OcdItem[]) =>
+  const makeItemTable = (items: ItemInfo[]) =>
     data && (
-      <OcdItemTable
+      <TableItemCleanup
         className="PanelCategorizedItems__Table"
         disableReset={!hasChanges}
         disableSave={!hasChanges}
         inventory={data.inventory}
         items={items}
-        ocdRules={activeOcdRules}
-        onRuleChange={handleOcdRuleChange}
+        cleanupRules={activeCleanupRules}
+        onRuleChange={handleRuleChange}
         onReset={handleReset}
         onSave={handleSave}
       />
@@ -241,19 +242,19 @@ export const PanelCategorizedItems = (): JSX.Element => {
       {data ? (
         <Tabs
           className="PanelCategorizedItems__Tabs"
-          onChange={tabId => isOcdTabType(tabId) && setTabId(tabId)}
+          onChange={tabId => isCleanupTabType(tabId) && setTabId(tabId)}
           renderActiveTabPanelOnly
           selectedTabId={actualTabId}
         >
           <Tab
-            id={typeCheck<OcdTabType>('all')}
+            id={typeCheck<CleanupTabType>('all')}
             panel={makeItemTable(itemsForTabs.all)}
             panelClassName="PanelCategorizedItems__TabItem"
             title="All"
           />
           {itemsForTabs.keep.length > 0 && (
             <Tab
-              id={typeCheck<OcdTabType>('keep')}
+              id={typeCheck<CleanupTabType>('keep')}
               panel={makeItemTable(itemsForTabs.keep)}
               panelClassName="PanelCategorizedItems__TabItem"
               title="Keep"
@@ -261,7 +262,7 @@ export const PanelCategorizedItems = (): JSX.Element => {
           )}
           {itemsForTabs.mall.length > 0 && (
             <Tab
-              id={typeCheck<OcdTabType>('mall')}
+              id={typeCheck<CleanupTabType>('mall')}
               panel={makeItemTable(itemsForTabs.mall)}
               panelClassName="PanelCategorizedItems__TabItem"
               title="Mall"
@@ -269,7 +270,7 @@ export const PanelCategorizedItems = (): JSX.Element => {
           )}
           {itemsForTabs.pulverize.length > 0 && (
             <Tab
-              id={typeCheck<OcdTabType>('pulverize')}
+              id={typeCheck<CleanupTabType>('pulverize')}
               panel={makeItemTable(itemsForTabs.pulverize)}
               panelClassName="PanelCategorizedItems__TabItem"
               title="Pulverize"
@@ -277,7 +278,7 @@ export const PanelCategorizedItems = (): JSX.Element => {
           )}
           {itemsForTabs.use.length > 0 && (
             <Tab
-              id={typeCheck<OcdTabType>('use')}
+              id={typeCheck<CleanupTabType>('use')}
               panel={makeItemTable(itemsForTabs.use)}
               panelClassName="PanelCategorizedItems__TabItem"
               title="Use"
@@ -285,7 +286,7 @@ export const PanelCategorizedItems = (): JSX.Element => {
           )}
           {itemsForTabs.closet.length > 0 && (
             <Tab
-              id={typeCheck<OcdTabType>('closet')}
+              id={typeCheck<CleanupTabType>('closet')}
               panel={makeItemTable(itemsForTabs.closet)}
               panelClassName="PanelCategorizedItems__TabItem"
               title="Closet"
@@ -293,7 +294,7 @@ export const PanelCategorizedItems = (): JSX.Element => {
           )}
           {itemsForTabs.stash.length > 0 && (
             <Tab
-              id={typeCheck<OcdTabType>('stash')}
+              id={typeCheck<CleanupTabType>('stash')}
               panel={makeItemTable(itemsForTabs.stash)}
               panelClassName="PanelCategorizedItems__TabItem"
               title="Clan Stash"
@@ -301,7 +302,7 @@ export const PanelCategorizedItems = (): JSX.Element => {
           )}
           {itemsForTabs.craft.length > 0 && (
             <Tab
-              id={typeCheck<OcdTabType>('craft')}
+              id={typeCheck<CleanupTabType>('craft')}
               panel={makeItemTable(itemsForTabs.craft)}
               panelClassName="PanelCategorizedItems__TabItem"
               title="Crafting"
@@ -309,7 +310,7 @@ export const PanelCategorizedItems = (): JSX.Element => {
           )}
           {itemsForTabs.untinker.length > 0 && (
             <Tab
-              id={typeCheck<OcdTabType>('untinker')}
+              id={typeCheck<CleanupTabType>('untinker')}
               panel={makeItemTable(itemsForTabs.untinker)}
               panelClassName="PanelCategorizedItems__TabItem"
               title="Untinkering"
@@ -317,7 +318,7 @@ export const PanelCategorizedItems = (): JSX.Element => {
           )}
           {itemsForTabs.gift.length > 0 && (
             <Tab
-              id={typeCheck<OcdTabType>('gift')}
+              id={typeCheck<CleanupTabType>('gift')}
               panel={makeItemTable(itemsForTabs.gift)}
               panelClassName="PanelCategorizedItems__TabItem"
               title="Gift"
@@ -325,7 +326,7 @@ export const PanelCategorizedItems = (): JSX.Element => {
           )}
           {itemsForTabs.display.length > 0 && (
             <Tab
-              id={typeCheck<OcdTabType>('display')}
+              id={typeCheck<CleanupTabType>('display')}
               panel={makeItemTable(itemsForTabs.display)}
               panelClassName="PanelCategorizedItems__TabItem"
               title="Display"
@@ -333,7 +334,7 @@ export const PanelCategorizedItems = (): JSX.Element => {
           )}
           {itemsForTabs.dispose.length > 0 && (
             <Tab
-              id={typeCheck<OcdTabType>('dispose')}
+              id={typeCheck<CleanupTabType>('dispose')}
               panel={makeItemTable(itemsForTabs.dispose)}
               panelClassName="PanelCategorizedItems__TabItem"
               title="Dispose"
@@ -341,7 +342,7 @@ export const PanelCategorizedItems = (): JSX.Element => {
           )}
           {itemsForTabs.reminder.length > 0 && (
             <Tab
-              id={typeCheck<OcdTabType>('reminder')}
+              id={typeCheck<CleanupTabType>('reminder')}
               panel={makeItemTable(itemsForTabs.reminder)}
               panelClassName="PanelCategorizedItems__TabItem"
               title="Reminders"

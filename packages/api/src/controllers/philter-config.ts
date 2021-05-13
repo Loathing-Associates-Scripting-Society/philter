@@ -1,8 +1,8 @@
 /**
- * @file Tools for managing `OcdCleanupConfig` objects.
+ * @file Tools for managing `PhilterConfig` objects.
  */
 
-import {OcdCleanupConfig} from '@philter/common';
+import {PhilterConfig} from '@philter/common';
 import {toBoolean} from 'kolmafia';
 import {_updateZlibVars} from 'philter.util.ash';
 import {getvar} from 'zlib.ash';
@@ -11,7 +11,7 @@ import {getvar} from 'zlib.ash';
  * Namespace object that maps each config key to their ZLib variable name.
  */
 export const CONFIG_NAMES: Readonly<
-  Record<keyof OcdCleanupConfig, string>
+  Record<keyof PhilterConfig, string>
 > = Object.freeze({
   emptyClosetMode: 'BaleOCD_EmptyCloset',
   simulateOnly: 'BaleOCD_Sim',
@@ -24,22 +24,22 @@ export const CONFIG_NAMES: Readonly<
 });
 
 /**
- * Get the full file name of an OCD ruleset file, including the prefix and file
- * extension.
+ * Get the full file name of a cleanup ruleset file, including the prefix and
+ * file extension.
  */
 export function getFullDataFileName(fileNameComponent: string) {
   return `OCDdata_${fileNameComponent}.txt`;
 }
 
 /**
- * Get the full file name of an OCD stocking ruleset file, including the prefix
- * and file extension.
+ * Get the full file name of a cleanup stocking ruleset file, including the
+ * prefix and file extension.
  */
 export function getFullStockFileName(fileNameComponent: string) {
   return `OCDstock_${fileNameComponent}.txt`;
 }
 
-export function loadOcdCleanupConfig(): OcdCleanupConfig {
+export function loadCleanupConfig(): PhilterConfig {
   const emptyClosetMode = parseInt(getvar(CONFIG_NAMES.emptyClosetMode));
   const mallPricingMode = getvar(CONFIG_NAMES.mallPricingMode);
   return {
@@ -58,7 +58,7 @@ export function loadOcdCleanupConfig(): OcdCleanupConfig {
   };
 }
 
-export function saveOcdCleanupConfig(config: OcdCleanupConfig) {
+export function saveCleanupConfig(config: PhilterConfig) {
   const serializedConfig: Record<string, string> = {};
   for (const key of Object.keys(config)) {
     const varName: string | undefined =

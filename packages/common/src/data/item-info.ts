@@ -1,7 +1,7 @@
 /**
- * Represents information about a KoL item that OCD Manager is interested in.
+ * Represents information about a KoL item that Philter is interested in.
  */
-export interface OcdItem {
+export interface ItemInfo {
   canAutosell: boolean;
   canBreak: boolean;
   canCloset: boolean;

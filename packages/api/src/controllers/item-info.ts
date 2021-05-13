@@ -1,8 +1,8 @@
 /**
- * @file Tools for managing `OcdItem` objects.
+ * @file Tools for managing `ItemInfo` objects.
  */
 
-import {OcdItem} from '@philter/common';
+import {ItemInfo} from '@philter/common';
 import {
   fileToArray,
   toItem,
@@ -95,9 +95,9 @@ function isPulverizable(item: Item): boolean {
 }
 
 /**
- * Converts a native `Item` to an `OcdItem` object.
+ * Converts a native `Item` to an `ItemInfo` object.
  */
-export function toOcdItem(item: Item): OcdItem {
+export function toItemInfo(item: Item): ItemInfo {
   return {
     canAutosell: item.discardable && autosellPrice(item) > 0,
     canBreak: isBreakable(item),
