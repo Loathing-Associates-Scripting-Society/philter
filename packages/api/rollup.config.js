@@ -1,5 +1,5 @@
 /**
- * @file Rollup configuration for building OCD-Cleanup's relay API script
+ * @file Rollup configuration for building Philter's relay API script
  * (Written in JavaScript to avoid an extra compilation step)
  *
  * This script imports build constants from @philter/common, which is a native

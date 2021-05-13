@@ -124,8 +124,8 @@ function withTemporaryConfig<T>(cb: () => T): T {
 }
 
 /**
- * Verify changes after running OCD-Cleanup, and report all thrown exceptions
- * for each test case.
+ * Verify changes after running Philter, and report all thrown exceptions for
+ * each test case.
  * @param testCases
  * @param oldState
  */
@@ -184,7 +184,7 @@ const CMD_OPTIONS = {
   'test-cmd': {
     varName: 'command',
     default: 'ocd-cleanup',
-    description: 'Command to use for invoking OCD-Cleanup',
+    description: 'Command to use for invoking Philter',
   } as CmdOptions,
   'gift-target': {
     varName: 'player',
@@ -306,7 +306,7 @@ export function main(commands: string): void {
   setup(testCases.values());
   const oldState = captureInventoryState();
 
-  print('Executing E2E test for OCD-Cleanup...');
+  print('Executing E2E test for Philter...');
   // For now, we test the ASH version of the script
   withTemporaryConfig(() => cliExecute(testCmd));
 

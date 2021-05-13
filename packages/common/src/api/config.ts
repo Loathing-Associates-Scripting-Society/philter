@@ -1,5 +1,5 @@
 /**
- * @file Defines requests and responses for OCD-Cleanup settings.
+ * @file Defines requests and responses for Philter settings.
  */
 
 import {OcdCleanupConfig} from '../data/ocd-cleanup-config.js';

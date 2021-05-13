@@ -1,8 +1,8 @@
 import {OcdAction} from '../data/ocd-rule.js';
 
 /**
- * Describes general statistics about OCD-Cleanup that the user may be
- * interested in.
+ * Describes general statistics about Philter that the user may be interested
+ * in.
  */
 export interface OcdCleanupStatistics {
   /** Number of categorized items for each action. */

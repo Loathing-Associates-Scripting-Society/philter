@@ -46,9 +46,9 @@ interface OcdMakeRule extends OcdRuleBase<'MAKE'> {
   /** Target item to create */
   targetItem: string;
   /**
-   * If `true`, OCD-Cleanup will only use available ingredients to create the
-   * target items. Otherwise, OCD-Cleanup will attempt to obtain any other
-   * ingredients necessary to spend all of the item being cleaned up.
+   * If `true`, Philter will only use available ingredients to create the target
+   * items. Otherwise, Philter will attempt to obtain any other ingredients
+   * necessary to spend all of the item being cleaned up.
    */
   shouldUseCreatableOnly: boolean;
 }
@@ -59,7 +59,7 @@ interface OcdMallRule extends OcdRuleBase<'MALL'> {
 }
 
 interface OcdTodoRule extends OcdRuleBase<'TODO'> {
-  /** Reminder message to display in the gCLI when OCD-Cleanup executes. */
+  /** Reminder message to display in the gCLI when Philter executes. */
   message: string;
 }
 

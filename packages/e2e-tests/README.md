@@ -1,4 +1,4 @@
-This directory contains end-to-end test scripts for OCD-Cleanup.
+This directory contains end-to-end test scripts for Philter.
 
 To run the tests:
 

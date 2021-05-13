@@ -53,7 +53,7 @@ export type CleanupTableUncategorizedGetRequest = RequestBase<
 /**
  * Response containing a cleanup table of uncategorized items in inventory.
  * This includes any items in the closet, display case, and storage.
- * Items that cannot be processed by OCD-Cleanup are excluded.
+ * Items that cannot be processed by Philter are excluded.
  */
 export interface CleanupTableUncategorizedGetResponse
   extends SuccessResponseBase {

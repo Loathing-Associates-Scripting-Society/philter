@@ -58,7 +58,7 @@ export const ocdActionToString = (action: OcdAction): string => {
 
 /**
  * @param item Item type to check
- * @return Whether OCD-Cleanup Manager should warn about pulverizing the item
+ * @return Whether Philter Manager should warn about pulverizing the item
  */
 export const shouldWarnOnPulverize = (item: Readonly<OcdItem>): boolean =>
   !item.isTradable;

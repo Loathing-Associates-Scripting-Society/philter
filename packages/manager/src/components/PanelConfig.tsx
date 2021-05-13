@@ -223,7 +223,7 @@ export const PanelConfig = (): JSX.Element => {
         }}
         {...dialogProps}
       />
-      <H3>Configure OCD-Cleanup</H3>
+      <H3>Configure Philter</H3>
 
       <fieldset className="PanelConfig__Section">
         <legend className="PanelConfig__SectionTitle">General settings</legend>

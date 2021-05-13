@@ -1,5 +1,5 @@
 /**
- * @file Endpoint for general statistics about OCD-Cleanup.
+ * @file Endpoint for general statistics about Philter.
  */
 
 import {OcdCleanupStatistics} from '../data/ocd-statistics.js';

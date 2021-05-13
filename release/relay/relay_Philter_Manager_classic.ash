@@ -825,7 +825,7 @@ void information() {
 	// page.append(`<p style="">OCD-Cleanup is undergoing a </p>`);
 	page.append(`<fieldset>`);
 	page.append(`<legend>`);
-	page.append(`<a class="version" href="https://kolmafia.us/threads/26027/" target="_blank" rel="noreferrer noopener">OCD-Cleanup Manager</a>`);
+	page.append(`<a class="version" href="https://kolmafia.us/threads/26027/" target="_blank" rel="noreferrer noopener">Philter Manager classic</a>`);
 	page.append(`<small>, brought to you by <a class="version" href="https://github.com/Loathing-Associates-Scripting-Society/" target="_blank" rel="noreferrer noopener">Loathing Associates Scripting Society</a></small>`);
 	page.append(`</legend>`);
 

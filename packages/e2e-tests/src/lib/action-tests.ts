@@ -111,7 +111,7 @@ function verifyKeepAmount(
   const beforeClosetAmount = before.closet.get(item) || 0;
   const afterAmount = after.inventory.get(item) || 0;
 
-  // OCD-Cleanup considers any items in the closet to count toward against the
+  // Philter considers any items in the closet to count toward against the
   // keepAmount limit
   const actualKeepAmount = Math.max(keepAmount - beforeClosetAmount, 0);
   const expectedAfterAmount = Math.min(beforeAmount, actualKeepAmount);

@@ -351,12 +351,12 @@ export const OcdItemTable = memo(function OcdItemTable({
           popoverClassName={Popover2Classes.POPOVER2_CONTENT_SIZING}
           content={
             <p>
-              Select an action for each item. These actions will tell
-              OCD-Cleanup how to process each item:
+              Select an action for each item. These actions will tell Philter
+              how to process each item:
               <UL>
                 <li>
-                  OCD-Cleanup will warn you about uncategorized items, but will
-                  not touch them.
+                  Philter will warn you about uncategorized items, but will not
+                  touch them.
                 </li>
                 <li>
                   "Mall sale" will use the lowest mall price <i>at cleanup</i>,

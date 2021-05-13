@@ -38,11 +38,11 @@ export const PanelInformation = (): JSX.Element => {
     <div>
       <H3>
         <a
-          href="https://github.com/Loathing-Associates-Scripting-Society/OCD-Cleanup"
+          href="https://github.com/Loathing-Associates-Scripting-Society/Philter"
           rel="noopener noreferrer"
           target="_blank"
         >
-          OCD-Cleanup Manager
+          Philter Manager
         </a>
       </H3>
       <p>
@@ -56,12 +56,12 @@ export const PanelInformation = (): JSX.Element => {
         </a>
       </p>
       <Callout intent="warning" title="Manager v2 is in alpha">
-        Using this <i>may</i> destroy your OCD-Cleanup configuration. Use at
-        your own risk.
+        Using this <i>may</i> destroy your Philter configuration. Use at your
+        own risk.
         <br />
         The{' '}
         <a href="/relay_Philter_Manager_classic.ash?relay=true">
-          classic OCD-Cleanup Manager
+          classic UI
         </a>{' '}
         is still available.
       </Callout>
@@ -174,8 +174,8 @@ export const PanelInformation = (): JSX.Element => {
         ) : (
           <NonIdealState
             icon="help"
-            description='If this is your first time using OCD-Cleanup, you can create cleanup rules for your items in the "Add Items" tab.'
-            title="Your OCD-Cleanup ruleset is empty or missing."
+            description='If this is your first time using Philter, you can create cleanup rules for your items in the "Add Items" tab.'
+            title="Your Philter ruleset is empty or missing."
           />
         )
       ) : isLoading ? (

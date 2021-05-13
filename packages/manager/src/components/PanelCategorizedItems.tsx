@@ -116,7 +116,7 @@ const categorizeItemsForTabs = (
 const EMPTY_OCD_RULES = Object.freeze({});
 
 /**
- * Panel for editing the player's OCD-Cleanup ruleset.
+ * Panel for editing the player's Philter ruleset.
  */
 export const PanelCategorizedItems = (): JSX.Element => {
   const {data, error: loadingError, isValidating: isLoading, mutate} = useSWR(

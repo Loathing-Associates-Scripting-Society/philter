@@ -1,5 +1,5 @@
 /**
- * Represents OCD-Cleanup's configuration.
+ * Represents Philter's configuration.
  */
 export interface OcdCleanupConfig {
   /**
@@ -16,7 +16,7 @@ export interface OcdCleanupConfig {
   mallMultiName: string;
   mallMultiKmailMessage: string;
   /**
-   * If `true` and `mallMultiName` is not an empty string, OCD-Cleanup will send
+   * If `true` and `mallMultiName` is not an empty string, Philter will send
    * `MALL` items to the mall multi instead of mallselling them.
    */
   canUseMallMulti: boolean;

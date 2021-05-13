@@ -28,7 +28,7 @@ interface SelectOcdActionProps
     > {}
 
 /**
- * `<HTMLSelect>` element for picking an OCD-Cleanup action.
+ * `<HTMLSelect>` element for picking a Philter action.
  */
 // eslint-disable-next-line prefer-arrow-callback
 export const SelectOcdAction = memo(function SelectOcdAction({
