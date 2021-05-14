@@ -6,6 +6,7 @@
   "proxy": "http://localhost:60080",
   "scripts": {
     "build": "react-scripts build",
+    "postbuild": "rimraf \"../../release/relay/ocd-cleanup-manager-2/static/media/icons-*.{woff,eot,ttf}\"",
     "lint": "eslint . && prettier --check .",
     "start": "react-scripts start",
     "test": "react-scripts test"
@@ -67,6 +68,7 @@
   },
   "devDependencies": {
     "eslint-config-prettier": "^8.2.0",
-    "prettier": "^2.2.1"
+    "prettier": "^2.2.1",
+    "rimraf": "^3.0.2"
   }
 }
