@@ -5,11 +5,11 @@
   "homepage": ".",
   "proxy": "http://localhost:60080",
   "scripts": {
-    "build": "react-scripts build",
+    "build": "craco build",
     "postbuild": "rimraf \"../../release/relay/ocd-cleanup-manager-2/static/media/icons-*.{woff,eot,ttf}\"",
     "lint": "eslint . && prettier --check .",
-    "start": "react-scripts start",
-    "test": "react-scripts test"
+    "start": "craco start",
+    "test": "craco test"
   },
   "eslintConfig": {
     "extends": [
@@ -44,6 +44,7 @@
   "dependencies": {
     "@blueprintjs/core": "^3.44.0",
     "@blueprintjs/popover2": "^0.6.0",
+    "@craco/craco": "^6.1.2",
     "@ocd-cleanup/common": "*",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
