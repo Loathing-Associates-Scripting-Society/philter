@@ -21,6 +21,8 @@ import {
   STATISTICS_ROUTE,
 } from '@ocd-cleanup/common';
 
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+
 /**
  * API error class. Thrown when the API returns an error response.
  */

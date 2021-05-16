@@ -15,11 +15,13 @@ import {
   ReadonlyOcdRuleset,
 } from '@ocd-cleanup/common';
 import classNames from 'classnames';
-import React, {useCallback, useEffect, useMemo, useRef} from 'react';
+import React, {memo, useCallback, useEffect, useMemo, useRef} from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import {areEqual, FixedSizeList} from 'react-window';
 import './OcdItemTable.css';
 import {OcdRulePicker} from './OcdRulePicker';
+
+/* eslint-disable react/no-unescaped-entities */
 
 /**
  * Adds a zero-width space (ZWSP) after each comma (`,`) in the given string.
@@ -53,7 +55,8 @@ interface OcdItemTableRowProps extends React.ComponentProps<'div'> {
 /**
  * Row component for `<OcdItemTable/>`.
  */
-const OcdItemTableRow = React.memo(function OcdItemTableRow({
+// eslint-disable-next-line prefer-arrow-callback
+const OcdItemTableRow = memo(function OcdItemTableRow({
   className,
   inventory,
   item,
@@ -118,7 +121,7 @@ const OcdItemTableRow = React.memo(function OcdItemTableRow({
       </div>
       <div className="OcdItemTable__Cell OcdItemTable__ColumnMallPrice">
         {item.mallPrice && addZwspAfterComma(item.mallPrice.toLocaleString())}
-        {item.mallPrice != null && item.isMallPriceAtMinimum && (
+        {item.mallPrice !== null && item.isMallPriceAtMinimum && (
           <Tag
             className="OcdItemTable__ColumnMallPrice--minimum"
             htmlTitle="Is at minimum mall price"
@@ -221,7 +224,10 @@ interface OcdItemTableProps
   extends OcdItemTablePropsBase,
     Omit<React.ComponentProps<'div'>, keyof OcdItemTablePropsBase> {}
 
-export const OcdItemTable = React.memo(function OcdItemTable({
+// eslint-disable-next-line prefer-arrow-callback
+export const OcdItemTable = memo(function OcdItemTable({
+  // className is already provided by React.ComponentProps<'div'>
+  // eslint-disable-next-line react/prop-types
   className,
   disableReset,
   disableSave,
@@ -243,6 +249,7 @@ export const OcdItemTable = React.memo(function OcdItemTable({
             : newRuleOrReducer;
         if (newRule) return {...prevOcdRules, [itemId]: newRule};
         else {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const {[itemId]: _removed, ...restOcdRules} = prevOcdRules;
           return restOcdRules;
         }
@@ -383,6 +390,7 @@ export const OcdItemTable = React.memo(function OcdItemTable({
   // Since the data prop changes whenever the OCD ruleset is modified, this
   // component itself does not benefit from `React.memo()`. However, the
   // underlying component _does_ benefit from `React.memo()`.
+  // eslint-disable-next-line prefer-arrow-callback
   const OcdItemTableRowWrapper = useCallback(function OcdItemTableRowWrapper({
     data: {ocdRules, onRuleChange, inventory, items},
     index,

@@ -1,3 +1,4 @@
+/* eslint-disable node/no-unpublished-import */
 import reactRefresh from '@vitejs/plugin-react-refresh';
 import del from 'rollup-plugin-delete';
 import {defineConfig} from 'vite';

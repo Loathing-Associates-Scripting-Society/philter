@@ -71,4 +71,4 @@ export const shouldWarnOnPulverize = (item: Readonly<OcdItem>): boolean =>
  * @param value
  * @return `value` unmodified
  */
-export const typeCheck = <T>(value: T) => value;
+export const typeCheck = <T>(value: T): T => value;

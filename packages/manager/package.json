@@ -40,7 +40,15 @@
           "additionalHooks": "(useAsync|useAsyncCallback)"
         }
       ]
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
     }
+  },
+  "engines": {
+    "node": ">=12"
   },
   "dependencies": {
     "@blueprintjs/core": "^3.44.0",

@@ -1,7 +1,7 @@
 import {Colors, HTMLSelect} from '@blueprintjs/core';
 import {isOcdAction, OcdAction, OcdItem} from '@ocd-cleanup/common';
 import classNames from 'classnames';
-import React from 'react';
+import React, {memo} from 'react';
 import {shouldWarnOnPulverize, typeCheck} from '../util';
 import './SelectOcdAction.css';
 
@@ -30,7 +30,8 @@ interface SelectOcdActionProps
 /**
  * `<HTMLSelect>` element for picking an OCD-Cleanup action.
  */
-export const SelectOcdAction = React.memo(function SelectOcdAction({
+// eslint-disable-next-line prefer-arrow-callback
+export const SelectOcdAction = memo(function SelectOcdAction({
   className,
   item,
   onChange,

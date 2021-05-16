@@ -23,9 +23,11 @@ const DEFAULT_TAB = 'information';
  *    Otherwise, returns an appropriate default tab ID as fallback.
  */
 const ensureValidTabType = (tabId: number | string): MainTabType =>
-  MainTabs.hasOwnProperty(tabId) ? (tabId as MainTabType) : DEFAULT_TAB;
+  Object.prototype.hasOwnProperty.call(MainTabs, tabId)
+    ? (tabId as MainTabType)
+    : DEFAULT_TAB;
 
-export const App = () => {
+export const App = (): JSX.Element => {
   const [tabId, setTabId] = useState<MainTabType>(DEFAULT_TAB);
 
   return (

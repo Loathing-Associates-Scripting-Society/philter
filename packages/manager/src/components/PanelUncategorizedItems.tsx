@@ -21,7 +21,7 @@ import './PanelUncategorizedItems.css';
 
 const EMPTY_OCD_RULES = {};
 
-export const PanelUncategorizedItems = () => {
+export const PanelUncategorizedItems = (): JSX.Element => {
   // Major assumptions:
   //
   // - data.items contains _only_ items that are uncategorized, i.e. the server
