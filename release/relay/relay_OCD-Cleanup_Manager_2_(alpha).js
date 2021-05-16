@@ -128,7 +128,7 @@ var CLEANUP_TABLES_CATEGORIZED_ROUTE = '/cleanup-tables/categorized';
 var CLEANUP_TABLES_UNCATEGORIZED_ROUTE = '/cleanup-tables/uncategorized';
 
 /**
- * @file Defines requests and responses for OCD-Cleanup settings.
+ * @file Defines requests and responses for Philter settings.
  */
 var CONFIG_ROUTE = '/config';
 
@@ -138,12 +138,12 @@ var CONFIG_ROUTE = '/config';
 var INVENTORY_ROUTE = '/inventory';
 
 /**
- * @file Defines requests and responses for OCD rulesets.
+ * @file Defines requests and responses for rulesets.
  */
 var RULESET_ROUTE = '/ruleset';
 
 /**
- * @file Endpoint for general statistics about OCD-Cleanup.
+ * @file Endpoint for general statistics about Philter.
  */
 var STATISTICS_ROUTE = '/statistics';
 
@@ -152,23 +152,23 @@ var STATISTICS_ROUTE = '/statistics';
  */
 /**
  * Relative path to the directory that contains assets (HTML, CSS, JS) for
- * OCD-Cleanup Manager.
+ * Philter Manager.
  *
  * Note: This must be kept in sync with `BUILD_PATH` in `/packages/manager/.env`
  */
-var RELAY_DIR = '/ocd-cleanup-manager-2';
+var RELAY_DIR = '/philter-manager';
 /**
- * Relative path to the HTML skeleton page for OCD-Cleanup Manager.
+ * Relative path to the HTML skeleton page for Philter Manager.
  * The relay API script will serve this page to the user.
  */
 var RELAY_HTML_PATH = RELAY_DIR + "/index.html";
 
 /**
- * Object whose keys define what string constants make up the `OcdAction` type.
- * Also used to check at runtime if a string belongs to the `OcdAction` type.
+ * Object whose keys are string values that make up the `CleanupAction` type.
+ * Also used to check at runtime if a string belongs to `CleanupAction`.
  * The values are unused; they can be anything.
  */
-var _ocdActions = Object.freeze({
+var _cleanupActions = Object.freeze({
     AUTO: 0,
     BREAK: 0,
     CLAN: 0,
@@ -185,11 +185,11 @@ var _ocdActions = Object.freeze({
     USE: 0,
 });
 /**
- * Checks if the given value is a valid `OcdAction` type.
+ * Checks if the given value is a valid `CleanupAction` type.
  */
-var isOcdAction = function (value) {
+var isCleanupAction = function (value) {
     return typeof value === 'string' &&
-        Object.prototype.hasOwnProperty.call(_ocdActions, value);
+        Object.prototype.hasOwnProperty.call(_cleanupActions, value);
 };
 
 /**
@@ -408,7 +408,7 @@ function getInventoryStateWithMaps() {
 }
 
 /**
- * @file Tools for managing `OcdCleanupConfig` objects.
+ * @file Tools for managing `PhilterConfig` objects.
  */
 /**
  * Namespace object that maps each config key to their ZLib variable name.
@@ -424,20 +424,20 @@ var CONFIG_NAMES = Object.freeze({
     stockFileName: 'BaleOCD_StockFile',
 });
 /**
- * Get the full file name of an OCD ruleset file, including the prefix and file
- * extension.
+ * Get the full file name of a cleanup ruleset file, including the prefix and
+ * file extension.
  */
 function getFullDataFileName(fileNameComponent) {
     return "OCDdata_" + fileNameComponent + ".txt";
 }
 /**
- * Get the full file name of an OCD stocking ruleset file, including the prefix
- * and file extension.
+ * Get the full file name of a cleanup stocking ruleset file, including the
+ * prefix and file extension.
  */
 function getFullStockFileName(fileNameComponent) {
     return "OCDstock_" + fileNameComponent + ".txt";
 }
-function loadOcdCleanupConfig() {
+function loadCleanupConfig() {
     var emptyClosetMode = parseInt(zlib_ash.getvar(CONFIG_NAMES.emptyClosetMode));
     var mallPricingMode = zlib_ash.getvar(CONFIG_NAMES.mallPricingMode);
     return {
@@ -453,7 +453,7 @@ function loadOcdCleanupConfig() {
         stockFileName: zlib_ash.getvar(CONFIG_NAMES.stockFileName),
     };
 }
-function saveOcdCleanupConfig(config) {
+function saveCleanupConfig(config) {
     var e_1, _a;
     var serializedConfig = {};
     try {
@@ -477,7 +477,7 @@ function saveOcdCleanupConfig(config) {
 }
 
 /**
- * @file Tools for managing `OcdItem` objects.
+ * @file Tools for managing `ItemInfo` objects.
  */
 var BREAKABLE_ITEMS = Item.get([
     'BRICKO hat',
@@ -576,9 +576,9 @@ function isPulverizable(item) {
     return !pulvy.has(USELESS_POWDER) && (pulvy.size > 0 || MALUSABLES.has(item));
 }
 /**
- * Converts a native `Item` to an `OcdItem` object.
+ * Converts a native `Item` to an `ItemInfo` object.
  */
-function toOcdItem(item) {
+function toItemInfo(item) {
     return {
         canAutosell: item.discardable && kolmafia.autosellPrice(item) > 0,
         canBreak: isBreakable(item),
@@ -603,19 +603,19 @@ function toOcdItem(item) {
 }
 
 /**
- * @file Tools for managing `OcdRuleset` objects.
+ * @file Tools for managing `CleanupRuleset` objects.
  */
 /**
- * Loads an OCD ruleset from a text file into a map.
+ * Loads a cleanup ruleset from a text file into a map.
  * @param filename Path to the data file
- * @return Map of each item to its OCD rule. If the user's OCD ruleset file is
- *    empty or missing, returns `null`.
+ * @return Map of each item to its cleanup rule. If the user's cleanup ruleset
+ *    file is empty or missing, returns `null`.
  * @throws {TypeError} If the file contains invalid data
  */
-var loadOcdRulesetFile = createMapLoader(function (_a, _, filename) {
+var loadCleanupRulesetFile = createMapLoader(function (_a, _, filename) {
     var _b = __read(_a, 5), itemName = _b[0], action = _b[1], keepAmountStr = _b[2], info = _b[3], message = _b[4];
-    if (!isOcdAction(action)) {
-        throw new TypeError(action + " is not a valid OCD action (file: " + filename + ", entry: " + itemName + ")");
+    if (!isCleanupAction(action)) {
+        throw new TypeError(action + " is not a valid cleanup action (file: " + filename + ", entry: " + itemName + ")");
     }
     var rule;
     if (action === 'GIFT') {
@@ -636,7 +636,7 @@ var loadOcdRulesetFile = createMapLoader(function (_a, _, filename) {
         rule = { action: action, minPrice: minPrice };
     }
     else if (action === 'TODO') {
-        // Curiously, OCD Inventory Control stores the message in the 'info' field
+        // Curiously, Philter stores the message in the 'info' field
         rule = { action: action, message: info };
     }
     else {
@@ -652,13 +652,13 @@ var loadOcdRulesetFile = createMapLoader(function (_a, _, filename) {
     return [kolmafia.toItem(itemName), rule];
 });
 /**
- * Saves a map containing an OCD ruleset to a text file.
+ * Saves a map containing a cleanup ruleset to a text file.
  * @param filepath Path to the data file
- * @param ocdRuleset Map of each item to its item info
+ * @param cleanupRulesMap Map of each item to its item info
  */
-function saveOcdRulesetFile(filepath, ocdRuleset) {
+function saveCleanupRulesetFile(filepath, cleanupRulesMap) {
     // Sort entries by item ID in ascending order when saving
-    var buffer = Array.from(ocdRuleset.entries())
+    var buffer = Array.from(cleanupRulesMap.entries())
         .sort(function (_a, _b) {
         var _c = __read(_a, 1), itemA = _c[0];
         var _d = __read(_b, 1), itemB = _d[0];
@@ -693,36 +693,36 @@ function saveOcdRulesetFile(filepath, ocdRuleset) {
     return kolmafia.bufferToFile(buffer, filepath);
 }
 /**
- * Loads the OCD ruleset from the ruleset file of the current player.
- * @return Map of each item to its OCD rule. If the user's OCD ruleset file is
- *    empty or missing, returns `null`.
+ * Loads the cleanup ruleset from the ruleset file of the current player.
+ * @return Map of each item to its cleanup rule. If the user's cleanup ruleset
+ *    file is empty or missing, returns `null`.
  */
-function loadOcdRulesetForCurrentPlayer() {
-    var ocdRulesMap = loadOcdRulesetFile(getFullDataFileName(zlib_ash.getvar(CONFIG_NAMES.dataFileName)));
-    if (!ocdRulesMap || ocdRulesMap.size === 0) {
+function loadCleanupRulesetForCurrentPlayer() {
+    var cleanupRulesMap = loadCleanupRulesetFile(getFullDataFileName(zlib_ash.getvar(CONFIG_NAMES.dataFileName)));
+    if (!cleanupRulesMap || cleanupRulesMap.size === 0) {
         // Legacy file name
         // TODO: We inherited this from OCD Inventory Manager. Since nobody seems to
         // be using this anymore, we can probably remove it.
-        ocdRulesMap = loadOcdRulesetFile("OCD_" + kolmafia.myName() + ".txt");
+        cleanupRulesMap = loadCleanupRulesetFile("OCD_" + kolmafia.myName() + ".txt");
     }
-    return ocdRulesMap;
+    return cleanupRulesMap;
 }
 /**
- * Writes the OCD ruleset to the ruleset file of the current player.
- * @param stockingRuleset OCD ruleset to save
+ * Writes the stocking ruleset to the ruleset file of the current player.
+ * @param cleanupRulesMap Stocking ruleset to save
  */
-function saveOcdRulesetForCurrentPlayer(ocdRuleset) {
-    return saveOcdRulesetFile(getFullDataFileName(zlib_ash.getvar(CONFIG_NAMES.dataFileName)), ocdRuleset);
+function saveCleanupRulesetForCurrentPlayer(cleanupRulesMap) {
+    return saveCleanupRulesetFile(getFullDataFileName(zlib_ash.getvar(CONFIG_NAMES.dataFileName)), cleanupRulesMap);
 }
 
 /**
- * @file Tools for managing `OcdStockRuleset` objects.
+ * @file Tools for managing `StockingRuleset` objects.
  */
 /**
- * Loads an OCD stocking ruleset from a text file into a map.
+ * Loads a stocking ruleset from a text file into a map.
  * @param fileName Path to the data file
- * @return Map of each item to its stocking rule. If the user's OCD stocking
- *    ruleset file is empty or missing, returns `null`.
+ * @return Map of each item to its stocking rule. If the user's stocking ruleset
+ *    file is empty or missing, returns `null`.
  * @throws {TypeError} If the file contains invalid data
  */
 var loadStockingRulesetFile = createMapLoader(function (_a, _, fileName) {
@@ -734,13 +734,13 @@ var loadStockingRulesetFile = createMapLoader(function (_a, _, fileName) {
     return [kolmafia.toItem(itemName), { type: type, amount: amount, category: category }];
 });
 /**
- * Saves a map containing an OCD stocking ruleset to a text file.
+ * Saves a map containing a stocking ruleset to a text file.
  * @param filepath Path to the data file
- * @param stockingRuleset Map of each item to its stocking rule
+ * @param stockingRulesMap Map of each item to its stocking rule
  */
-function saveStockingRulesetFile(filepath, stockingRuleset) {
+function saveStockingRulesetFile(filepath, stockingRulesMap) {
     // Sort entries by item ID in ascending order when saving
-    var buffer = Array.from(stockingRuleset.entries())
+    var buffer = Array.from(stockingRulesMap.entries())
         .sort(function (_a, _b) {
         var _c = __read(_a, 1), itemA = _c[0];
         var _d = __read(_b, 1), itemB = _d[0];
@@ -756,10 +756,10 @@ function saveStockingRulesetFile(filepath, stockingRuleset) {
     }
 }
 /**
- * Loads the OCD stocking ruleset from the stocking ruleset file of the current
+ * Loads the stocking ruleset from the stocking ruleset file of the current
  * player.
- * @return Map of each item to its stocking rule. If the user's OCD stocking
- *    ruleset file is empty or missing, returns `null`.
+ * @return Map of each item to its stocking rule. If the user's stocking ruleset
+ *    file is empty or missing, returns `null`.
  */
 function loadStockingRulesetForCurrentPlayer() {
     return loadStockingRulesetFile(getFullStockFileName(zlib_ash.getvar(CONFIG_NAMES.stockFileName)));
@@ -1347,12 +1347,12 @@ var routes = [
     createRoute(CLEANUP_TABLES_CATEGORIZED_ROUTE, {
         get: function () {
             var e_1, _a, e_2, _b;
-            var ocdRulesMap = loadOcdRulesetForCurrentPlayer();
-            if (!ocdRulesMap || ocdRulesMap.size === 0) {
+            var cleanupRulesMap = loadCleanupRulesetForCurrentPlayer();
+            if (!cleanupRulesMap || cleanupRulesMap.size === 0) {
                 throw new Error('All item information is corrupted or missing. Either you have not yet saved any item data or you lost it.');
             }
             var _c = __read(getInventoryStateWithMaps(), 2), inventory = _c[0], inventoryMaps = _c[1];
-            var categorizedItems = new Set(ocdRulesMap.keys());
+            var categorizedItems = new Set(cleanupRulesMap.keys());
             try {
                 for (var _d = __values(Object.keys(inventoryMaps)), _e = _d.next(); !_e.done; _e = _d.next()) {
                     var key = _e.value;
@@ -1381,9 +1381,9 @@ var routes = [
             }
             return {
                 result: {
-                    ocdRules: itemMapToIdMapping(ocdRulesMap),
+                    cleanupRules: itemMapToIdMapping(cleanupRulesMap),
                     inventory: inventory,
-                    items: Array.from(categorizedItems, function (item) { return toOcdItem(item); }),
+                    items: Array.from(categorizedItems, function (item) { return toItemInfo(item); }),
                 },
             };
         },
@@ -1391,7 +1391,7 @@ var routes = [
     createRoute(CLEANUP_TABLES_UNCATEGORIZED_ROUTE, {
         get: function () {
             var e_3, _a, e_4, _b;
-            var ocdRulesMap = loadOcdRulesetForCurrentPlayer() || new Map();
+            var cleanupRulesMap = loadCleanupRulesetForCurrentPlayer() || new Map();
             var _c = __read(getInventoryStateWithMaps(), 2), inventory = _c[0], inventoryMaps = _c[1];
             var uncategorizedItems = new Set();
             try {
@@ -1401,7 +1401,7 @@ var routes = [
                     try {
                         for (var _f = (e_4 = void 0, __values(itemMap.keys())), _g = _f.next(); !_g.done; _g = _f.next()) {
                             var item = _g.value;
-                            if (!ocdRulesMap.has(item) && ocdCleanup_ash.isOCDable(item)) {
+                            if (!cleanupRulesMap.has(item) && ocdCleanup_ash.isOCDable(item)) {
                                 uncategorizedItems.add(item);
                             }
                         }
@@ -1425,30 +1425,30 @@ var routes = [
             return {
                 result: {
                     inventory: inventory,
-                    items: Array.from(uncategorizedItems, function (item) { return toOcdItem(item); }),
+                    items: Array.from(uncategorizedItems, function (item) { return toItemInfo(item); }),
                 },
             };
         },
     }),
     createRoute(RULESET_ROUTE, {
         post: function (params) {
-            var ocdRulesMap = idMappingToItemMap(params.ocdRules);
-            var success = saveOcdRulesetForCurrentPlayer(ocdRulesMap);
+            var cleanupRulesMap = idMappingToItemMap(params.cleanupRules);
+            var success = saveCleanupRulesetForCurrentPlayer(cleanupRulesMap);
             return success
                 ? { result: { success: success } }
-                : { error: { code: 500, message: 'Cannot save OCD ruleset' } };
+                : { error: { code: 500, message: 'Cannot save cleanup ruleset' } };
         },
         patch: function (params) {
             var e_5, _a;
-            var ocdRulesMap = loadOcdRulesetForCurrentPlayer() || new Map();
+            var cleanupRulesMap = loadCleanupRulesetForCurrentPlayer() || new Map();
             try {
-                for (var _b = __values(idMappingToItemMap(params.ocdRulesPatch)), _c = _b.next(); !_c.done; _c = _b.next()) {
+                for (var _b = __values(idMappingToItemMap(params.cleanupRulesPatch)), _c = _b.next(); !_c.done; _c = _b.next()) {
                     var _d = __read(_c.value, 2), item = _d[0], patch = _d[1];
                     if (patch === null) {
-                        ocdRulesMap.delete(item);
+                        cleanupRulesMap.delete(item);
                     }
                     else {
-                        ocdRulesMap.set(item, patch);
+                        cleanupRulesMap.set(item, patch);
                     }
                 }
             }
@@ -1459,21 +1459,22 @@ var routes = [
                 }
                 finally { if (e_5) throw e_5.error; }
             }
-            var success = saveOcdRulesetForCurrentPlayer(ocdRulesMap);
+            var success = saveCleanupRulesetForCurrentPlayer(cleanupRulesMap);
             return success
                 ? { result: { success: success } }
-                : { error: { code: 500, message: 'Cannot update OCD ruleset' } };
+                : { error: { code: 500, message: 'Cannot update cleanup ruleset' } };
         },
     }),
     createRoute(CONFIG_ROUTE, {
-        get: function () { return ({ result: loadOcdCleanupConfig() }); },
+        get: function () { return ({ result: loadCleanupConfig() }); },
         post: function (request) {
             var config = request.config;
             if (request.shouldCopyDataFiles) {
                 if (config.dataFileName !== zlib_ash.getvar(CONFIG_NAMES.dataFileName)) {
                     // "Copy" file even if the original stocking file is missing or empty
-                    if (!saveOcdRulesetFile(getFullDataFileName(config.dataFileName), loadOcdRulesetForCurrentPlayer() || new Map())) {
-                        throw new Error("Cannot copy OCD ruleset from " + CONFIG_NAMES.dataFileName + " to " + config.dataFileName);
+                    if (!saveCleanupRulesetFile(getFullDataFileName(config.dataFileName), loadCleanupRulesetForCurrentPlayer() ||
+                        new Map())) {
+                        throw new Error("Cannot copy cleanup ruleset from " + CONFIG_NAMES.dataFileName + " to " + config.dataFileName);
                     }
                 }
                 if (config.stockFileName !== zlib_ash.getvar(CONFIG_NAMES.stockFileName)) {
@@ -1482,7 +1483,7 @@ var routes = [
                         new Map());
                 }
             }
-            saveOcdCleanupConfig(config);
+            saveCleanupConfig(config);
             return { result: { success: true } };
         },
     }),
@@ -1492,7 +1493,7 @@ var routes = [
     createRoute(STATISTICS_ROUTE, {
         get: function () {
             var e_6, _a, e_7, _b, e_8, _c;
-            var ocdRulesMap = loadOcdRulesetForCurrentPlayer() || new Map();
+            var cleanupRulesMap = loadCleanupRulesetForCurrentPlayer() || new Map();
             var _d = __read(getInventoryStateWithMaps(), 2), inventoryMaps = _d[1];
             var categorizedItemCounts = {
                 AUTO: 0,
@@ -1511,7 +1512,7 @@ var routes = [
                 USE: 0,
             };
             try {
-                for (var _e = __values(ocdRulesMap.values()), _f = _e.next(); !_f.done; _f = _e.next()) {
+                for (var _e = __values(cleanupRulesMap.values()), _f = _e.next(); !_f.done; _f = _e.next()) {
                     var rule = _f.value;
                     ++categorizedItemCounts[rule.action];
                 }
@@ -1531,7 +1532,7 @@ var routes = [
                     try {
                         for (var _j = (e_8 = void 0, __values(itemMap.keys())), _k = _j.next(); !_k.done; _k = _j.next()) {
                             var item = _k.value;
-                            if (!ocdRulesMap.has(item) && ocdCleanup_ash.isOCDable(item)) {
+                            if (!cleanupRulesMap.has(item) && ocdCleanup_ash.isOCDable(item)) {
                                 uncategorizedItems.add(item);
                             }
                         }
@@ -1617,7 +1618,7 @@ function main() {
         if (requestParameters === null) {
             // If there are no URL parameters, this is probably a request made by a
             // user navigating to our app.
-            // We send the HTML skeleton of the OCD-Cleanup Manager.
+            // We send the HTML skeleton of the Philter Manager.
             send(generateRedirectPage(RELAY_HTML_PATH));
         }
         else {
