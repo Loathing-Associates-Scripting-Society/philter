@@ -153,8 +153,6 @@ var STATISTICS_ROUTE = '/statistics';
 /**
  * Relative path to the directory that contains assets (HTML, CSS, JS) for
  * OCD-Cleanup Manager.
- *
- * Note: This must be kept in sync with `BUILD_PATH` in `/packages/manager/.env`
  */
 var RELAY_DIR = '/ocd-cleanup-manager-2';
 /**

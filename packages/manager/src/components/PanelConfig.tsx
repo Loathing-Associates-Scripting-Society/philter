@@ -101,8 +101,10 @@ const DialogAskCopyOnSave = React.memo(function DialogAskCopyOnSave({
  * Helper function that checks if first value is identical to any of the values
  * in the given array.
  */
-const isOneOf = <T,>(value: unknown, compareWith: readonly T[]): value is T =>
-  compareWith.includes(value as T);
+const isOneOf = <T extends unknown>(
+  value: unknown,
+  compareWith: readonly T[]
+): value is T => compareWith.includes(value as T);
 
 export const PanelConfig = () => {
   const {data: baseConfig, error: loadingError, mutate} = useSWR(
