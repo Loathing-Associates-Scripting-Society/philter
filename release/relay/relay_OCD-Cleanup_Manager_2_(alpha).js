@@ -5,7 +5,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 var kolmafia = require('kolmafia');
 var zlib_ash = require('zlib.ash');
 var ocdCleanup_ash = require('ocd-cleanup.ash');
-var ocdCleanup_util_ash = require('ocd-cleanup.util.ash');
+var philter_util_ash = require('philter.util.ash');
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -473,7 +473,7 @@ function saveOcdCleanupConfig(config) {
         }
         finally { if (e_1) throw e_1.error; }
     }
-    ocdCleanup_util_ash._updateZlibVars(serializedConfig);
+    philter_util_ash._updateZlibVars(serializedConfig);
 }
 
 /**

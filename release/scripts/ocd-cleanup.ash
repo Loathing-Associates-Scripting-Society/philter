@@ -1,7 +1,7 @@
 // OCD Inventory by Bale
 script "ocd-cleanup.ash";
 import "zlib.ash";
-import "relay/ocd-cleanup-manager/ocd-cleanup.util.ash";
+import "relay/philter-manager-classic/philter.util.ash";
 
 // The following variables should be set from the relay script.
 setvar("BaleOCD_MallMulti", "");           // If mall_multi is not empty, then all MALL items will be sent to this multi.

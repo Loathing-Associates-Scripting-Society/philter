@@ -1,9 +1,9 @@
 /**
- * @file Type definitions for functions provided by `ocd-cleanup.util.ash`.
+ * @file Type definitions for functions provided by `philter.util.ash`.
  * This is needed for JavaScript <-> ASH interop.
  */
 
-declare module 'ocd-cleanup.util.ash' {
+declare module 'philter.util.ash' {
   /**
    * Updates multiple ZLib variables.
    * This will only update variables whose values have been changed.

@@ -175,8 +175,8 @@ string write_hidden(string ov, string name) {
 }
 
 void styles() {
-	page.append('<script src="/ocd-cleanup-manager/ocd-cleanup-manager.web.js"></script>\n');
-	page.append('<link rel="stylesheet" href="/ocd-cleanup-manager/styles.css">\n');
+	page.append('<script src="/philter-manager-classic/philter-manager-classic.web.js"></script>\n');
+	page.append('<link rel="stylesheet" href="/philter-manager-classic/philter-manager-classic.css">\n');
 }
 
 void load_OCD() {

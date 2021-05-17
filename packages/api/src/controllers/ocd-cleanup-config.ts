@@ -4,7 +4,7 @@
 
 import {OcdCleanupConfig} from '@ocd-cleanup/common';
 import {toBoolean} from 'kolmafia';
-import {_updateZlibVars} from 'ocd-cleanup.util.ash';
+import {_updateZlibVars} from 'philter.util.ash';
 import {getvar} from 'zlib.ash';
 
 /**
