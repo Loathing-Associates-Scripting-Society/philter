@@ -1,6 +1,6 @@
 /**
- * @file This script provides utility methods for both the OCD Cleanup script
- * and the Relay Manager UI.
+ * @file This script provides utility methods for the ASH version of Philter
+ * and the classic Manager.
  *
  * All function names defined here are prefixed with "_ocd_" to avoid possible
  * conflicts with KoLmafia's library functions and/or scripts.

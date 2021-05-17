@@ -44,7 +44,7 @@ import copy from 'rollup-plugin-copy';
 
 /** @type {import('rollup').RollupOptions} */
 const config = {
-  external: ['kolmafia', 'ocd-cleanup.ash', 'ocd-cleanup.util.ash', 'zlib.ash'],
+  external: ['kolmafia', 'ocd-cleanup.ash', 'philter.util.ash', 'zlib.ash'],
   input: 'src/index.ts',
   output: {
     // To take advantage of TypeScript's incremental build mode, we must allow
