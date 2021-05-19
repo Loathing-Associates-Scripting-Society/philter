@@ -12,7 +12,7 @@ import {
   Radio,
   RadioGroup,
 } from '@blueprintjs/core';
-import {CONFIG_ROUTE, OcdCleanupConfig} from '@ocd-cleanup/common';
+import {CONFIG_ROUTE, OcdCleanupConfig} from '@philter/common';
 import classNames from 'classnames';
 import {dequal} from 'dequal/lite';
 import React, {memo, useCallback, useEffect, useState} from 'react';

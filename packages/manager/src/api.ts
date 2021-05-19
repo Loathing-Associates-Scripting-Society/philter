@@ -19,7 +19,7 @@ import {
   Routes,
   RULESET_ROUTE,
   STATISTICS_ROUTE,
-} from '@ocd-cleanup/common';
+} from '@philter/common';
 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
@@ -41,7 +41,7 @@ export class ApiError extends Error {
 ApiError.prototype.name = 'ApiError';
 
 /**
- * Fetches data using routes and methods defined in `@ocd-cleanup/common`.
+ * Fetches data using routes and methods defined in `@philter/common`.
  * @param path Request route
  * @param method Request method
  * @return Asynchronous fetcher callback

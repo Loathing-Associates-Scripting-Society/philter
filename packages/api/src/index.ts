@@ -2,7 +2,7 @@ import {
   ErrorResponseBase,
   RELAY_HTML_PATH,
   unwrapDeserializedRequest,
-} from '@ocd-cleanup/common';
+} from '@philter/common';
 import {formFields, gametimeToInt, myName, write} from 'kolmafia';
 import {debug, error} from './logging';
 import {routes} from './routes';

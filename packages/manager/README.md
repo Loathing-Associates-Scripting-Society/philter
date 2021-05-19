@@ -1,4 +1,4 @@
-# @ocd-cleanup/manager
+# @philter/manager
 
 This project was bootstrapped with [@vite/create-app](https://github.com/vitejs/vite/tree/main/packages/create-app) 2.3.0.
 

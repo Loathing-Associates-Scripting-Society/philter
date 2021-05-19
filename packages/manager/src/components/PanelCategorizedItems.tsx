@@ -5,7 +5,7 @@ import {
   OcdRule,
   OcdRuleset,
   ReadonlyOcdRuleset,
-} from '@ocd-cleanup/common';
+} from '@philter/common';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useAsyncCallback} from 'react-async-hook';
 import useSWR from 'swr';

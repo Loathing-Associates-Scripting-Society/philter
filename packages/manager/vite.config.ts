@@ -2,7 +2,7 @@
 import reactRefresh from '@vitejs/plugin-react-refresh';
 import del from 'rollup-plugin-delete';
 import {defineConfig} from 'vite';
-// Import @ocd-cleanup/common using a relative path. This is a hack, btw.
+// Import @philter/common using a relative path. This is a hack, btw.
 // File extension is required to make this work in Node.js v12 AND v14.
 import {RELAY_DIR, RELAY_HTML_FILE} from '../common/build/src/index.js';
 

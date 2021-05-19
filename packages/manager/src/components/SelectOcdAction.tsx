@@ -1,5 +1,5 @@
 import {Colors, HTMLSelect} from '@blueprintjs/core';
-import {isOcdAction, OcdAction, OcdItem} from '@ocd-cleanup/common';
+import {isOcdAction, OcdAction, OcdItem} from '@philter/common';
 import classNames from 'classnames';
 import React, {memo} from 'react';
 import {shouldWarnOnPulverize, typeCheck} from '../util';

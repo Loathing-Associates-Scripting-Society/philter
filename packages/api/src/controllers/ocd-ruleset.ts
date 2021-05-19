@@ -2,7 +2,7 @@
  * @file Tools for managing `OcdRuleset` objects.
  */
 
-import {isOcdAction, OcdRule} from '@ocd-cleanup/common';
+import {isOcdAction, OcdRule} from '@philter/common';
 import {bufferToFile, myName, toBoolean, toInt, toItem} from 'kolmafia';
 import {getvar} from 'zlib.ash';
 import {createMapLoader, encodeItem} from '../util';

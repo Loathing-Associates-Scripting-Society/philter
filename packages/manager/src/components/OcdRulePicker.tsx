@@ -5,7 +5,7 @@ import {
   Intent,
   NumericInput,
 } from '@blueprintjs/core';
-import {OcdItem, OcdRule} from '@ocd-cleanup/common';
+import {OcdItem, OcdRule} from '@philter/common';
 import React, {useCallback} from 'react';
 import {MAX_MALL_PRICE, shouldWarnOnPulverize} from '../util';
 import './OcdRulePicker.css';

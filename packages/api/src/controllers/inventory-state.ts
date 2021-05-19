@@ -2,7 +2,7 @@
  * @file Tools for managing `InventoryState` objects.
  */
 
-import {InventoryState} from '@ocd-cleanup/common';
+import {InventoryState} from '@philter/common';
 import {
   getCloset,
   haveDisplay,

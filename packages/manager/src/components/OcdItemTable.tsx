@@ -13,7 +13,7 @@ import {
   OcdRuleset,
   ReadonlyInventoryState,
   ReadonlyOcdRuleset,
-} from '@ocd-cleanup/common';
+} from '@philter/common';
 import classNames from 'classnames';
 import React, {memo, useCallback, useEffect, useMemo, useRef} from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';

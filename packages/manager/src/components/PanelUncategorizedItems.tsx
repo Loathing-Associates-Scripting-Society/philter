@@ -6,10 +6,7 @@ import {
   NonIdealState,
   Spinner,
 } from '@blueprintjs/core';
-import {
-  CLEANUP_TABLES_UNCATEGORIZED_ROUTE,
-  OcdRuleset,
-} from '@ocd-cleanup/common';
+import {CLEANUP_TABLES_UNCATEGORIZED_ROUTE, OcdRuleset} from '@philter/common';
 import {dequal} from 'dequal/lite';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useAsyncCallback} from 'react-async-hook';

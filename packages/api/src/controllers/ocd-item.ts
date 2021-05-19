@@ -2,7 +2,7 @@
  * @file Tools for managing `OcdItem` objects.
  */
 
-import {OcdItem} from '@ocd-cleanup/common';
+import {OcdItem} from '@philter/common';
 import {
   fileToArray,
   toItem,

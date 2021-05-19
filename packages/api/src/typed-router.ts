@@ -10,7 +10,7 @@ import {
   Response,
   ResponseBase,
   Routes,
-} from '@ocd-cleanup/common';
+} from '@philter/common';
 import UniversalRouterSync from 'universal-router/sync';
 
 /**

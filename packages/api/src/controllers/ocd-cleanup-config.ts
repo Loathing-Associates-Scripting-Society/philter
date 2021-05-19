@@ -2,7 +2,7 @@
  * @file Tools for managing `OcdCleanupConfig` objects.
  */
 
-import {OcdCleanupConfig} from '@ocd-cleanup/common';
+import {OcdCleanupConfig} from '@philter/common';
 import {toBoolean} from 'kolmafia';
 import {_updateZlibVars} from 'philter.util.ash';
 import {getvar} from 'zlib.ash';

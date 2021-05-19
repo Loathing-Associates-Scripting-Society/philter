@@ -2,11 +2,11 @@
  * @file Rollup configuration for building OCD-Cleanup's relay API script
  * (Written in JavaScript to avoid an extra compilation step)
  *
- * This script imports build constants from @ocd-cleanup/common, which is a
- * native ESM package.
+ * This script imports build constants from @philter/common, which is a native
+ * ESM package.
  * Unfortunately, Rollup transpiles the config file from ESM to CJS before
- * running it. The transpiled code (CJS) attempts to load @ocd-cleanup/common
- * using require(), which fails because Node.js disallows loading ESM from CJS.
+ * running it. The transpiled code (CJS) attempts to load @philter/common using
+ * require(), which fails because Node.js disallows loading ESM from CJS.
  *
  * ## Solution 1
  * Prevent Rollup from transpiling the config file before passing it to Node.js.
@@ -24,8 +24,8 @@
  * (See: https://rollupjs.org/guide/en/#using-untranspiled-config-files)
  *
  * ## Solution 2
- * Alternatively, we can directly import the ESM code from @ocd-cleanup/common
- * using a relative path. This allows Rollup to transpile the ESM.
+ * Alternatively, we can directly import the ESM code from @philter/common using
+ * a relative path. This allows Rollup to transpile the ESM.
  *
  * This allows us to keep the `.js` extension, and support Node.js v12.
  * This is the hack will use until Node.js v12 reaches EOL or Rollup provides
@@ -34,7 +34,7 @@
 
 /* eslint-disable node/no-unpublished-import */
 /* eslint-disable node/no-unsupported-features/es-syntax */
-// Import @ocd-cleanup/common using a relative path. This is a hack, btw.
+// Import @philter/common using a relative path. This is a hack, btw.
 // File extension is required to make this work in Node.js v12 AND v14.
 // eslint-disable-next-line node/no-missing-import
 import {RELAY_SCRIPT_FILE} from '../common/build/src/index.js';

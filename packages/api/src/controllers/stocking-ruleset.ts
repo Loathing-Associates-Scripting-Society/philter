@@ -6,7 +6,7 @@
  * @file Tools for managing `OcdRuleset` objects.
  */
 
-import {StockingRule} from '@ocd-cleanup/common';
+import {StockingRule} from '@philter/common';
 import {bufferToFile, toInt, toItem} from 'kolmafia';
 import {getvar} from 'zlib.ash';
 import {createMapLoader, encodeItem} from '../util';

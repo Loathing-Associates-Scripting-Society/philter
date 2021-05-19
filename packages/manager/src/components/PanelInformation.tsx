@@ -6,7 +6,7 @@ import {
   NonIdealState,
   Spinner,
 } from '@blueprintjs/core';
-import {STATISTICS_ROUTE} from '@ocd-cleanup/common';
+import {STATISTICS_ROUTE} from '@philter/common';
 import React, {useMemo} from 'react';
 import useSWR from 'swr';
 import {fetchGetStatistics} from '../api';

@@ -2,7 +2,7 @@
  * @file Utilities that don't quite fit anywhere else.
  */
 
-import {OcdAction, OcdItem} from '@ocd-cleanup/common';
+import {OcdAction, OcdItem} from '@philter/common';
 
 /**
  * Maximum possible mallsell price for any item.

@@ -12,7 +12,7 @@ import {
   RULESET_ROUTE,
   STATISTICS_ROUTE,
   StockingRule,
-} from '@ocd-cleanup/common';
+} from '@philter/common';
 import {isOCDable} from 'ocd-cleanup.ash';
 import {getvar} from 'zlib.ash';
 import {
