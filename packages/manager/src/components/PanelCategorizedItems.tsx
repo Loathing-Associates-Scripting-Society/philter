@@ -119,9 +119,6 @@ const EMPTY_OCD_RULES = Object.freeze({});
  * Panel for editing the player's OCD-Cleanup ruleset.
  */
 export const PanelCategorizedItems = (): JSX.Element => {
-  // Providing default values is not ideal.
-  // TODO: Add "loading" and "network error" states to <TabbedOcdRulesetEditor>
-  // and handle network errors properly.
   const {data, error: loadingError, isValidating: isLoading, mutate} = useSWR(
     CLEANUP_TABLES_CATEGORIZED_ROUTE,
     async () => {
