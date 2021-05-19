@@ -1,5 +1,5 @@
 /**
- * @file Supporting script for relay_OCD_dB_Manager.ash.
+ * @file Supporting script for Philter Manager classic.
  * This is meant to be served to a web browser, not executed by KoLmafia!
  */
 

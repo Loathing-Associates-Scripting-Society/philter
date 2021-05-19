@@ -60,7 +60,7 @@ export const PanelInformation = (): JSX.Element => {
         your own risk.
         <br />
         The{' '}
-        <a href="/relay_OCD-Cleanup_Manager.ash?relay=true">
+        <a href="/relay_Philter_Manager_classic.ash?relay=true">
           classic OCD-Cleanup Manager
         </a>{' '}
         is still available.
