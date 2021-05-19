@@ -1,5 +1,5 @@
 {
-  "name": "@ocd-cleanup/manager",
+  "name": "@philter/manager",
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:60080",
@@ -53,7 +53,7 @@
   "dependencies": {
     "@blueprintjs/core": "^3.44.0",
     "@blueprintjs/popover2": "^0.6.0",
-    "@ocd-cleanup/common": "*",
+    "@philter/common": "*",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^13.1.5",

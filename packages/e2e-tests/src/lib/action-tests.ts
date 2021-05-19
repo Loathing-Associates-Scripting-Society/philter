@@ -41,7 +41,7 @@ import {
  * 4. `verify()`
  * 5. `teardown()`
  */
-export interface OcdActionTest {
+export interface CleanupActionTest {
   /** Item to test this action with. */
   readonly item: Item;
 
@@ -93,7 +93,7 @@ export interface OcdActionTest {
 /**
  * Interface of tests for actions that support the "keep X of item" feature.
  */
-export interface OcdActionTestWithKeep extends OcdActionTest {
+export interface OcdActionTestWithKeep extends CleanupActionTest {
   readonly keepAmount: number;
 }
 
@@ -111,7 +111,7 @@ function verifyKeepAmount(
   const beforeClosetAmount = before.closet.get(item) || 0;
   const afterAmount = after.inventory.get(item) || 0;
 
-  // OCD-Cleanup considers any items in the closet to count toward against the
+  // Philter considers any items in the closet to count toward against the
   // keepAmount limit
   const actualKeepAmount = Math.max(keepAmount - beforeClosetAmount, 0);
   const expectedAfterAmount = Math.min(beforeAmount, actualKeepAmount);
@@ -125,7 +125,7 @@ function verifyKeepAmount(
 /**
  * Test case that verifies the AUTO (autosell) action.
  */
-export class AutosellTest implements OcdActionTest {
+export class AutosellTest implements CleanupActionTest {
   readonly item: Item;
   readonly name = 'AUTO';
   readonly keepAmount: number;
@@ -165,7 +165,7 @@ export class AutosellTest implements OcdActionTest {
 /**
  * Test case that verifies the BREAK (break apart BRICKO item) action.
  */
-export class BrickoBreakTest implements OcdActionTest {
+export class BrickoBreakTest implements CleanupActionTest {
   readonly item: Item;
   readonly name = 'BREAK';
   readonly keepAmount: number;
@@ -220,7 +220,7 @@ export class BrickoBreakTest implements OcdActionTest {
 /**
  * Test case that verifies the CLST (closet) action.
  */
-export class ClosetTest implements OcdActionTest {
+export class ClosetTest implements CleanupActionTest {
   readonly item: Item;
   readonly name = 'CLST';
   readonly keepAmount: number;
@@ -276,7 +276,7 @@ export class ClosetTest implements OcdActionTest {
 /**
  * Test case that verifies the DISP (display case) action.
  */
-export class DisplayTest implements OcdActionTest {
+export class DisplayTest implements CleanupActionTest {
   readonly item: Item;
   readonly name = 'DISP';
   readonly keepAmount: number;
@@ -336,7 +336,7 @@ export class DisplayTest implements OcdActionTest {
 /**
  * Test case that verifies the DISC (discard) action.
  */
-export class DiscardTest implements OcdActionTest {
+export class DiscardTest implements CleanupActionTest {
   readonly item: Item;
   readonly name = 'DISC';
   readonly keepAmount: number;
@@ -380,7 +380,7 @@ export class DiscardTest implements OcdActionTest {
 /**
  * Test case that verifies the GIFT (send to player) action.
  */
-export class GiftTest implements OcdActionTest {
+export class GiftTest implements CleanupActionTest {
   readonly player: string;
   readonly item: Item;
   readonly name = 'GIFT';
@@ -453,7 +453,7 @@ export class GiftTest implements OcdActionTest {
 /**
  * Test case that verifies the MAKE (transform to another item) action.
  */
-export class MakeTest implements OcdActionTest {
+export class MakeTest implements CleanupActionTest {
   readonly item: Item;
   readonly targetItem: Item;
   readonly name = 'MAKE';
@@ -530,7 +530,7 @@ export class MakeTest implements OcdActionTest {
 /**
  * Test case that verifies the MALL (put in mall store/shop) action.
  */
-export class MallTest implements OcdActionTest {
+export class MallTest implements CleanupActionTest {
   readonly item: Item;
   readonly name = 'MALL';
   readonly keepAmount: number;
@@ -588,7 +588,7 @@ export class MallTest implements OcdActionTest {
 /**
  * Test case that verifies the PULV (pulverize) action.
  */
-export class PulverizeTest implements OcdActionTest {
+export class PulverizeTest implements CleanupActionTest {
   readonly item: Item;
   readonly name = 'PULV';
   readonly keepAmount: number;
@@ -649,7 +649,7 @@ export class PulverizeTest implements OcdActionTest {
 /**
  * Test case that verifies the CLAN (clan stash) action.
  */
-export class StashTest implements OcdActionTest {
+export class StashTest implements CleanupActionTest {
   readonly item: Item;
   readonly name = 'CLAN';
   readonly keepAmount: number;
@@ -709,7 +709,7 @@ export class StashTest implements OcdActionTest {
  * Test case that verifies the TODO action.
  * Since we can't parse the CLI output yet, this technically does nothing.
  */
-export class TodoTest implements OcdActionTest {
+export class TodoTest implements CleanupActionTest {
   readonly item: Item;
   readonly name = 'TODO';
 
@@ -760,7 +760,7 @@ export class TodoTest implements OcdActionTest {
 /**
  * Test case that verifies the KEEP action.
  */
-export class KeepTest implements OcdActionTest {
+export class KeepTest implements CleanupActionTest {
   readonly item: Item;
   readonly name = 'KEEP';
 
@@ -807,7 +807,7 @@ export class KeepTest implements OcdActionTest {
 /**
  * Test case that verifies the UNTN (untinker) action.
  */
-export class UntinkerTest implements OcdActionTest {
+export class UntinkerTest implements CleanupActionTest {
   readonly item: Item;
   readonly name = 'UNTN';
   readonly keepAmount: number;
@@ -861,7 +861,7 @@ export class UntinkerTest implements OcdActionTest {
 /**
  * Test case that verifies the USE action.
  */
-export class UseTest implements OcdActionTest {
+export class UseTest implements CleanupActionTest {
   readonly item: Item;
   readonly name = 'USE';
   readonly keepAmount: number;

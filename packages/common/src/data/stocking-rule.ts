@@ -1,9 +1,9 @@
-/** Base interface for OCD stocking rule. */
+/** Base interface for stocking rule. */
 export interface StockingRule {
   /**
-   * Type of stocking rule (i.e. "Purpose" in OCD-Cleanup manager).
-   * This is used to sort and group stocking rules in the OCD-Cleanup Manager.
-   * It does not have any significance during the execution of OCD-Cleanup.
+   * Type of stocking rule (i.e. "Purpose" in Philter manager).
+   * This is used to sort and group stocking rules in the Philter Manager.
+   * It does not have any significance during the execution of Philter.
    */
   type: string;
   /** Quantity of item to stock up. */

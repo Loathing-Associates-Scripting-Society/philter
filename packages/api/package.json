@@ -1,5 +1,5 @@
 {
-  "name": "@ocd-cleanup/api",
+  "name": "@philter/api",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -19,7 +19,7 @@
     }
   },
   "dependencies": {
-    "@ocd-cleanup/common": "*",
+    "@philter/common": "*",
     "kolmafia": "npm:kolmafia-types@^0.1.0",
     "universal-router": "^9.0.1"
   },

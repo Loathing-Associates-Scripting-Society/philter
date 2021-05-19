@@ -12,20 +12,20 @@ import {
   Radio,
   RadioGroup,
 } from '@blueprintjs/core';
-import {CONFIG_ROUTE, OcdCleanupConfig} from '@ocd-cleanup/common';
+import {CONFIG_ROUTE, PhilterConfig} from '@philter/common';
 import classNames from 'classnames';
 import {dequal} from 'dequal/lite';
 import React, {memo, useCallback, useEffect, useState} from 'react';
 import {useAsyncCallback} from 'react-async-hook';
 import useSWR from 'swr';
-import {fetchGetOcdCleanupConfig, fetchSaveOcdCleanupConfig} from '../api';
+import {fetchGetPhilterConfig, fetchSavePhilterConfig} from '../api';
 import {setErrorToast, setSavingToast} from '../toaster';
 import {MAX_MALL_PRICE, ZWSP} from '../util';
 import {InputGroupAffixedFileName} from './InputGroupAffixedFileName';
 import './PanelConfig.css';
 
-const OCD_RULESET_PREFIX = 'OCDdata_';
-const OCD_STOCK_PREFIX = 'OCDstock_';
+const CLEANUP_RULESET_PREFIX = 'OCDdata_';
+const STOCKING_RULESET_PREFIX = 'OCDstock_';
 const TXT_SUFFIX = '.txt';
 
 interface ChangedFileEntry {
@@ -37,7 +37,7 @@ interface ChangedFileEntry {
 
 /**
  * A `<Dialog>` that asks whether to copy over existing data or start fresh when
- * the user changes the name of an OCD data file.
+ * the user changes the name of the ruleset file(s).
  * To properly animate closing transitions, this must be rendered even if the
  * dialog is closed.
  */
@@ -110,10 +110,10 @@ const isOneOf = <T extends unknown>(
 export const PanelConfig = (): JSX.Element => {
   const {data: baseConfig, error: loadingError, mutate} = useSWR(
     CONFIG_ROUTE,
-    async () => (await fetchGetOcdCleanupConfig()).result
+    async () => (await fetchGetPhilterConfig()).result
   );
 
-  const [config, setConfig] = useState<OcdCleanupConfig | null>(null);
+  const [config, setConfig] = useState<PhilterConfig | null>(null);
   // When the data is loaded for the first time, synchronize config with
   // the server-sent config
   useEffect(() => {
@@ -151,15 +151,18 @@ export const PanelConfig = (): JSX.Element => {
         if (config.dataFileName !== baseConfig.dataFileName) {
           changedFiles.push({
             label: 'Ruleset file',
-            oldName: OCD_RULESET_PREFIX + baseConfig.dataFileName + TXT_SUFFIX,
-            newName: OCD_RULESET_PREFIX + config.dataFileName + TXT_SUFFIX,
+            oldName:
+              CLEANUP_RULESET_PREFIX + baseConfig.dataFileName + TXT_SUFFIX,
+            newName: CLEANUP_RULESET_PREFIX + config.dataFileName + TXT_SUFFIX,
           });
         }
         if (config.stockFileName !== baseConfig.stockFileName) {
           changedFiles.push({
             label: 'Stock file',
-            oldName: OCD_STOCK_PREFIX + baseConfig.stockFileName + TXT_SUFFIX,
-            newName: OCD_STOCK_PREFIX + config.stockFileName + TXT_SUFFIX,
+            oldName:
+              STOCKING_RULESET_PREFIX + baseConfig.stockFileName + TXT_SUFFIX,
+            newName:
+              STOCKING_RULESET_PREFIX + config.stockFileName + TXT_SUFFIX,
           });
         }
 
@@ -170,7 +173,7 @@ export const PanelConfig = (): JSX.Element => {
           return;
         }
 
-        const response = await fetchSaveOcdCleanupConfig(
+        const response = await fetchSavePhilterConfig(
           config,
           shouldCopyDataFiles
         );
@@ -185,7 +188,7 @@ export const PanelConfig = (): JSX.Element => {
 
   const hasChanges = !dequal(config, baseConfig);
   const setConfigSafe = useCallback(
-    (configOrReducer: React.SetStateAction<OcdCleanupConfig>) =>
+    (configOrReducer: React.SetStateAction<PhilterConfig>) =>
       setConfig(
         typeof configOrReducer === 'function'
           ? config => config && configOrReducer(config)
@@ -223,7 +226,7 @@ export const PanelConfig = (): JSX.Element => {
         }}
         {...dialogProps}
       />
-      <H3>Configure OCD-Cleanup</H3>
+      <H3>Configure Philter</H3>
 
       <fieldset className="PanelConfig__Section">
         <legend className="PanelConfig__SectionTitle">General settings</legend>
@@ -370,7 +373,7 @@ export const PanelConfig = (): JSX.Element => {
               !config && Classes.SKELETON
             )}
             disabled={isDisabled}
-            fileNamePrefix={OCD_RULESET_PREFIX}
+            fileNamePrefix={CLEANUP_RULESET_PREFIX}
             fileNameSuffix={TXT_SUFFIX}
             onChange={useCallback(
               ({target: {value}}) =>
@@ -392,7 +395,7 @@ export const PanelConfig = (): JSX.Element => {
               !config && Classes.SKELETON
             )}
             disabled={isDisabled}
-            fileNamePrefix={OCD_STOCK_PREFIX}
+            fileNamePrefix={STOCKING_RULESET_PREFIX}
             fileNameSuffix={TXT_SUFFIX}
             onChange={useCallback(
               ({target: {value}}) =>

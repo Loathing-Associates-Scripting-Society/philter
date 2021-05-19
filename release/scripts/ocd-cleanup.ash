@@ -23,10 +23,10 @@ setvar("BaleOCD_RunIfRoninOrHC", "ask");   // Controls whether to run OCD-Cleanu
 
 // Check version! This will check both scripts and data files.
 // This code is at base level so that the relay script's importation will automatically cause it to be run.
-string __OCD_PROJECT_NAME__ = "Loathing-Associates-Scripting-Society-OCD-Inventory-Control-trunk-release";
+string __OCD_PROJECT_NAME__ = "Loathing-Associates-Scripting-Society-philter-trunk-release";
 if(svn_exists(__OCD_PROJECT_NAME__) && get_property("_svnUpdated") == "false" && get_property("_ocdUpdated") != "true") {
 	if(!svn_at_head(__OCD_PROJECT_NAME__)) {
-		print("OCD-Cleanup has become outdated. Automatically updating from SVN...", _ocd_color_error());
+		print("Philter has become outdated. Automatically updating from SVN...", _ocd_color_error());
 		cli_execute("svn update " + __OCD_PROJECT_NAME__);
 		print("On the script's next invocation it will be up to date.", _ocd_color_success());
 	}

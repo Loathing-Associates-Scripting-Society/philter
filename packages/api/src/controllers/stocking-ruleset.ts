@@ -1,22 +1,18 @@
 /**
- * @file Tools for managing `OcdStockRuleset` objects.
+ * @file Tools for managing `StockingRuleset` objects.
  */
 
-/**
- * @file Tools for managing `OcdRuleset` objects.
- */
-
-import {StockingRule} from '@ocd-cleanup/common';
+import {StockingRule} from '@philter/common';
 import {bufferToFile, toInt, toItem} from 'kolmafia';
 import {getvar} from 'zlib.ash';
 import {createMapLoader, encodeItem} from '../util';
-import {CONFIG_NAMES, getFullStockFileName} from './ocd-cleanup-config';
+import {CONFIG_NAMES, getFullStockFileName} from './philter-config';
 
 /**
- * Loads an OCD stocking ruleset from a text file into a map.
+ * Loads a stocking ruleset from a text file into a map.
  * @param fileName Path to the data file
- * @return Map of each item to its stocking rule. If the user's OCD stocking
- *    ruleset file is empty or missing, returns `null`.
+ * @return Map of each item to its stocking rule. If the user's stocking ruleset
+ *    file is empty or missing, returns `null`.
  * @throws {TypeError} If the file contains invalid data
  */
 const loadStockingRulesetFile = createMapLoader(
@@ -37,16 +33,16 @@ const loadStockingRulesetFile = createMapLoader(
 );
 
 /**
- * Saves a map containing an OCD stocking ruleset to a text file.
+ * Saves a map containing a stocking ruleset to a text file.
  * @param filepath Path to the data file
- * @param stockingRuleset Map of each item to its stocking rule
+ * @param stockingRulesMap Map of each item to its stocking rule
  */
 export function saveStockingRulesetFile(
   filepath: string,
-  stockingRuleset: ReadonlyMap<Item, Readonly<StockingRule>>
+  stockingRulesMap: ReadonlyMap<Item, Readonly<StockingRule>>
 ) {
   // Sort entries by item ID in ascending order when saving
-  const buffer = Array.from(stockingRuleset.entries())
+  const buffer = Array.from(stockingRulesMap.entries())
     .sort(([itemA], [itemB]) => toInt(itemA) - toInt(itemB))
     .map(([item, rule]) =>
       [encodeItem(item), rule.type, rule.amount, rule.category].join('\t')
@@ -59,10 +55,10 @@ export function saveStockingRulesetFile(
 }
 
 /**
- * Loads the OCD stocking ruleset from the stocking ruleset file of the current
+ * Loads the stocking ruleset from the stocking ruleset file of the current
  * player.
- * @return Map of each item to its stocking rule. If the user's OCD stocking
- *    ruleset file is empty or missing, returns `null`.
+ * @return Map of each item to its stocking rule. If the user's stocking ruleset
+ *    file is empty or missing, returns `null`.
  */
 export function loadStockingRulesetForCurrentPlayer() {
   return loadStockingRulesetFile(
@@ -71,15 +67,15 @@ export function loadStockingRulesetForCurrentPlayer() {
 }
 
 /**
- * Writes the OCD stocking ruleset to the stocking ruleset file of the current
+ * Writes the stocking ruleset to the stocking ruleset file of the current
  * player.
- * @param stockingRuleset OCD stocking ruleset to save
+ * @param stockingRulesMap Stocking ruleset to save
  */
 export function saveStockingRulesetForCurrentPlayer(
-  stockingRuleset: ReadonlyMap<Item, Readonly<StockingRule>>
+  stockingRulesMap: ReadonlyMap<Item, Readonly<StockingRule>>
 ) {
   return saveStockingRulesetFile(
     getFullStockFileName(getvar(CONFIG_NAMES.stockFileName)),
-    stockingRuleset
+    stockingRulesMap
   );
 }

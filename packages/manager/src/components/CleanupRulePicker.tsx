@@ -5,35 +5,37 @@ import {
   Intent,
   NumericInput,
 } from '@blueprintjs/core';
-import {OcdItem, OcdRule} from '@ocd-cleanup/common';
+import {ItemInfo, CleanupRule} from '@philter/common';
 import React, {useCallback} from 'react';
 import {MAX_MALL_PRICE, shouldWarnOnPulverize} from '../util';
-import './OcdRulePicker.css';
+import './CleanupRulePicker.css';
 import {
-  OcdActionOrUnknown,
-  SelectOcdAction,
-  UNKNOWN_OCD_ACTION,
-} from './SelectOcdAction';
+  CleanupActionOrUnknown,
+  SelectCleanupAction,
+  UNKNOWN_CLEANUP_ACTION,
+} from './SelectCleanupAction';
 
 // Note: We use one condition per each conditional option, which allows the
 // backend to decide what can be done with each item.
-export const OcdRulePicker = ({
+export const CleanupRulePicker = ({
   item,
   rule,
   onChange,
 }: {
-  item: Readonly<OcdItem>;
+  item: Readonly<ItemInfo>;
   /**
    * Callback that accepts a new rule, or `null` if the user changed the rule
    * to "(uncategorized)".
    * The argument is the new rule, or an updater function that takes the
-   * previous OCD rule as argument and returns a new OCD rule.
+   * previous rule as argument and returns a new rule.
    */
-  onChange?: (newRuleOrReducer: React.SetStateAction<OcdRule | null>) => void;
-  rule: Readonly<OcdRule> | null;
+  onChange?: (
+    newRuleOrReducer: React.SetStateAction<CleanupRule | null>
+  ) => void;
+  rule: Readonly<CleanupRule> | null;
 }): JSX.Element => {
   const handleActionChange = useCallback(
-    (action: OcdActionOrUnknown) => {
+    (action: CleanupActionOrUnknown) => {
       if (!onChange) return;
       onChange(oldRule => {
         if (action === oldRule?.action) return oldRule;
@@ -44,7 +46,7 @@ export const OcdRulePicker = ({
         // the user switches an action. This may be undesirable...perhaps use
         // some internal state to maintain this, or let the parent component
         // handle it?
-        if (action === UNKNOWN_OCD_ACTION) {
+        if (action === UNKNOWN_CLEANUP_ACTION) {
           return null;
         } else if (action === 'GIFT') {
           return {...oldRule, action, message: '', recipent: ''};
@@ -82,7 +84,7 @@ export const OcdRulePicker = ({
 
   return (
     <FormGroup
-      className="OcdRulePicker"
+      className="CleanupRulePicker"
       helperText={helperText}
       intent={intent}
     >
@@ -90,26 +92,26 @@ export const OcdRulePicker = ({
           helper text <div>, which is injected by the outer <FormGroup>.
           This separation allows the children to be arranged on a single "row"
           with the helper text under them. */}
-      <div className="OcdRulePicker__Inputs">
-        <SelectOcdAction
-          className="OcdRulePicker__Child"
+      <div className="CleanupRulePicker__Inputs">
+        <SelectCleanupAction
+          className="CleanupRulePicker__Child"
           item={item}
           onChange={handleActionChange}
-          value={rule ? rule.action : UNKNOWN_OCD_ACTION}
+          value={rule ? rule.action : UNKNOWN_CLEANUP_ACTION}
         />
 
         {!rule ? null : rule.action === 'GIFT' ? (
           <>
             <FormGroup
-              className="OcdRulePicker__Child"
-              contentClassName="OcdRulePicker__InputGiftRecipent"
+              className="CleanupRulePicker__Child"
+              contentClassName="CleanupRulePicker__InputGiftRecipent"
               helperText={!rule.recipent && 'No recipent name'}
               inline
               intent={rule.recipent ? undefined : Intent.DANGER}
               label="to"
             >
               <InputGroup
-                className="OcdRulePicker__InputText"
+                className="CleanupRulePicker__InputText"
                 intent={rule.recipent ? undefined : Intent.DANGER}
                 onChange={e => onChange?.({...rule, recipent: e.target.value})}
                 placeholder="Player name"
@@ -118,13 +120,13 @@ export const OcdRulePicker = ({
               />
             </FormGroup>
             <FormGroup
-              className="OcdRulePicker__Child"
-              contentClassName="OcdRulePicker__InputGiftMessage"
+              className="CleanupRulePicker__Child"
+              contentClassName="CleanupRulePicker__InputGiftMessage"
               inline
               label="with"
             >
               <InputGroup
-                className="OcdRulePicker__InputText"
+                className="CleanupRulePicker__InputText"
                 onChange={e => onChange?.({...rule, message: e.target.value})}
                 placeholder="Kmail message"
                 small
@@ -135,15 +137,15 @@ export const OcdRulePicker = ({
         ) : rule.action === 'MAKE' ? (
           <>
             <FormGroup
-              className="OcdRulePicker__Child"
-              contentClassName="OcdRulePicker__InputMakeTarget"
+              className="CleanupRulePicker__Child"
+              contentClassName="CleanupRulePicker__InputMakeTarget"
               helperText={!rule.targetItem && 'No item name'}
               inline
               intent={!rule.targetItem ? Intent.DANGER : undefined}
               label="into"
             >
               <InputGroup
-                className="OcdRulePicker__InputText"
+                className="CleanupRulePicker__InputText"
                 intent={!rule.targetItem ? Intent.DANGER : undefined}
                 onChange={e =>
                   onChange?.({...rule, targetItem: e.target.value})
@@ -155,7 +157,7 @@ export const OcdRulePicker = ({
             </FormGroup>
             <Checkbox
               checked={rule.shouldUseCreatableOnly}
-              className="OcdRulePicker__Child OcdRulePicker__Checkbox"
+              className="CleanupRulePicker__Child CleanupRulePicker__Checkbox"
               onChange={e =>
                 onChange?.({
                   ...rule,
@@ -163,15 +165,15 @@ export const OcdRulePicker = ({
                 })
               }
             >
-              <span className="OcdRulePicker__CheckBoxText">
+              <span className="CleanupRulePicker__CheckBoxText">
                 Only use available ingredients
               </span>
             </Checkbox>
           </>
         ) : rule.action === 'MALL' ? (
           <FormGroup
-            className="OcdRulePicker__Child"
-            contentClassName="OcdRulePicker__InputMallMinPrice"
+            className="CleanupRulePicker__Child"
+            contentClassName="CleanupRulePicker__InputMallMinPrice"
             inline
             label="min price"
           >
@@ -194,13 +196,13 @@ export const OcdRulePicker = ({
           </FormGroup>
         ) : rule.action === 'TODO' ? (
           <FormGroup
-            className="OcdRulePicker__Child"
-            contentClassName="OcdRulePicker__InputTodoMessage"
+            className="CleanupRulePicker__Child"
+            contentClassName="CleanupRulePicker__InputTodoMessage"
             inline
             label="with message:"
           >
             <InputGroup
-              className="OcdRulePicker__InputText"
+              className="CleanupRulePicker__InputText"
               onChange={e => onChange?.({...rule, message: e.target.value})}
               placeholder="Enter reminder message"
               small

@@ -8,10 +8,10 @@ import {
   CONFIG_ROUTE,
   ErrorResponseBase,
   INVENTORY_ROUTE,
-  OcdCleanupConfig,
+  PhilterConfig,
   prepareRequestForSerialization,
-  ReadonlyOcdRuleset,
-  ReadonlyOcdRulesetPatch,
+  ReadonlyCleanupRuleset,
+  ReadonlyCleanupRulesetPatch,
   RELAY_SCRIPT_FILE,
   Request,
   RequestMethodFor,
@@ -19,7 +19,7 @@ import {
   Routes,
   RULESET_ROUTE,
   STATISTICS_ROUTE,
-} from '@ocd-cleanup/common';
+} from '@philter/common';
 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
@@ -41,7 +41,7 @@ export class ApiError extends Error {
 ApiError.prototype.name = 'ApiError';
 
 /**
- * Fetches data using routes and methods defined in `@ocd-cleanup/common`.
+ * Fetches data using routes and methods defined in `@philter/common`.
  * @param path Request route
  * @param method Request method
  * @return Asynchronous fetcher callback
@@ -107,20 +107,21 @@ export const fetchGetCleanupTableCategorized = () =>
 export const fetchGetCleanupTableUncategorized = () =>
   fetchFromApi(CLEANUP_TABLES_UNCATEGORIZED_ROUTE, 'get', {});
 
-export const fetchSaveOcdRuleset = (ocdRules: ReadonlyOcdRuleset) =>
-  fetchFromApi(RULESET_ROUTE, 'post', {ocdRules});
+export const fetchSaveCleanupRuleset = (cleanupRules: ReadonlyCleanupRuleset) =>
+  fetchFromApi(RULESET_ROUTE, 'post', {cleanupRules});
 
-export const fetchPatchOcdRuleset = (ocdRulesPatch: ReadonlyOcdRulesetPatch) =>
-  fetchFromApi(RULESET_ROUTE, 'patch', {ocdRulesPatch});
+export const fetchPatchCleanupRuleset = (
+  cleanupRulesPatch: ReadonlyCleanupRulesetPatch
+) => fetchFromApi(RULESET_ROUTE, 'patch', {cleanupRulesPatch});
 
 export const fetchInventoryState = () =>
   fetchFromApi(INVENTORY_ROUTE, 'get', {});
 
-export const fetchGetOcdCleanupConfig = () =>
+export const fetchGetPhilterConfig = () =>
   fetchFromApi(CONFIG_ROUTE, 'get', {});
 
-export const fetchSaveOcdCleanupConfig = (
-  config: Readonly<OcdCleanupConfig>,
+export const fetchSavePhilterConfig = (
+  config: Readonly<PhilterConfig>,
   shouldCopyDataFiles?: boolean
 ) => fetchFromApi(CONFIG_ROUTE, 'post', {config, shouldCopyDataFiles});
 

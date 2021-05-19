@@ -1,9 +1,9 @@
 {
-  "name": "@ocd-cleanup/e2e-tests",
+  "name": "@philter/e2e-tests",
   "version": "0.0.0",
-  "description": "End-to-end test scripts for OCD-Cleanup",
+  "description": "End-to-end test scripts for Philter",
   "main": "index.js",
-  "repository": "https://github.com/Loathing-Associates-Scripting-Society/OCD-Cleanup",
+  "repository": "https://github.com/Loathing-Associates-Scripting-Society/Philter",
   "author": "Yehyoung Kang",
   "license": "MIT",
   "private": true,

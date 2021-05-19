@@ -7,12 +7,12 @@ import {
   CLEANUP_TABLES_UNCATEGORIZED_ROUTE,
   CONFIG_ROUTE,
   INVENTORY_ROUTE,
-  OcdAction,
-  OcdRule,
+  CleanupAction,
+  CleanupRule,
   RULESET_ROUTE,
   STATISTICS_ROUTE,
   StockingRule,
-} from '@ocd-cleanup/common';
+} from '@philter/common';
 import {isOCDable} from 'ocd-cleanup.ash';
 import {getvar} from 'zlib.ash';
 import {
@@ -23,15 +23,15 @@ import {
   CONFIG_NAMES,
   getFullDataFileName,
   getFullStockFileName,
-  loadOcdCleanupConfig,
-  saveOcdCleanupConfig,
-} from './controllers/ocd-cleanup-config';
-import {toOcdItem} from './controllers/ocd-item';
+  loadCleanupConfig,
+  saveCleanupConfig,
+} from './controllers/philter-config';
+import {toItemInfo} from './controllers/item-info';
 import {
-  loadOcdRulesetForCurrentPlayer,
-  saveOcdRulesetFile,
-  saveOcdRulesetForCurrentPlayer,
-} from './controllers/ocd-ruleset';
+  loadCleanupRulesetForCurrentPlayer,
+  saveCleanupRulesetFile,
+  saveCleanupRulesetForCurrentPlayer,
+} from './controllers/cleanup-ruleset';
 import {
   loadStockingRulesetForCurrentPlayer,
   saveStockingRulesetFile,
@@ -42,8 +42,8 @@ import {idMappingToItemMap, itemMapToIdMapping} from './util';
 export const routes = [
   createRoute(CLEANUP_TABLES_CATEGORIZED_ROUTE, {
     get() {
-      const ocdRulesMap = loadOcdRulesetForCurrentPlayer();
-      if (!ocdRulesMap || ocdRulesMap.size === 0) {
+      const cleanupRulesMap = loadCleanupRulesetForCurrentPlayer();
+      if (!cleanupRulesMap || cleanupRulesMap.size === 0) {
         throw new Error(
           'All item information is corrupted or missing. Either you have not yet saved any item data or you lost it.'
         );
@@ -51,7 +51,7 @@ export const routes = [
 
       const [inventory, inventoryMaps] = getInventoryStateWithMaps();
 
-      const categorizedItems = new Set(ocdRulesMap.keys());
+      const categorizedItems = new Set(cleanupRulesMap.keys());
       for (const key of Object.keys(inventoryMaps)) {
         const itemMap = inventoryMaps[key as keyof typeof inventoryMaps];
         for (const item of itemMap.keys()) {
@@ -61,24 +61,24 @@ export const routes = [
 
       return {
         result: {
-          ocdRules: itemMapToIdMapping(ocdRulesMap),
+          cleanupRules: itemMapToIdMapping(cleanupRulesMap),
           inventory,
-          items: Array.from(categorizedItems, item => toOcdItem(item)),
+          items: Array.from(categorizedItems, item => toItemInfo(item)),
         },
       };
     },
   }),
   createRoute(CLEANUP_TABLES_UNCATEGORIZED_ROUTE, {
     get: () => {
-      const ocdRulesMap =
-        loadOcdRulesetForCurrentPlayer() || new Map<Item, OcdRule>();
+      const cleanupRulesMap =
+        loadCleanupRulesetForCurrentPlayer() || new Map<Item, CleanupRule>();
       const [inventory, inventoryMaps] = getInventoryStateWithMaps();
 
       const uncategorizedItems = new Set<Item>();
       for (const key of Object.keys(inventoryMaps)) {
         const itemMap = inventoryMaps[key as keyof typeof inventoryMaps];
         for (const item of itemMap.keys()) {
-          if (!ocdRulesMap.has(item) && isOCDable(item)) {
+          if (!cleanupRulesMap.has(item) && isOCDable(item)) {
             uncategorizedItems.add(item);
           }
         }
@@ -87,39 +87,41 @@ export const routes = [
       return {
         result: {
           inventory,
-          items: Array.from(uncategorizedItems, item => toOcdItem(item)),
+          items: Array.from(uncategorizedItems, item => toItemInfo(item)),
         },
       };
     },
   }),
   createRoute(RULESET_ROUTE, {
     post(params) {
-      const ocdRulesMap = idMappingToItemMap(params.ocdRules);
-      const success = saveOcdRulesetForCurrentPlayer(ocdRulesMap);
+      const cleanupRulesMap = idMappingToItemMap(params.cleanupRules);
+      const success = saveCleanupRulesetForCurrentPlayer(cleanupRulesMap);
 
       return success
         ? {result: {success}}
-        : {error: {code: 500, message: 'Cannot save OCD ruleset'}};
+        : {error: {code: 500, message: 'Cannot save cleanup ruleset'}};
     },
     patch(params) {
-      const ocdRulesMap =
-        loadOcdRulesetForCurrentPlayer() || new Map<Item, OcdRule>();
-      for (const [item, patch] of idMappingToItemMap(params.ocdRulesPatch)) {
+      const cleanupRulesMap =
+        loadCleanupRulesetForCurrentPlayer() || new Map<Item, CleanupRule>();
+      for (const [item, patch] of idMappingToItemMap(
+        params.cleanupRulesPatch
+      )) {
         if (patch === null) {
-          ocdRulesMap.delete(item);
+          cleanupRulesMap.delete(item);
         } else {
-          ocdRulesMap.set(item, patch);
+          cleanupRulesMap.set(item, patch);
         }
       }
-      const success = saveOcdRulesetForCurrentPlayer(ocdRulesMap);
+      const success = saveCleanupRulesetForCurrentPlayer(cleanupRulesMap);
 
       return success
         ? {result: {success}}
-        : {error: {code: 500, message: 'Cannot update OCD ruleset'}};
+        : {error: {code: 500, message: 'Cannot update cleanup ruleset'}};
     },
   }),
   createRoute(CONFIG_ROUTE, {
-    get: () => ({result: loadOcdCleanupConfig()}),
+    get: () => ({result: loadCleanupConfig()}),
     post(request) {
       const config = request.config;
 
@@ -127,13 +129,14 @@ export const routes = [
         if (config.dataFileName !== getvar(CONFIG_NAMES.dataFileName)) {
           // "Copy" file even if the original stocking file is missing or empty
           if (
-            !saveOcdRulesetFile(
+            !saveCleanupRulesetFile(
               getFullDataFileName(config.dataFileName),
-              loadOcdRulesetForCurrentPlayer() || new Map<Item, OcdRule>()
+              loadCleanupRulesetForCurrentPlayer() ||
+                new Map<Item, CleanupRule>()
             )
           ) {
             throw new Error(
-              `Cannot copy OCD ruleset from ${CONFIG_NAMES.dataFileName} to ${config.dataFileName}`
+              `Cannot copy cleanup ruleset from ${CONFIG_NAMES.dataFileName} to ${config.dataFileName}`
             );
           }
         }
@@ -148,7 +151,7 @@ export const routes = [
         }
       }
 
-      saveOcdCleanupConfig(config);
+      saveCleanupConfig(config);
       return {result: {success: true}};
     },
   }),
@@ -157,11 +160,11 @@ export const routes = [
   }),
   createRoute(STATISTICS_ROUTE, {
     get: () => {
-      const ocdRulesMap =
-        loadOcdRulesetForCurrentPlayer() || new Map<Item, OcdRule>();
+      const cleanupRulesMap =
+        loadCleanupRulesetForCurrentPlayer() || new Map<Item, CleanupRule>();
       const [, inventoryMaps] = getInventoryStateWithMaps();
 
-      const categorizedItemCounts: Record<OcdAction, number> = {
+      const categorizedItemCounts: Record<CleanupAction, number> = {
         AUTO: 0,
         BREAK: 0,
         CLAN: 0,
@@ -177,7 +180,7 @@ export const routes = [
         UNTN: 0,
         USE: 0,
       };
-      for (const rule of ocdRulesMap.values()) {
+      for (const rule of cleanupRulesMap.values()) {
         ++categorizedItemCounts[rule.action];
       }
 
@@ -185,7 +188,7 @@ export const routes = [
       for (const key of Object.keys(inventoryMaps)) {
         const itemMap = inventoryMaps[key as keyof typeof inventoryMaps];
         for (const item of itemMap.keys()) {
-          if (!ocdRulesMap.has(item) && isOCDable(item)) {
+          if (!cleanupRulesMap.has(item) && isOCDable(item)) {
             uncategorizedItems.add(item);
           }
         }

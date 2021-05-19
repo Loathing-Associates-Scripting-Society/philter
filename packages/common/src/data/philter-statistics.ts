@@ -1,13 +1,13 @@
-import {OcdAction} from '../data/ocd-rule.js';
+import {CleanupAction} from './cleanup-rule.js';
 
 /**
- * Describes general statistics about OCD-Cleanup that the user may be
- * interested in.
+ * Describes general statistics about Philter that the user may be interested
+ * in.
  */
-export interface OcdCleanupStatistics {
+export interface PhilterStatistics {
   /** Number of categorized items for each action. */
   categorizedItemCounts: {
-    [action in OcdAction]: number;
+    [action in CleanupAction]: number;
   };
   /**
    * Number of uncategorized items in inventory, closet, storage, or display

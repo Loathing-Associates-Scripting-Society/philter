@@ -1,21 +1,21 @@
-.OcdItemTable {
-  --OcdItemTable-Col-ItemName-Width: 15em;
-  --OcdItemTable-Col-ClosetAmount-Width: 3em;
-  --OcdItemTable-Col-MallPrice-Width: 5em;
-  --OcdItemTable-Col-KeepAmount-Width: 7em;
-  --OcdItemTable-Col-Action-Width: 31em;
+.TableItemCleanup {
+  --TableItemCleanup-Col-ItemName-Width: 15em;
+  --TableItemCleanup-Col-ClosetAmount-Width: 3em;
+  --TableItemCleanup-Col-MallPrice-Width: 5em;
+  --TableItemCleanup-Col-KeepAmount-Width: 7em;
+  --TableItemCleanup-Col-Action-Width: 31em;
   /* Accounts for horizontal space occupied by vertical scrollbars */
-  --OcdItemTable-Scrollbar-Width-Hack: 20px;
+  --TableItemCleanup-Scrollbar-Width-Hack: 20px;
 
-  --OcdItemTable-Total-Width: calc(
-    var(--OcdItemTable-Col-ItemName-Width) +
-      var(--OcdItemTable-Col-ClosetAmount-Width) +
-      var(--OcdItemTable-Col-ClosetAmount-Width) +
-      var(--OcdItemTable-Col-ClosetAmount-Width) +
-      var(--OcdItemTable-Col-MallPrice-Width) +
-      var(--OcdItemTable-Col-KeepAmount-Width) +
-      var(--OcdItemTable-Col-Action-Width) +
-      var(--OcdItemTable-Scrollbar-Width-Hack)
+  --TableItemCleanup-Total-Width: calc(
+    var(--TableItemCleanup-Col-ItemName-Width) +
+      var(--TableItemCleanup-Col-ClosetAmount-Width) +
+      var(--TableItemCleanup-Col-ClosetAmount-Width) +
+      var(--TableItemCleanup-Col-ClosetAmount-Width) +
+      var(--TableItemCleanup-Col-MallPrice-Width) +
+      var(--TableItemCleanup-Col-KeepAmount-Width) +
+      var(--TableItemCleanup-Col-Action-Width) +
+      var(--TableItemCleanup-Scrollbar-Width-Hack)
   );
 
   display: flex;
@@ -27,7 +27,7 @@
    For an explanation of why this wrapper is needed, see:
    https://github.com/bvaughn/react-virtualized/blob/master/docs/usingAutoSizer.md
  */
-.OcdItemTable__TableWrapper {
+.TableItemCleanup__TableWrapper {
   /* For some reason, <AutoSizer> tries to eat the component below this one.
      Add a bigger bottom margin to prevent this. */
   margin-bottom: 2.5em;
@@ -35,7 +35,7 @@
   flex-grow: 1;
 }
 
-.OcdItemTable__Inner {
+.TableItemCleanup__Inner {
   /* Instead of letting or header row and/or body to gain their own horizontal
    * scrollbars, we prevent them from shrinking, and let the parent container
    * gain its own scrollbar.
@@ -45,17 +45,17 @@
   overflow-x: auto;
 }
 
-.OcdItemTable__HeaderRow,
-.OcdItemTable__Row {
+.TableItemCleanup__HeaderRow,
+.TableItemCleanup__Row {
   display: flex;
 }
 
-.OcdItemTable__HeaderRow {
+.TableItemCleanup__HeaderRow {
   /* Based on Blueprint.js's <HTMLTable> component style */
   box-shadow: inset -1px -1px 0 0 rgb(0 0 0 / 15%);
   font-weight: 600;
   /* We _never_ want this component to shrink by itself. */
-  min-width: var(--OcdItemTable-Total-Width);
+  min-width: var(--TableItemCleanup-Total-Width);
   /* Always show a vertical scrollbar.
    * This prevents column mis-alignment glitches that occur when the main row
    * region has a scroll bar, but the header row does not (or vice versa).
@@ -63,9 +63,9 @@
   overflow-y: scroll;
 }
 
-.OcdItemTable__Body {
+.TableItemCleanup__Body {
   /* We _never_ want this component to shrink by itself. */
-  min-width: var(--OcdItemTable-Total-Width);
+  min-width: var(--TableItemCleanup-Total-Width);
   /* Always show a vertical scrollbar.
    * This prevents column mis-alignment glitches that occur when the main row
    * region has a scroll bar, but the header row does not (or vice versa).
@@ -75,8 +75,8 @@
   overflow-y: scroll !important;
 }
 
-.OcdItemTable__Cell,
-.OcdItemTable__HeaderCell {
+.TableItemCleanup__Cell,
+.TableItemCleanup__HeaderCell {
   /* Copied from Blueprint.js's <HTMLTable> component style */
   box-shadow: inset 1px 1px 0 0 rgb(0 0 0 / 15%);
   /* Columns should never try to shrink, even if the viewport becomes narrow. */
@@ -84,37 +84,37 @@
   padding: 5px;
 }
 
-.OcdItemTable__ColumnItemName {
+.TableItemCleanup__ColumnItemName {
   /* Don't vertically stretch the item icon and buttons */
   align-items: center;
   /* Use flexbox to ensure that the item name always appears to the right of the
      icon, even if the item name is very long */
   display: flex;
-  flex-basis: var(--OcdItemTable-Col-ItemName-Width);
+  flex-basis: var(--TableItemCleanup-Col-ItemName-Width);
   flex-grow: 5;
-  min-width: var(--OcdItemTable-Col-ItemName-Width);
+  min-width: var(--TableItemCleanup-Col-ItemName-Width);
 }
 
-.OcdItemTable__ColumnClosetAmount,
-.OcdItemTable__ColumnStorageAmount,
-.OcdItemTable__ColumnDisplayCaseAmount {
-  flex-basis: var(--OcdItemTable-Col-ClosetAmount-Width);
-  min-width: var(--OcdItemTable-Col-ClosetAmount-Width);
+.TableItemCleanup__ColumnClosetAmount,
+.TableItemCleanup__ColumnStorageAmount,
+.TableItemCleanup__ColumnDisplayCaseAmount {
+  flex-basis: var(--TableItemCleanup-Col-ClosetAmount-Width);
+  min-width: var(--TableItemCleanup-Col-ClosetAmount-Width);
   text-align: right;
 }
 
-.OcdItemTable__ColumnMallPrice {
+.TableItemCleanup__ColumnMallPrice {
   /* Ensure that both the price and the "min" tag are right-aligned, instead of
      stretching to the right end of the cell
    */
   align-items: flex-end;
   display: flex;
-  flex-basis: var(--OcdItemTable-Col-MallPrice-Width);
+  flex-basis: var(--TableItemCleanup-Col-MallPrice-Width);
   /* Ensure that the "min" tag appears below the price */
   flex-direction: column;
   flex-grow: 1;
-  max-width: calc(2 * var(--OcdItemTable-Col-MallPrice-Width));
-  min-width: var(--OcdItemTable-Col-MallPrice-Width);
+  max-width: calc(2 * var(--TableItemCleanup-Col-MallPrice-Width));
+  min-width: var(--TableItemCleanup-Col-MallPrice-Width);
   /* Break long price numbers across multiple lines */
   overflow-wrap: break-word;
   /* When long price numbers are broken across multiple lines, ensure that they
@@ -122,24 +122,24 @@
   text-align: right;
 }
 
-.OcdItemTable__ColumnKeepAmount {
-  flex-basis: var(--OcdItemTable-Col-KeepAmount-Width);
-  min-width: var(--OcdItemTable-Col-KeepAmount-Width);
+.TableItemCleanup__ColumnKeepAmount {
+  flex-basis: var(--TableItemCleanup-Col-KeepAmount-Width);
+  min-width: var(--TableItemCleanup-Col-KeepAmount-Width);
 }
 
-.OcdItemTable__ColumnAction {
-  flex-basis: var(--OcdItemTable-Col-Action-Width);
+.TableItemCleanup__ColumnAction {
+  flex-basis: var(--TableItemCleanup-Col-Action-Width);
   flex-grow: 1;
-  min-width: var(--OcdItemTable-Col-Action-Width);
+  min-width: var(--TableItemCleanup-Col-Action-Width);
 }
 
 /* Need specificity > (0, 2, 0) to override Blueprint's styling */
-.OcdItemTable .OcdItemTable__Cell .OcdItemTable__ItemImageLink,
-.OcdItemTable .OcdItemTable__Cell .OcdItemTable__ItemNameLink {
+.TableItemCleanup .TableItemCleanup__Cell .TableItemCleanup__ItemImageLink,
+.TableItemCleanup .TableItemCleanup__Cell .TableItemCleanup__ItemNameLink {
   padding: 3px;
 }
 
-.OcdItemTable__ItemImage {
+.TableItemCleanup__ItemImage {
   display: block;
   height: 30px;
   /* If the image fails to load, don't let the alt text overflow */
@@ -148,18 +148,20 @@
 }
 
 /* Need specificity > (0, 1, 1) to override Blueprint's styling */
-.OcdItemTable .OcdItemTable__ItemNameLink {
+.TableItemCleanup .TableItemCleanup__ItemNameLink {
   /* Adjustment to vertically align the item icon and name */
   /* align-self: center; */
   text-align: start;
 }
 
-.OcdItemTable__InputKeepAmount input {
+.TableItemCleanup__InputKeepAmount input {
   text-align: right;
 }
 
 /* Need specificity > (0, 2, 0) to override Blueprint's styling */
-.OcdItemTable .OcdItemTable__EditorButtons .OcdItemTable__PopperFix {
+.TableItemCleanup
+  .TableItemCleanup__EditorButtons
+  .TableItemCleanup__PopperFix {
   /* Due to flexbox layout, the <span> injected by the <Popover2> component
      grows wider than it should, resulting in incorrect placement of the  popup
      help message. This fixes it by preventing flex growth. */

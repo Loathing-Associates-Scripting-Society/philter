@@ -1,5 +1,5 @@
 {
-  "name": "@ocd-cleanup/common",
+  "name": "@philter/common",
   "version": "0.0.0",
   "private": true,
   "type": "module",

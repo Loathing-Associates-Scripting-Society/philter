@@ -1,8 +1,8 @@
 /**
- * @file Endpoint for general statistics about OCD-Cleanup.
+ * @file Endpoint for general statistics about Philter.
  */
 
-import {OcdCleanupStatistics} from '../data/ocd-statistics.js';
+import {PhilterStatistics} from '../data/philter-statistics.js';
 import {RequestBase, SuccessResponseBase} from './base.js';
 
 export const STATISTICS_ROUTE = '/statistics';
@@ -11,7 +11,7 @@ export type STATISTICS_ROUTE = typeof STATISTICS_ROUTE;
 export type StatisticsGetRequest = RequestBase<STATISTICS_ROUTE, 'get'>;
 
 export interface StatisticsGetResponse extends SuccessResponseBase {
-  result: OcdCleanupStatistics;
+  result: PhilterStatistics;
 }
 
 declare module './base' {

@@ -1,8 +1,6 @@
-# @ocd-cleanup/common
+# @philter/common
 
-This package provides code shared between OCD-Cleanup Manager's frontend and
-backend repositories. This includes various type definitions, constants, and
-executable code.
+This package provides code shared between Philter Manager's frontend and backend repositories. This includes various type definitions, constants, and executable code.
 
 As such, this code must satisfy the following:
 

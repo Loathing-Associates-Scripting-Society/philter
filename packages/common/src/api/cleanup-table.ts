@@ -3,8 +3,8 @@
  */
 
 import {InventoryState} from '../data/inventory-state.js';
-import {OcdItem} from '../data/ocd-item.js';
-import {OcdRuleset} from '../data/ocd-rule.js';
+import {ItemInfo} from '../data/item-info.js';
+import {CleanupRuleset} from '../data/cleanup-rule.js';
 import {RequestBase, SuccessResponseBase} from './base.js';
 
 export const CLEANUP_TABLES_CATEGORIZED_ROUTE = '/cleanup-tables/categorized';
@@ -28,13 +28,13 @@ export interface CleanupTableCategorizedGetResponse
     /** Inventory state needed to render the table. */
     inventory: InventoryState;
     /**
-     * Categorized items (i.e. has an OCD cleanup action assigned)
+     * Categorized items (i.e. has a cleanup action assigned)
      */
-    items: OcdItem[];
+    items: ItemInfo[];
     /**
-     * The entire OCD ruleset
+     * The entire cleanup ruleset
      */
-    ocdRules: OcdRuleset;
+    cleanupRules: CleanupRuleset;
   };
 }
 
@@ -53,16 +53,15 @@ export type CleanupTableUncategorizedGetRequest = RequestBase<
 /**
  * Response containing a cleanup table of uncategorized items in inventory.
  * This includes any items in the closet, display case, and storage.
- * Items that cannot be processed by OCD-Cleanup are excluded.
+ * Items that cannot be processed by Philter are excluded.
  */
 export interface CleanupTableUncategorizedGetResponse
   extends SuccessResponseBase {
   result: {
     /**
-     * Uncategorized items (i.e. has no OCD cleanup action assigned) in
-     * inventory.
+     * Uncategorized items (i.e. has no cleanup action assigned) in inventory.
      */
-    items: OcdItem[];
+    items: ItemInfo[];
     /** Inventory state needed to render the table. */
     inventory: InventoryState;
   };

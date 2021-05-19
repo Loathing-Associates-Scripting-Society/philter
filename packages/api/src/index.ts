@@ -2,7 +2,7 @@ import {
   ErrorResponseBase,
   RELAY_HTML_PATH,
   unwrapDeserializedRequest,
-} from '@ocd-cleanup/common';
+} from '@philter/common';
 import {formFields, gametimeToInt, myName, write} from 'kolmafia';
 import {debug, error} from './logging';
 import {routes} from './routes';
@@ -74,7 +74,7 @@ export function main() {
     if (requestParameters === null) {
       // If there are no URL parameters, this is probably a request made by a
       // user navigating to our app.
-      // We send the HTML skeleton of the OCD-Cleanup Manager.
+      // We send the HTML skeleton of the Philter Manager.
       send(generateRedirectPage(RELAY_HTML_PATH));
     } else {
       send(
