@@ -154,7 +154,7 @@ var STATISTICS_ROUTE = '/statistics';
  * Relative path to the directory that contains assets (HTML, CSS, JS) for
  * OCD-Cleanup Manager.
  */
-var RELAY_DIR = '/ocd-cleanup-manager-2';
+var RELAY_DIR = '/philter-manager';
 /**
  * Name of the entrypoint HTML file.
  * The relay API script will serve this page to the user.

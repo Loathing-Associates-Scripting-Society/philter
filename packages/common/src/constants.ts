@@ -6,7 +6,7 @@
  * Relative path to the directory that contains assets (HTML, CSS, JS) for
  * OCD-Cleanup Manager.
  */
-export const RELAY_DIR = '/ocd-cleanup-manager-2' as const;
+export const RELAY_DIR = '/philter-manager' as const;
 
 /**
  * Name of the entrypoint HTML file.
@@ -25,4 +25,4 @@ export const RELAY_HTML_PATH = `${RELAY_DIR}/${RELAY_HTML_FILE}` as const;
  * OCD-Cleanup Manager uses this to construct the request URL.
  * This is also used by build/release scripts.
  */
-export const RELAY_SCRIPT_FILE = 'relay_OCD-Cleanup_Manager_2_(alpha).js' as const;
+export const RELAY_SCRIPT_FILE = 'relay_Philter_Manager.js' as const;
