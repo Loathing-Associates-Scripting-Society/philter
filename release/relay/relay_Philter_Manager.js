@@ -159,7 +159,7 @@ var RELAY_DIR = '/philter-manager';
  * Name of the entrypoint HTML file.
  * The relay API script will serve this page to the user.
  */
-var RELAY_HTML_FILE = 'philter.index.html';
+var RELAY_HTML_FILE = 'philter-manager.index.html';
 /**
  * Relative path to the HTML skeleton page for OCD-Cleanup Manager.
  * The relay API script will serve this page to the user.
