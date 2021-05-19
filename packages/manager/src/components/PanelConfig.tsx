@@ -15,7 +15,7 @@ import {
 import {CONFIG_ROUTE, OcdCleanupConfig} from '@ocd-cleanup/common';
 import classNames from 'classnames';
 import {dequal} from 'dequal/lite';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {memo, useCallback, useEffect, useState} from 'react';
 import {useAsyncCallback} from 'react-async-hook';
 import useSWR from 'swr';
 import {fetchGetOcdCleanupConfig, fetchSaveOcdCleanupConfig} from '../api';
@@ -41,7 +41,8 @@ interface ChangedFileEntry {
  * To properly animate closing transitions, this must be rendered even if the
  * dialog is closed.
  */
-const DialogAskCopyOnSave = React.memo(function DialogAskCopyOnSave({
+// eslint-disable-next-line prefer-arrow-callback
+const DialogAskCopyOnSave = memo(function DialogAskCopyOnSave({
   changedFiles = [],
   isOpen,
   onCancel,
@@ -101,10 +102,12 @@ const DialogAskCopyOnSave = React.memo(function DialogAskCopyOnSave({
  * Helper function that checks if first value is identical to any of the values
  * in the given array.
  */
-const isOneOf = <T,>(value: unknown, compareWith: readonly T[]): value is T =>
-  compareWith.includes(value as T);
+const isOneOf = <T extends unknown>(
+  value: unknown,
+  compareWith: readonly T[]
+): value is T => compareWith.includes(value as T);
 
-export const PanelConfig = () => {
+export const PanelConfig = (): JSX.Element => {
   const {data: baseConfig, error: loadingError, mutate} = useSWR(
     CONFIG_ROUTE,
     async () => (await fetchGetOcdCleanupConfig()).result

@@ -20,7 +20,7 @@ export const setErrorToast = (
   key: string,
   error: unknown,
   errorMessage: string
-) => {
+): void => {
   if (error) {
     toaster.show(
       {
@@ -48,7 +48,7 @@ export const setErrorToast = (
  * Display an informational toast message.
  * @param message Message to show
  */
-export const showInfoToast = (message: string) => {
+export const showInfoToast = (message: string): void => {
   toaster.show({icon: 'info-sign', message});
 };
 
@@ -62,7 +62,7 @@ export const setSavingToast = (
   key: string,
   isSaving: boolean,
   message: string
-) => {
+): void => {
   if (isSaving) {
     toaster.show({icon: 'floppy-disk', intent: 'primary', message}, key);
   } else {

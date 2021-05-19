@@ -31,7 +31,7 @@ export const OcdRulePicker = ({
    */
   onChange?: (newRuleOrReducer: React.SetStateAction<OcdRule | null>) => void;
   rule: Readonly<OcdRule> | null;
-}) => {
+}): JSX.Element => {
   const handleActionChange = useCallback(
     (action: OcdActionOrUnknown) => {
       if (!onChange) return;

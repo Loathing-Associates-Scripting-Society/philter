@@ -4,7 +4,7 @@ This document contains license information for 3rd-party work.
 
 ## Favicon
 
-The favicon (`/public/favicon.png`) is derived from:
+The favicon (`/src/favicon.png`) is derived from:
 
 - [mop](https://thenounproject.com/term/mop/3671435) by
   [Vectorstall](https://thenounproject.com/vectorstall) from

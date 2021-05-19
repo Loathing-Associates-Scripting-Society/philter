@@ -5,8 +5,6 @@
 /**
  * Relative path to the directory that contains assets (HTML, CSS, JS) for
  * OCD-Cleanup Manager.
- *
- * Note: This must be kept in sync with `BUILD_PATH` in `/packages/manager/.env`
  */
 export const RELAY_DIR = '/ocd-cleanup-manager-2' as const;
 

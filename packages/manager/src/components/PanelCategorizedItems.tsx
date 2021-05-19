@@ -39,7 +39,8 @@ const OCD_TAB_TYPES = {
  */
 type OcdTabType = keyof typeof OCD_TAB_TYPES;
 const isOcdTabType = (tabId: unknown): tabId is OcdTabType =>
-  typeof tabId === 'string' && OCD_TAB_TYPES.hasOwnProperty(tabId);
+  typeof tabId === 'string' &&
+  Object.prototype.hasOwnProperty.call(OCD_TAB_TYPES, tabId);
 
 const categorizeItemsForTabs = (
   items: readonly Readonly<OcdItem>[],
@@ -117,7 +118,7 @@ const EMPTY_OCD_RULES = Object.freeze({});
 /**
  * Panel for editing the player's OCD-Cleanup ruleset.
  */
-export const PanelCategorizedItems = () => {
+export const PanelCategorizedItems = (): JSX.Element => {
   // Providing default values is not ideal.
   // TODO: Add "loading" and "network error" states to <TabbedOcdRulesetEditor>
   // and handle network errors properly.
@@ -194,6 +195,7 @@ export const PanelCategorizedItems = () => {
 
         if (newRule) return {...prevOcdRules, [itemId]: newRule};
         else {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const {[itemId]: _removed, ...restOcdRules} = prevOcdRules;
           return restOcdRules;
         }
@@ -211,7 +213,10 @@ export const PanelCategorizedItems = () => {
     [data?.items, activeOcdRules]
   );
 
-  const isTabAvailable = itemsForTabs.hasOwnProperty(tabId)
+  const isTabAvailable = Object.prototype.hasOwnProperty.call(
+    itemsForTabs,
+    tabId
+  )
     ? itemsForTabs[tabId as keyof typeof itemsForTabs].length > 0
     : true;
   const actualTabId = isTabAvailable ? tabId : 'all';

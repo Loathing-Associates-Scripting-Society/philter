@@ -1,5 +1,5 @@
 import {Code, InputGroup} from '@blueprintjs/core';
-import React from 'react';
+import React, {memo} from 'react';
 import './InputGroupAffixedFileName.css';
 
 interface InputGroupAffixedFileNameProps
@@ -13,7 +13,8 @@ interface InputGroupAffixedFileNameProps
 /**
  * `InputGroup` for a file name with predefined prefix and/or suffix.
  */
-export const InputGroupAffixedFileName = React.memo(
+export const InputGroupAffixedFileName = memo(
+  // eslint-disable-next-line prefer-arrow-callback
   function InputGroupAffixedFileName({
     fileNamePrefix,
     fileNameSuffix,
