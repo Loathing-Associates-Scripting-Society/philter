@@ -156,10 +156,15 @@ var STATISTICS_ROUTE = '/statistics';
  */
 var RELAY_DIR = '/ocd-cleanup-manager-2';
 /**
+ * Name of the entrypoint HTML file.
+ * The relay API script will serve this page to the user.
+ */
+var RELAY_HTML_FILE = 'philter.index.html';
+/**
  * Relative path to the HTML skeleton page for OCD-Cleanup Manager.
  * The relay API script will serve this page to the user.
  */
-var RELAY_HTML_PATH = RELAY_DIR + "/index.html";
+var RELAY_HTML_PATH = RELAY_DIR + "/" + RELAY_HTML_FILE;
 
 /**
  * Object whose keys define what string constants make up the `OcdAction` type.
