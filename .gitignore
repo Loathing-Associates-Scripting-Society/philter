@@ -69,9 +69,8 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variables file
-# (Commented out to commit .env files used by @ocd-cleanup/manager)
-# .env
-# .env.test
+.env
+.env.test
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
