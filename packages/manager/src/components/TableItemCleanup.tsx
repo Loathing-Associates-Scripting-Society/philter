@@ -70,9 +70,10 @@ const TableItemCleanupRow = memo(function TableItemCleanupRow({
         <AnchorButton
           className="TableItemCleanup__ItemImageLink"
           minimal
-          onClick={useCallback(() => itemDescriptionPopup(item.descid), [
-            item.descid,
-          ])}
+          onClick={useCallback(
+            () => itemDescriptionPopup(item.descid),
+            [item.descid]
+          )}
           title="View item description"
         >
           {useMemo(

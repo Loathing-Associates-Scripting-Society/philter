@@ -138,27 +138,17 @@ function parseKmailPage(page: string): KolKmail[] {
   const cells = xpath(page, '//table//table//table//td[//blockquote]');
 
   return cells.map(cell => {
-    const recipentMatch = /<a href="showplayer\.php\?who=(\d+)">(.+?)<\/a>/.exec(
-      cell
-    );
+    const recipentMatch =
+      /<a href="showplayer\.php\?who=(\d+)">(.+?)<\/a>/.exec(cell);
     assert(recipentMatch, `Failed to match recipent pattern in kmail: ${cell}`);
     const recipentId = Number(recipentMatch[1]);
     const recipentName = recipentMatch[2];
 
-    const localTimeMatch = /<!--((\d+)\/(\d+)\/(\d+) (\d+):(\d+):(\d+))-->/.exec(
-      cell
-    );
+    const localTimeMatch =
+      /<!--((\d+)\/(\d+)\/(\d+) (\d+):(\d+):(\d+))-->/.exec(cell);
     assert(localTimeMatch, `Failed to match time pattern in kmail: ${cell}`);
-    const [
-      ,
-      localTime,
-      mm,
-      dd,
-      yy,
-      hourStr,
-      minuteStr,
-      secondStr,
-    ] = localTimeMatch;
+    const [, localTime, mm, dd, yy, hourStr, minuteStr, secondStr] =
+      localTimeMatch;
     const localTimestamp = new Date(
       2000 + Number(yy),
       Number(mm) - 1,

@@ -108,10 +108,11 @@ const isOneOf = <T extends unknown>(
 ): value is T => compareWith.includes(value as T);
 
 export const PanelConfig = (): JSX.Element => {
-  const {data: baseConfig, error: loadingError, mutate} = useSWR(
-    CONFIG_ROUTE,
-    async () => (await fetchGetPhilterConfig()).result
-  );
+  const {
+    data: baseConfig,
+    error: loadingError,
+    mutate,
+  } = useSWR(CONFIG_ROUTE, async () => (await fetchGetPhilterConfig()).result);
 
   const [config, setConfig] = useState<PhilterConfig | null>(null);
   // When the data is loaded for the first time, synchronize config with
@@ -207,9 +208,10 @@ export const PanelConfig = (): JSX.Element => {
     () => setErrorToast('savingError', savingError, 'Cannot save config'),
     [savingError]
   );
-  useEffect(() => setSavingToast('isSaving', isSaving, 'Saving config...'), [
-    isSaving,
-  ]);
+  useEffect(
+    () => setSavingToast('isSaving', isSaving, 'Saving config...'),
+    [isSaving]
+  );
 
   const isMallMultiInputDisabled = isDisabled || !config?.canUseMallMulti;
   return (
@@ -417,9 +419,10 @@ export const PanelConfig = (): JSX.Element => {
         <Button
           disabled={isDisabled || !hasChanges}
           icon="reset"
-          onClick={useCallback(() => baseConfig && setConfig(baseConfig), [
-            baseConfig,
-          ])}
+          onClick={useCallback(
+            () => baseConfig && setConfig(baseConfig),
+            [baseConfig]
+          )}
           text="Discard changes"
         />
       </ButtonGroup>

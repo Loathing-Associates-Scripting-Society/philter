@@ -10,18 +10,17 @@ import {getvar} from 'zlib.ash';
 /**
  * Namespace object that maps each config key to their ZLib variable name.
  */
-export const CONFIG_NAMES: Readonly<
-  Record<keyof PhilterConfig, string>
-> = Object.freeze({
-  emptyClosetMode: 'BaleOCD_EmptyCloset',
-  simulateOnly: 'BaleOCD_Sim',
-  mallPricingMode: 'BaleOCD_Pricing',
-  mallMultiName: 'BaleOCD_MallMulti',
-  mallMultiKmailMessage: 'BaleOCD_MultiMessage',
-  canUseMallMulti: 'BaleOCD_UseMallMulti',
-  dataFileName: 'BaleOCD_DataFile',
-  stockFileName: 'BaleOCD_StockFile',
-});
+export const CONFIG_NAMES: Readonly<Record<keyof PhilterConfig, string>> =
+  Object.freeze({
+    emptyClosetMode: 'BaleOCD_EmptyCloset',
+    simulateOnly: 'BaleOCD_Sim',
+    mallPricingMode: 'BaleOCD_Pricing',
+    mallMultiName: 'BaleOCD_MallMulti',
+    mallMultiKmailMessage: 'BaleOCD_MultiMessage',
+    canUseMallMulti: 'BaleOCD_UseMallMulti',
+    dataFileName: 'BaleOCD_DataFile',
+    stockFileName: 'BaleOCD_StockFile',
+  });
 
 /**
  * Get the full file name of a cleanup ruleset file, including the prefix and
