@@ -44,7 +44,7 @@ export const SelectCleanupAction = memo(function SelectCleanupAction({
 }: SelectCleanupActionProps) {
   return (
     <HTMLSelect
-      className={classNames(`SelectCleanupAction`, className)}
+      className={classNames('SelectCleanupAction', className)}
       onChange={e =>
         isCleanupActionOrUnknown(e.target.value) && onChange(e.target.value)
       }
