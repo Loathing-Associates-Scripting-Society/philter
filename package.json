@@ -6,7 +6,7 @@
   "scripts": {
     "build": "yarn run build:manager && yarn workspace @philter/e2e-tests build",
     "build:manager": "yarn workspace @philter/common build && yarn workspace @philter/api build && yarn workspace @philter/manager build",
-    "lint": "eslint . && prettier --check ."
+    "lint": "eslint ."
   },
   "eslintConfig": {
     "extends": "./node_modules/gts/",
