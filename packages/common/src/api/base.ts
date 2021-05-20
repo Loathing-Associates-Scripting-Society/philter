@@ -152,9 +152,8 @@ export interface RoutesEntry<
 /**
  * Generic type for methods that are defined for a particular path.
  */
-export type RequestMethodFor<
-  Path extends keyof Routes
-> = Routes[Path]['request']['method'];
+export type RequestMethodFor<Path extends keyof Routes> =
+  Routes[Path]['request']['method'];
 
 /**
  * Generic interface for "querying" a Request based on the path and method.

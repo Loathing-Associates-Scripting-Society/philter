@@ -119,19 +119,20 @@ const EMPTY_CLEANUP_RULES = Object.freeze({});
  * Panel for editing the player's Philter ruleset.
  */
 export const PanelCategorizedItems = (): JSX.Element => {
-  const {data, error: loadingError, isValidating: isLoading, mutate} = useSWR(
-    CLEANUP_TABLES_CATEGORIZED_ROUTE,
-    async () => {
-      const response = await fetchGetCleanupTableCategorized();
-      // Items must be sorted by ID
-      response.result.items.sort((itemA, itemB) => itemA.id - itemB.id);
-      return response.result;
-    }
-  );
+  const {
+    data,
+    error: loadingError,
+    isValidating: isLoading,
+    mutate,
+  } = useSWR(CLEANUP_TABLES_CATEGORIZED_ROUTE, async () => {
+    const response = await fetchGetCleanupTableCategorized();
+    // Items must be sorted by ID
+    response.result.items.sort((itemA, itemB) => itemA.id - itemB.id);
+    return response.result;
+  });
 
-  const [activeCleanupRules, setActiveCleanupRules] = useState<CleanupRuleset>(
-    EMPTY_CLEANUP_RULES
-  );
+  const [activeCleanupRules, setActiveCleanupRules] =
+    useState<CleanupRuleset>(EMPTY_CLEANUP_RULES);
 
   useEffect(() => {
     // When the data is loaded for the first time, populate activeCleanupRules

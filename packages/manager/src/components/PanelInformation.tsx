@@ -19,10 +19,11 @@ const BULLET = <span className="PanelInformation__Bullet">&#8943;</span>;
  * the player's cleanup rules.
  */
 export const PanelInformation = (): JSX.Element => {
-  const {data, isValidating: isLoading, error: loadingError} = useSWR(
-    STATISTICS_ROUTE,
-    async () => (await fetchGetStatistics()).result
-  );
+  const {
+    data,
+    isValidating: isLoading,
+    error: loadingError,
+  } = useSWR(STATISTICS_ROUTE, async () => (await fetchGetStatistics()).result);
 
   const categorizedCount = useMemo(
     () =>

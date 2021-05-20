@@ -8,7 +8,8 @@ import {CleanupRuleset} from '../data/cleanup-rule.js';
 import {RequestBase, SuccessResponseBase} from './base.js';
 
 export const CLEANUP_TABLES_CATEGORIZED_ROUTE = '/cleanup-tables/categorized';
-export type CLEANUP_TABLES_CATEGORIZED_ROUTE = typeof CLEANUP_TABLES_CATEGORIZED_ROUTE;
+export type CLEANUP_TABLES_CATEGORIZED_ROUTE =
+  typeof CLEANUP_TABLES_CATEGORIZED_ROUTE;
 
 /**
  * Request for a cleanup table of categorized items.
@@ -40,7 +41,8 @@ export interface CleanupTableCategorizedGetResponse
 
 export const CLEANUP_TABLES_UNCATEGORIZED_ROUTE =
   '/cleanup-tables/uncategorized';
-export type CLEANUP_TABLES_UNCATEGORIZED_ROUTE = typeof CLEANUP_TABLES_UNCATEGORIZED_ROUTE;
+export type CLEANUP_TABLES_UNCATEGORIZED_ROUTE =
+  typeof CLEANUP_TABLES_UNCATEGORIZED_ROUTE;
 
 /**
  * Request for a cleanup table of uncategorized items in inventory.

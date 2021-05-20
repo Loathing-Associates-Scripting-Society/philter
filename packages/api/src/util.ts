@@ -29,7 +29,7 @@ export function createMapLoader<K, V>(
     const rawData = fileToArray(filename);
 
     for (const indexStr of Object.keys(rawData)) {
-      const row = rawData[(indexStr as unknown) as number].split('\t');
+      const row = rawData[indexStr as unknown as number].split('\t');
       const [key, value] = parse(row, Number(indexStr), filename);
       entries.set(key, value);
     }
@@ -91,7 +91,7 @@ export function idMappingToItemMap<T>(itemMapping: {
   return new Map(
     Object.keys(itemMapping).map(itemId => [
       Item.get(Number(itemId)),
-      itemMapping[(itemId as unknown) as number],
+      itemMapping[itemId as unknown as number],
     ])
   );
 }
@@ -100,9 +100,9 @@ export function idMappingToItemMap<T>(itemMapping: {
  * Converts an ES6 Map keyed by `Item` objects to a regular JavaScript object
  * keyed by item IDs.
  */
-export function itemMapToIdMapping<T>(
-  itemMap: ReadonlyMap<Item, T>
-): {[itemId: number]: T} {
+export function itemMapToIdMapping<T>(itemMap: ReadonlyMap<Item, T>): {
+  [itemId: number]: T;
+} {
   const itemMapping: {[itemId: number]: T} = {};
   for (const [item, value] of itemMap) {
     itemMapping[toInt(item)] = value;

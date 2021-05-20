@@ -41,7 +41,7 @@ function isCraftable(item: Item): boolean {
     const rawCrafty = fileToArray('data/concoctions.txt');
 
     for (const key of Object.keys(rawCrafty)) {
-      const row = rawCrafty[(key as unknown) as number].split('\t');
+      const row = rawCrafty[key as unknown as number].split('\t');
 
       // We assume that concoctions.txt looks like this:
       //

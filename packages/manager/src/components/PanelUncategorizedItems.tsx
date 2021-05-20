@@ -44,17 +44,17 @@ export const PanelUncategorizedItems = (): JSX.Element => {
     return response.result;
   });
 
-  const [cleanupRules, setCleanupRules] = useState<CleanupRuleset>(
-    EMPTY_CLEANUP_RULES
-  );
+  const [cleanupRules, setCleanupRules] =
+    useState<CleanupRuleset>(EMPTY_CLEANUP_RULES);
   const resetCleanupRules = useCallback(
     () => setCleanupRules(EMPTY_CLEANUP_RULES),
     []
   );
 
-  const hasChanges = useMemo(() => !dequal(cleanupRules, EMPTY_CLEANUP_RULES), [
-    cleanupRules,
-  ]);
+  const hasChanges = useMemo(
+    () => !dequal(cleanupRules, EMPTY_CLEANUP_RULES),
+    [cleanupRules]
+  );
 
   const {
     error: savingError,
