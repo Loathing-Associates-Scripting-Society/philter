@@ -1603,9 +1603,11 @@ function parseRequestParameters() {
 /**
  * Generate a HTML page that immediately redirects the client to the URL.
  * This is needed because we can't respond with HTTP redirect codes.
+ *
+ * Include a URL to the same place in case the user has disabled automatic refresh.
  */
 function generateRedirectPage(url) {
-    return "<!DOCTYPE html><html><head><meta http-equiv=\"refresh\" content=\"0;url=" + url + "\"></head></html>";
+    return "<!DOCTYPE html><html><head><meta http-equiv=\"refresh\" content=\"0;url=" + url + "\"></head><body><a href=\"" + url + "\">Click here</a></body></html>";
 }
 function main() {
     // TODO: Add require() to kolmafia-types if possible
