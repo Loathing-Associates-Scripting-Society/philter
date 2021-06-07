@@ -62,6 +62,7 @@ const config = {
       tsconfig: 'src/tsconfig.json',
     }),
     copy({
+      hook: 'writeBundle',
       targets: [
         {
           src: 'build/index.js',
