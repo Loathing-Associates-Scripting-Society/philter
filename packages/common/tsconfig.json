@@ -18,6 +18,8 @@
     ],
     // Emit ES modules and rely on the bundler to convert us to CommonJS
     "module": "ES2015",
+    // Necessary to produce consistent output on different platforms
+    "newLine": "LF",
     "outDir": "build",
     "rootDir": ".",
     // Transpile ES2015 syntax unsupported by Rhino (e.g. template strings)
