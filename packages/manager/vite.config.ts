@@ -45,10 +45,11 @@ export default defineConfig({
     sourcemap: true,
   },
   define: Object.fromEntries(
-    Object.entries(process.env).map(([name, value]) => [
-      `process.env.${name}`,
-      JSON.stringify(value),
-    ])
+    Object.entries(process.env)
+      // Exclude environment variables that are not valid JavaScript identifiers
+      // (we ignore names with non-ASCII characters for practical purposes)
+      .filter(([name]) => /[_$a-zA-Z][_$\w]*$/.test(name))
+      .map(([name, value]) => [`process.env.${name}`, JSON.stringify(value)])
   ),
   plugins: [reactRefresh()],
   server: {
