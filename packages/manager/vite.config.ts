@@ -18,6 +18,20 @@ export default defineConfig({
     outDir: OUT_DIR,
     rollupOptions: {
       input: `./${RELAY_HTML_FILE}`,
+      output: {
+        // Do not include chunk hash in bundle file names, as it introduces a
+        // lot of churn whenever the file changes.
+        assetFileNames: 'assets/[name][extname]',
+        // The 'philter-manager' prefix is intented to avoid file name conflicts
+        // with other KoLmafia projects. Although this may be no longer
+        // necessary since r20743, we should keep it around for people using old
+        // versions of KoLmafia.
+        // For more info, see:
+        // - https://kolmafia.us/threads/svn-update-does-not-move-files-in-local-copy.26043/post-162344
+        // - https://kolmafia.us/threads/cargo-shorts-gui.25416/post-162271
+        chunkFileNames: 'assets/philter-manager.[name].js',
+        entryFileNames: 'assets/[name].js',
+      },
       plugins: [
         // Since Blueprint.js 3.0+ uses SVG icons exclusively, we can delete the
         // font icon files
