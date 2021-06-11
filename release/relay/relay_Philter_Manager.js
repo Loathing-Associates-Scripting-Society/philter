@@ -1605,7 +1605,11 @@ function parseRequestParameters() {
  * This is needed because we can't respond with HTTP redirect codes.
  */
 function generateRedirectPage(url) {
-    return "<!DOCTYPE html><html><head><meta http-equiv=\"refresh\" content=\"0;url=" + url + "\"></head></html>";
+    return ('<!DOCTYPE html>' +
+        '<html>' +
+        ("<head><meta http-equiv=\"refresh\" content=\"0;url=" + url + "\"></head>") +
+        ("<body>If your browser does not redirect you immediately, <a href=\"" + url + "\">click here</a></body>") +
+        '</html>');
 }
 function main() {
     // TODO: Add require() to kolmafia-types if possible
