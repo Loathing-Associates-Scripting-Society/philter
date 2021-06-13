@@ -179,6 +179,35 @@ interface TableItemCleanupRowData {
 }
 
 /**
+ * Callback that returns the item key for react-window.
+ */
+const itemKeyCallback = (index: number, data: TableItemCleanupRowData) =>
+  data.items[index].id;
+
+// This function must be a stable value for React to properly use memoization.
+// Since the data prop changes whenever the cleanup ruleset is modified, this
+// component itself does not benefit from `React.memo()`. However, the
+// underlying component _does_ benefit from `React.memo()`.
+const TableItemCleanupRowWrapper = ({
+  data: {cleanupRules, onRuleChange, inventory, items},
+  index,
+  style,
+}: {
+  data: TableItemCleanupRowData;
+  index: number;
+  style?: React.CSSProperties;
+  isScrolling?: boolean;
+}) => (
+  <TableItemCleanupRow
+    inventory={inventory}
+    item={items[index]}
+    onRuleChange={onRuleChange}
+    rule={cleanupRules[items[index].id]}
+    style={style}
+  />
+);
+
+/**
  * Sets the `tabIndex` of a HTML element to -1.
  * This enables keyboard-based scrolling on the react-window container.
  * (Page Up/Down, Arrow Up/Down, Home/End)
@@ -283,10 +312,6 @@ export const TableItemCleanup = memo(function TableItemCleanup({
     }),
     [defaultRuleChangeHandler, inventory, items, cleanupRules, onRuleChange]
   );
-  const itemKeyCallback = useCallback(
-    (index: number, data: TableItemCleanupRowData) => data.items[index].id,
-    []
-  );
 
   const editorButtons = useMemo(
     () => (
@@ -341,35 +366,6 @@ export const TableItemCleanup = memo(function TableItemCleanup({
       </ButtonGroup>
     ),
     [disableReset, disableSave, onReset, onSave]
-  );
-
-  // This function must be a stable value for React to properly use memoization.
-  // Since the data prop changes whenever the cleanup ruleset is modified, this
-  // component itself does not benefit from `React.memo()`. However, the
-  // underlying component _does_ benefit from `React.memo()`.
-  const TableItemCleanupRowWrapper = useCallback(
-    // eslint-disable-next-line prefer-arrow-callback
-    function TableItemCleanupRowWrapper({
-      data: {cleanupRules, onRuleChange, inventory, items},
-      index,
-      style,
-    }: {
-      data: TableItemCleanupRowData;
-      index: number;
-      style?: React.CSSProperties;
-      isScrolling?: boolean;
-    }) {
-      return (
-        <TableItemCleanupRow
-          inventory={inventory}
-          item={items[index]}
-          onRuleChange={onRuleChange}
-          rule={cleanupRules[items[index].id]}
-          style={style}
-        />
-      );
-    },
-    []
   );
 
   return (
