@@ -8,18 +8,18 @@ import {
 } from '@blueprintjs/core';
 import {Classes as Popover2Classes, Popover2} from '@blueprintjs/popover2';
 import {
-  ItemInfo,
   CleanupRule,
   CleanupRuleset,
-  ReadonlyInventoryState,
+  ItemInfo,
   ReadonlyCleanupRuleset,
+  ReadonlyInventoryState,
 } from '@philter/common';
 import classNames from 'classnames';
-import React, {memo, useCallback, useEffect, useMemo, useRef} from 'react';
+import React, {memo, useCallback, useMemo} from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import {areEqual, FixedSizeList} from 'react-window';
-import './TableItemCleanup.css';
 import {CleanupRulePicker} from './CleanupRulePicker';
+import './TableItemCleanup.css';
 
 /* eslint-disable react/no-unescaped-entities */
 
@@ -178,6 +178,17 @@ interface TableItemCleanupRowData {
   onRuleChange: RuleChangeHandler;
 }
 
+/**
+ * Sets the `tabIndex` of a HTML element to -1.
+ * This enables keyboard-based scrolling on the react-window container.
+ * (Page Up/Down, Arrow Up/Down, Home/End)
+ */
+const setTabIndexOnRefElement = (refElement: HTMLElement | null) => {
+  if (refElement) {
+    refElement.tabIndex = -1;
+  }
+};
+
 interface TableItemCleanupPropsBase {
   /**
    * Cleanup ruleset.
@@ -263,66 +274,6 @@ export const TableItemCleanup = memo(function TableItemCleanup({
     [onChange]
   );
 
-  // Smooth scrolling (behavior: "smooth") via keyboard is tricky.
-  // When the user holds down on the arrow up/down or page up/down keys,
-  // onKeyDown() fires way too fast, overloading the browser and causing
-  // scrolling to become extremely jittery.
-  // I tried multiple ways of debouncing this:
-  //
-  // 1. Using lodash.throttle()
-  //    - Was quite janky and forced me to set unreasonably high throttle
-  //      delays, on the order of ~500ms for page up/down. Even then, it was
-  //      unreliably janky.
-  // 2. Manually debouncing using requestAnimationFrame() or setTimeout()
-  //    - This was worse than using lodash.throttle().
-  // 3. Using `isScrolling`
-  //    - Much more reliable than the above. However, it caused long pauses
-  //      between scrolls when the user holds down a scrolling key. Also, it
-  //      didn't prevent doScroll() from being called multiple times before the
-  //      component registered `isScrolling`.
-  //
-  // I eventually landed on a combination of (2) and (3) to successfully
-  // debounce scrolling. This is still quite slow, but almost jitter-free.
-
-  // Use requestAnimationFrame() and isScrolling to throttle scroll events
-  const scrollTimerRef = useRef<number>();
-  const isScrollingRef = useRef(false);
-
-  /**
-   * Debounced scrolling function
-   * @param type
-   * @param amount Position for `to`, offset for `by`
-   */
-  const doScroll = useCallback((type: 'to' | 'by', amount: number) => {
-    if (isScrollingRef.current) return;
-    if (scrollTimerRef.current !== undefined) return;
-    scrollTimerRef.current = window.requestAnimationFrame(() => {
-      scrollTimerRef.current = undefined;
-      outerListRef.current?.[type === 'by' ? 'scrollBy' : 'scrollTo']({
-        behavior: 'smooth',
-        top: amount,
-      });
-    });
-  }, []);
-  // Cancel any remaining scrolling events if we are unmounting
-  useEffect(
-    () => () => {
-      if (scrollTimerRef.current !== undefined) {
-        window.cancelAnimationFrame(scrollTimerRef.current);
-      }
-    },
-    []
-  );
-
-  // Manually implement Page Up/Down. Based on:
-  // - https://github.com/bvaughn/react-window/issues/46#issuecomment-416073707
-  // - https://sung.codes/blog/2019/05/07/scrolling-with-page-up-down-keys-in-react-window/
-  const innerListRef = useRef<HTMLElement>(null);
-  const outerListRef = useRef<HTMLElement>(null);
-
-  const PAGE_HEIGHT = 600;
-  const ROW_HEIGHT = 60;
-
   const itemData = useMemo<TableItemCleanupRowData>(
     () => ({
       inventory,
@@ -402,14 +353,12 @@ export const TableItemCleanup = memo(function TableItemCleanup({
       data: {cleanupRules, onRuleChange, inventory, items},
       index,
       style,
-      isScrolling = false,
     }: {
       data: TableItemCleanupRowData;
       index: number;
       style?: React.CSSProperties;
       isScrolling?: boolean;
     }) {
-      isScrollingRef.current = isScrolling;
       return (
         <TableItemCleanupRow
           inventory={inventory}
@@ -429,34 +378,7 @@ export const TableItemCleanup = memo(function TableItemCleanup({
       <div className="TableItemCleanup__TableWrapper">
         <AutoSizer disableWidth>
           {({height: measuredHeight}) => (
-            <div
-              className="TableItemCleanup__Inner"
-              onKeyDown={event => {
-                if (event.key === 'ArrowDown') {
-                  if (event.currentTarget === event.target) {
-                    doScroll('by', ROW_HEIGHT * 3);
-                  }
-                } else if (event.key === 'ArrowUp') {
-                  if (event.currentTarget === event.target) {
-                    doScroll('by', -ROW_HEIGHT * 3);
-                  }
-                } else if (event.key === 'PageDown') {
-                  doScroll('by', PAGE_HEIGHT);
-                } else if (event.key === 'PageUp') {
-                  doScroll('by', -PAGE_HEIGHT);
-                } else if (event.key === 'Home') {
-                  doScroll('to', 0);
-                } else if (event.key === 'End') {
-                  if (innerListRef.current) {
-                    doScroll(
-                      'to',
-                      parseFloat(innerListRef.current.style.height)
-                    );
-                  }
-                }
-              }}
-              tabIndex={-1}
-            >
+            <div className="TableItemCleanup__Inner">
               <div className="TableItemCleanup__HeaderRow">
                 <div className="TableItemCleanup__HeaderCell TableItemCleanup__ColumnItemName">
                   Item (Amount)
@@ -483,14 +405,12 @@ export const TableItemCleanup = memo(function TableItemCleanup({
               <FixedSizeList
                 className="TableItemCleanup__Body"
                 height={measuredHeight}
-                innerRef={innerListRef}
                 itemCount={items.length}
                 itemData={itemData}
                 itemKey={itemKeyCallback}
-                itemSize={ROW_HEIGHT}
-                outerRef={outerListRef}
+                itemSize={60}
+                outerRef={setTabIndexOnRefElement}
                 overscanCount={15}
-                useIsScrolling
                 width="100%"
               >
                 {TableItemCleanupRowWrapper}
