@@ -2,7 +2,7 @@
   --TableItemCleanup-Col-ItemName-Width: 15em;
   --TableItemCleanup-Col-ClosetAmount-Width: 3em;
   --TableItemCleanup-Col-MallPrice-Width: 5em;
-  --TableItemCleanup-Col-KeepAmount-Width: 7em;
+  --TableItemCleanup-Col-KeepAmount-Width: 6em;
   --TableItemCleanup-Col-Action-Width: 31em;
   /* Accounts for horizontal space occupied by vertical scrollbars */
   --TableItemCleanup-Scrollbar-Width-Hack: 20px;

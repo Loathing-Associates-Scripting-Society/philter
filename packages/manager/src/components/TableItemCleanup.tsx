@@ -1,11 +1,4 @@
-import {
-  AnchorButton,
-  Button,
-  ButtonGroup,
-  NumericInput,
-  Tag,
-  UL,
-} from '@blueprintjs/core';
+import {AnchorButton, Button, ButtonGroup, Tag, UL} from '@blueprintjs/core';
 import {Classes as Popover2Classes, Popover2} from '@blueprintjs/popover2';
 import {
   CleanupRule,
@@ -19,6 +12,7 @@ import React, {memo, useCallback, useMemo} from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import {areEqual, FixedSizeList} from 'react-window';
 import {CleanupRulePicker} from './CleanupRulePicker';
+import {NumericInputLite} from './NumericInputLite';
 import './TableItemCleanup.css';
 
 /* eslint-disable react/no-unescaped-entities */
@@ -134,25 +128,20 @@ const TableItemCleanupRow = memo(function TableItemCleanupRow({
         )}
       </div>
       <div className="TableItemCleanup__Cell TableItemCleanup__ColumnKeepAmount">
-        <NumericInput
+        <NumericInputLite
           className="TableItemCleanup__InputKeepAmount"
           disabled={!rule || rule.action === 'KEEP'}
           fill
-          majorStepSize={10}
           min={0}
-          minorStepSize={null}
-          onValueChange={useCallback(
-            (value: number) => {
-              if (Number.isInteger(value)) {
-                onRuleChange(
-                  item.id,
-                  rule => rule && {...rule, keepAmount: value}
-                );
-              }
-            },
-            [item.id, onRuleChange]
-          )}
-          stepSize={1}
+          onChange={event => {
+            const value = Number(event.target.value);
+            if (Number.isInteger(value)) {
+              onRuleChange(
+                item.id,
+                rule => rule && {...rule, keepAmount: value}
+              );
+            }
+          }}
           value={rule?.keepAmount || 0}
         />
       </div>
