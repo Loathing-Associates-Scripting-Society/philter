@@ -1,4 +1,10 @@
-import {AnchorButton, Button, ButtonGroup, Tag, UL} from '@blueprintjs/core';
+import {
+  AnchorButton,
+  Button,
+  ButtonGroup,
+  Classes,
+  UL,
+} from '@blueprintjs/core';
 import {Classes as Popover2Classes, Popover2} from '@blueprintjs/popover2';
 import {
   CleanupRule,
@@ -33,6 +39,25 @@ const itemDescriptionPopup = (descid: string) => {
     .open(`/desc_item.php?whichitem=${descid}`, 'name', 'height=200,width=214')
     ?.focus();
 };
+
+/**
+ * Tag for items whose mall price is at minimum value.
+ *
+ * This is a lightweight replica of Blueprint.js's `<Tag>` component.
+ */
+const MinMallPriceTag = () => (
+  <span
+    className={classNames(
+      Classes.TAG,
+      Classes.MINIMAL,
+      Classes.INTENT_PRIMARY,
+      'TableItemCleanup__ColumnMallPrice--minimum'
+    )}
+    title="Is at minimum mall price"
+  >
+    min
+  </span>
+);
 
 export type RuleChangeHandler = (
   itemId: number,
@@ -117,14 +142,7 @@ const TableItemCleanupRow = memo(function TableItemCleanupRow({
       <div className="TableItemCleanup__Cell TableItemCleanup__ColumnMallPrice">
         {item.mallPrice && addZwspAfterComma(item.mallPrice.toLocaleString())}
         {item.mallPrice !== null && item.isMallPriceAtMinimum && (
-          <Tag
-            className="TableItemCleanup__ColumnMallPrice--minimum"
-            htmlTitle="Is at minimum mall price"
-            intent="primary"
-            minimal
-          >
-            min
-          </Tag>
+          <MinMallPriceTag />
         )}
       </div>
       <div className="TableItemCleanup__Cell TableItemCleanup__ColumnKeepAmount">
