@@ -1,14 +1,9 @@
-import {
-  Checkbox,
-  FormGroup,
-  InputGroup,
-  Intent,
-  NumericInput,
-} from '@blueprintjs/core';
+import {Checkbox, FormGroup, InputGroup, Intent} from '@blueprintjs/core';
 import {ItemInfo, CleanupRule} from '@philter/common';
 import React, {useCallback} from 'react';
 import {MAX_MALL_PRICE, shouldWarnOnPulverize} from '../util';
 import './CleanupRulePicker.css';
+import {NumericInputLite} from './NumericInputLite';
 import {
   CleanupActionOrUnknown,
   SelectCleanupAction,
@@ -177,12 +172,11 @@ export const CleanupRulePicker = ({
             inline
             label="min price"
           >
-            <NumericInput
-              majorStepSize={100}
+            <NumericInputLite
               max={MAX_MALL_PRICE}
               min={0}
-              minorStepSize={null}
-              onValueChange={value => {
+              onChange={event => {
+                const value = Number(event.target.value);
                 if (Number.isInteger(value)) {
                   onChange?.({
                     ...rule,
@@ -190,7 +184,6 @@ export const CleanupRulePicker = ({
                   });
                 }
               }}
-              stepSize={1}
               value={rule.minPrice}
             />
           </FormGroup>
