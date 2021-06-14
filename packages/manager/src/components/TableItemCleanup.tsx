@@ -1,10 +1,4 @@
-import {
-  AnchorButton,
-  Button,
-  ButtonGroup,
-  Classes,
-  UL,
-} from '@blueprintjs/core';
+import {Button, ButtonGroup, Classes, UL} from '@blueprintjs/core';
 import {Classes as Popover2Classes, Popover2} from '@blueprintjs/popover2';
 import {
   CleanupRule,
@@ -86,49 +80,42 @@ const TableItemCleanupRow = memo(function TableItemCleanupRow({
   return (
     <div className={`TableItemCleanup__Row ${className || ''}`} {...restProps}>
       <div className="TableItemCleanup__Cell TableItemCleanup__ColumnItemName">
-        <AnchorButton
-          className="TableItemCleanup__ItemImageLink"
-          minimal
-          onClick={useCallback(
-            () => itemDescriptionPopup(item.descid),
-            [item.descid]
+        <a
+          className={classNames(
+            Classes.BUTTON,
+            Classes.MINIMAL,
+            'TableItemCleanup__ItemImageLink'
           )}
+          onClick={() => itemDescriptionPopup(item.descid)}
+          tabIndex={0}
           title="View item description"
         >
-          {useMemo(
-            () => (
-              <img
-                className="TableItemCleanup__ItemImage"
-                alt={item.name}
-                src={`/images/itemimages/${item.image}`}
-              />
-            ),
-            [item]
+          <img
+            className="TableItemCleanup__ItemImage"
+            alt={item.name}
+            src={`/images/itemimages/${item.image}`}
+          />
+        </a>
+        <a
+          className={classNames(
+            Classes.BUTTON,
+            Classes.MINIMAL,
+            'TableItemCleanup__ItemNameLink'
           )}
-        </AnchorButton>
-        <AnchorButton
-          className="TableItemCleanup__ItemNameLink"
           href={`https://kol.coldfront.net/thekolwiki/index.php/Special:Search?search=${item.name}&go=Go`}
-          minimal
           rel="noopener noreferrer"
           target="_blank"
+          tabIndex={0}
           title="Visit KoL wiki page"
         >
-          {useMemo(
-            () => (
-              <>
-                <span dangerouslySetInnerHTML={{__html: item.name}}></span>
-                {inventory.inventory[item.id] > 0 && (
-                  <>
-                    {' '}
-                    <i>({inventory.inventory[item.id]})</i>
-                  </>
-                )}
-              </>
-            ),
-            [inventory, item]
+          <span dangerouslySetInnerHTML={{__html: item.name}}></span>
+          {inventory.inventory[item.id] > 0 && (
+            <>
+              {' '}
+              <i>({inventory.inventory[item.id]})</i>
+            </>
           )}
-        </AnchorButton>
+        </a>
       </div>
       <div className="TableItemCleanup__Cell TableItemCleanup__ColumnClosetAmount">
         {inventory.closet[item.id] || 0}
