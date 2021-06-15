@@ -1,14 +1,10 @@
-import {
-  Checkbox,
-  FormGroup,
-  InputGroup,
-  Intent,
-  NumericInput,
-} from '@blueprintjs/core';
+import {Checkbox, Classes, FormGroup, Intent} from '@blueprintjs/core';
 import {ItemInfo, CleanupRule} from '@philter/common';
+import classNames from 'classnames';
 import React, {useCallback} from 'react';
 import {MAX_MALL_PRICE, shouldWarnOnPulverize} from '../util';
 import './CleanupRulePicker.css';
+import {NumericInputLite} from './NumericInputLite';
 import {
   CleanupActionOrUnknown,
   SelectCleanupAction,
@@ -110,12 +106,16 @@ export const CleanupRulePicker = ({
               intent={rule.recipent ? undefined : Intent.DANGER}
               label="to"
             >
-              <InputGroup
-                className="CleanupRulePicker__InputText"
-                intent={rule.recipent ? undefined : Intent.DANGER}
+              <input
+                className={classNames(
+                  Classes.INPUT,
+                  Classes.SMALL,
+                  !rule.recipent && Classes.INTENT_DANGER,
+                  'CleanupRulePicker__InputText'
+                )}
                 onChange={e => onChange?.({...rule, recipent: e.target.value})}
                 placeholder="Player name"
-                small
+                type="text"
                 value={rule.recipent}
               />
             </FormGroup>
@@ -125,11 +125,15 @@ export const CleanupRulePicker = ({
               inline
               label="with"
             >
-              <InputGroup
-                className="CleanupRulePicker__InputText"
+              <input
+                className={classNames(
+                  Classes.INPUT,
+                  Classes.SMALL,
+                  'CleanupRulePicker__InputText'
+                )}
                 onChange={e => onChange?.({...rule, message: e.target.value})}
                 placeholder="Kmail message"
-                small
+                type="text"
                 value={rule.message}
               />
             </FormGroup>
@@ -144,14 +148,17 @@ export const CleanupRulePicker = ({
               intent={!rule.targetItem ? Intent.DANGER : undefined}
               label="into"
             >
-              <InputGroup
-                className="CleanupRulePicker__InputText"
-                intent={!rule.targetItem ? Intent.DANGER : undefined}
+              <input
+                className={classNames(
+                  Classes.INPUT,
+                  Classes.SMALL,
+                  'CleanupRulePicker__InputText'
+                )}
                 onChange={e =>
                   onChange?.({...rule, targetItem: e.target.value})
                 }
                 placeholder="Item name"
-                small
+                type="text"
                 value={rule.targetItem}
               />
             </FormGroup>
@@ -177,12 +184,11 @@ export const CleanupRulePicker = ({
             inline
             label="min price"
           >
-            <NumericInput
-              majorStepSize={100}
+            <NumericInputLite
               max={MAX_MALL_PRICE}
               min={0}
-              minorStepSize={null}
-              onValueChange={value => {
+              onChange={event => {
+                const value = Number(event.target.value);
                 if (Number.isInteger(value)) {
                   onChange?.({
                     ...rule,
@@ -190,7 +196,6 @@ export const CleanupRulePicker = ({
                   });
                 }
               }}
-              stepSize={1}
               value={rule.minPrice}
             />
           </FormGroup>
@@ -201,11 +206,15 @@ export const CleanupRulePicker = ({
             inline
             label="with message:"
           >
-            <InputGroup
-              className="CleanupRulePicker__InputText"
+            <input
+              className={classNames(
+                Classes.INPUT,
+                Classes.SMALL,
+                'CleanupRulePicker__InputText'
+              )}
               onChange={e => onChange?.({...rule, message: e.target.value})}
               placeholder="Enter reminder message"
-              small
+              type="text"
               value={rule.message}
             />
           </FormGroup>

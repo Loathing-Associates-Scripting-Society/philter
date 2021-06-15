@@ -27,12 +27,15 @@
 }
 
 .CleanupRulePicker__InputText {
-  /* Since we're using the "small" prop for the inner <InputGroup>, we need to
-     ensure that the input aligns vertically with the label.
+  /* Ensure that the input aligns vertically with the label.
      (align-items: center does not work because helper text would change its
       alignment)
    */
   margin-top: 0.3em;
+  /* Fill the enclosing <FormGroup>
+     (needed b/c we're using <input> instead of <InputGroup>
+   */
+  width: 100%;
 }
 
 /* Need specificity > (0, 1, 0) to override Blueprint's styling */

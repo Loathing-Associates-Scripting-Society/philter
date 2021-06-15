@@ -1,25 +1,19 @@
-import {
-  AnchorButton,
-  Button,
-  ButtonGroup,
-  NumericInput,
-  Tag,
-  UL,
-} from '@blueprintjs/core';
+import {Button, ButtonGroup, Classes, UL} from '@blueprintjs/core';
 import {Classes as Popover2Classes, Popover2} from '@blueprintjs/popover2';
 import {
-  ItemInfo,
   CleanupRule,
   CleanupRuleset,
-  ReadonlyInventoryState,
+  ItemInfo,
   ReadonlyCleanupRuleset,
+  ReadonlyInventoryState,
 } from '@philter/common';
 import classNames from 'classnames';
-import React, {memo, useCallback, useEffect, useMemo, useRef} from 'react';
+import React, {memo, useCallback, useMemo} from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import {areEqual, FixedSizeList} from 'react-window';
-import './TableItemCleanup.css';
 import {CleanupRulePicker} from './CleanupRulePicker';
+import {NumericInputLite} from './NumericInputLite';
+import './TableItemCleanup.css';
 
 /* eslint-disable react/no-unescaped-entities */
 
@@ -39,6 +33,25 @@ const itemDescriptionPopup = (descid: string) => {
     .open(`/desc_item.php?whichitem=${descid}`, 'name', 'height=200,width=214')
     ?.focus();
 };
+
+/**
+ * Tag for items whose mall price is at minimum value.
+ *
+ * This is a lightweight replica of Blueprint.js's `<Tag>` component.
+ */
+const MinMallPriceTag = () => (
+  <span
+    className={classNames(
+      Classes.TAG,
+      Classes.MINIMAL,
+      Classes.INTENT_PRIMARY,
+      'TableItemCleanup__ColumnMallPrice--minimum'
+    )}
+    title="Is at minimum mall price"
+  >
+    min
+  </span>
+);
 
 export type RuleChangeHandler = (
   itemId: number,
@@ -67,49 +80,42 @@ const TableItemCleanupRow = memo(function TableItemCleanupRow({
   return (
     <div className={`TableItemCleanup__Row ${className || ''}`} {...restProps}>
       <div className="TableItemCleanup__Cell TableItemCleanup__ColumnItemName">
-        <AnchorButton
-          className="TableItemCleanup__ItemImageLink"
-          minimal
-          onClick={useCallback(
-            () => itemDescriptionPopup(item.descid),
-            [item.descid]
+        <a
+          className={classNames(
+            Classes.BUTTON,
+            Classes.MINIMAL,
+            'TableItemCleanup__ItemImageLink'
           )}
+          onClick={() => itemDescriptionPopup(item.descid)}
+          tabIndex={0}
           title="View item description"
         >
-          {useMemo(
-            () => (
-              <img
-                className="TableItemCleanup__ItemImage"
-                alt={item.name}
-                src={`/images/itemimages/${item.image}`}
-              />
-            ),
-            [item]
+          <img
+            className="TableItemCleanup__ItemImage"
+            alt={item.name}
+            src={`/images/itemimages/${item.image}`}
+          />
+        </a>
+        <a
+          className={classNames(
+            Classes.BUTTON,
+            Classes.MINIMAL,
+            'TableItemCleanup__ItemNameLink'
           )}
-        </AnchorButton>
-        <AnchorButton
-          className="TableItemCleanup__ItemNameLink"
           href={`https://kol.coldfront.net/thekolwiki/index.php/Special:Search?search=${item.name}&go=Go`}
-          minimal
           rel="noopener noreferrer"
           target="_blank"
+          tabIndex={0}
           title="Visit KoL wiki page"
         >
-          {useMemo(
-            () => (
-              <>
-                <span dangerouslySetInnerHTML={{__html: item.name}}></span>
-                {inventory.inventory[item.id] > 0 && (
-                  <>
-                    {' '}
-                    <i>({inventory.inventory[item.id]})</i>
-                  </>
-                )}
-              </>
-            ),
-            [inventory, item]
+          <span dangerouslySetInnerHTML={{__html: item.name}}></span>
+          {inventory.inventory[item.id] > 0 && (
+            <>
+              {' '}
+              <i>({inventory.inventory[item.id]})</i>
+            </>
           )}
-        </AnchorButton>
+        </a>
       </div>
       <div className="TableItemCleanup__Cell TableItemCleanup__ColumnClosetAmount">
         {inventory.closet[item.id] || 0}
@@ -123,36 +129,24 @@ const TableItemCleanupRow = memo(function TableItemCleanupRow({
       <div className="TableItemCleanup__Cell TableItemCleanup__ColumnMallPrice">
         {item.mallPrice && addZwspAfterComma(item.mallPrice.toLocaleString())}
         {item.mallPrice !== null && item.isMallPriceAtMinimum && (
-          <Tag
-            className="TableItemCleanup__ColumnMallPrice--minimum"
-            htmlTitle="Is at minimum mall price"
-            intent="primary"
-            minimal
-          >
-            min
-          </Tag>
+          <MinMallPriceTag />
         )}
       </div>
       <div className="TableItemCleanup__Cell TableItemCleanup__ColumnKeepAmount">
-        <NumericInput
+        <NumericInputLite
           className="TableItemCleanup__InputKeepAmount"
           disabled={!rule || rule.action === 'KEEP'}
           fill
-          majorStepSize={10}
           min={0}
-          minorStepSize={null}
-          onValueChange={useCallback(
-            (value: number) => {
-              if (Number.isInteger(value)) {
-                onRuleChange(
-                  item.id,
-                  rule => rule && {...rule, keepAmount: value}
-                );
-              }
-            },
-            [item.id, onRuleChange]
-          )}
-          stepSize={1}
+          onChange={event => {
+            const value = Number(event.target.value);
+            if (Number.isInteger(value)) {
+              onRuleChange(
+                item.id,
+                rule => rule && {...rule, keepAmount: value}
+              );
+            }
+          }}
           value={rule?.keepAmount || 0}
         />
       </div>
@@ -177,6 +171,46 @@ interface TableItemCleanupRowData {
   cleanupRules: ReadonlyCleanupRuleset;
   onRuleChange: RuleChangeHandler;
 }
+
+/**
+ * Callback that returns the item key for react-window.
+ */
+const itemKeyCallback = (index: number, data: TableItemCleanupRowData) =>
+  data.items[index].id;
+
+// This function must be a stable value for React to properly use memoization.
+// Since the data prop changes whenever the cleanup ruleset is modified, this
+// component itself does not benefit from `React.memo()`. However, the
+// underlying component _does_ benefit from `React.memo()`.
+const TableItemCleanupRowWrapper = ({
+  data: {cleanupRules, onRuleChange, inventory, items},
+  index,
+  style,
+}: {
+  data: TableItemCleanupRowData;
+  index: number;
+  style?: React.CSSProperties;
+  isScrolling?: boolean;
+}) => (
+  <TableItemCleanupRow
+    inventory={inventory}
+    item={items[index]}
+    onRuleChange={onRuleChange}
+    rule={cleanupRules[items[index].id]}
+    style={style}
+  />
+);
+
+/**
+ * Sets the `tabIndex` of a HTML element to -1.
+ * This enables keyboard-based scrolling on the react-window container.
+ * (Page Up/Down, Arrow Up/Down, Home/End)
+ */
+const setTabIndexOnRefElement = (refElement: HTMLElement | null) => {
+  if (refElement) {
+    refElement.tabIndex = -1;
+  }
+};
 
 interface TableItemCleanupPropsBase {
   /**
@@ -263,66 +297,6 @@ export const TableItemCleanup = memo(function TableItemCleanup({
     [onChange]
   );
 
-  // Smooth scrolling (behavior: "smooth") via keyboard is tricky.
-  // When the user holds down on the arrow up/down or page up/down keys,
-  // onKeyDown() fires way too fast, overloading the browser and causing
-  // scrolling to become extremely jittery.
-  // I tried multiple ways of debouncing this:
-  //
-  // 1. Using lodash.throttle()
-  //    - Was quite janky and forced me to set unreasonably high throttle
-  //      delays, on the order of ~500ms for page up/down. Even then, it was
-  //      unreliably janky.
-  // 2. Manually debouncing using requestAnimationFrame() or setTimeout()
-  //    - This was worse than using lodash.throttle().
-  // 3. Using `isScrolling`
-  //    - Much more reliable than the above. However, it caused long pauses
-  //      between scrolls when the user holds down a scrolling key. Also, it
-  //      didn't prevent doScroll() from being called multiple times before the
-  //      component registered `isScrolling`.
-  //
-  // I eventually landed on a combination of (2) and (3) to successfully
-  // debounce scrolling. This is still quite slow, but almost jitter-free.
-
-  // Use requestAnimationFrame() and isScrolling to throttle scroll events
-  const scrollTimerRef = useRef<number>();
-  const isScrollingRef = useRef(false);
-
-  /**
-   * Debounced scrolling function
-   * @param type
-   * @param amount Position for `to`, offset for `by`
-   */
-  const doScroll = useCallback((type: 'to' | 'by', amount: number) => {
-    if (isScrollingRef.current) return;
-    if (scrollTimerRef.current !== undefined) return;
-    scrollTimerRef.current = window.requestAnimationFrame(() => {
-      scrollTimerRef.current = undefined;
-      outerListRef.current?.[type === 'by' ? 'scrollBy' : 'scrollTo']({
-        behavior: 'smooth',
-        top: amount,
-      });
-    });
-  }, []);
-  // Cancel any remaining scrolling events if we are unmounting
-  useEffect(
-    () => () => {
-      if (scrollTimerRef.current !== undefined) {
-        window.cancelAnimationFrame(scrollTimerRef.current);
-      }
-    },
-    []
-  );
-
-  // Manually implement Page Up/Down. Based on:
-  // - https://github.com/bvaughn/react-window/issues/46#issuecomment-416073707
-  // - https://sung.codes/blog/2019/05/07/scrolling-with-page-up-down-keys-in-react-window/
-  const innerListRef = useRef<HTMLElement>(null);
-  const outerListRef = useRef<HTMLElement>(null);
-
-  const PAGE_HEIGHT = 600;
-  const ROW_HEIGHT = 60;
-
   const itemData = useMemo<TableItemCleanupRowData>(
     () => ({
       inventory,
@@ -331,10 +305,6 @@ export const TableItemCleanup = memo(function TableItemCleanup({
       onRuleChange: onRuleChange || defaultRuleChangeHandler,
     }),
     [defaultRuleChangeHandler, inventory, items, cleanupRules, onRuleChange]
-  );
-  const itemKeyCallback = useCallback(
-    (index: number, data: TableItemCleanupRowData) => data.items[index].id,
-    []
   );
 
   const editorButtons = useMemo(
@@ -392,71 +362,13 @@ export const TableItemCleanup = memo(function TableItemCleanup({
     [disableReset, disableSave, onReset, onSave]
   );
 
-  // This function must be a stable value for React to properly use memoization.
-  // Since the data prop changes whenever the cleanup ruleset is modified, this
-  // component itself does not benefit from `React.memo()`. However, the
-  // underlying component _does_ benefit from `React.memo()`.
-  const TableItemCleanupRowWrapper = useCallback(
-    // eslint-disable-next-line prefer-arrow-callback
-    function TableItemCleanupRowWrapper({
-      data: {cleanupRules, onRuleChange, inventory, items},
-      index,
-      style,
-      isScrolling = false,
-    }: {
-      data: TableItemCleanupRowData;
-      index: number;
-      style?: React.CSSProperties;
-      isScrolling?: boolean;
-    }) {
-      isScrollingRef.current = isScrolling;
-      return (
-        <TableItemCleanupRow
-          inventory={inventory}
-          item={items[index]}
-          onRuleChange={onRuleChange}
-          rule={cleanupRules[items[index].id]}
-          style={style}
-        />
-      );
-    },
-    []
-  );
-
   return (
     <div className={classNames('TableItemCleanup', className)} {...restProps}>
       {editorButtons}
       <div className="TableItemCleanup__TableWrapper">
         <AutoSizer disableWidth>
           {({height: measuredHeight}) => (
-            <div
-              className="TableItemCleanup__Inner"
-              onKeyDown={event => {
-                if (event.key === 'ArrowDown') {
-                  if (event.currentTarget === event.target) {
-                    doScroll('by', ROW_HEIGHT * 3);
-                  }
-                } else if (event.key === 'ArrowUp') {
-                  if (event.currentTarget === event.target) {
-                    doScroll('by', -ROW_HEIGHT * 3);
-                  }
-                } else if (event.key === 'PageDown') {
-                  doScroll('by', PAGE_HEIGHT);
-                } else if (event.key === 'PageUp') {
-                  doScroll('by', -PAGE_HEIGHT);
-                } else if (event.key === 'Home') {
-                  doScroll('to', 0);
-                } else if (event.key === 'End') {
-                  if (innerListRef.current) {
-                    doScroll(
-                      'to',
-                      parseFloat(innerListRef.current.style.height)
-                    );
-                  }
-                }
-              }}
-              tabIndex={-1}
-            >
+            <div className="TableItemCleanup__Inner">
               <div className="TableItemCleanup__HeaderRow">
                 <div className="TableItemCleanup__HeaderCell TableItemCleanup__ColumnItemName">
                   Item (Amount)
@@ -483,14 +395,12 @@ export const TableItemCleanup = memo(function TableItemCleanup({
               <FixedSizeList
                 className="TableItemCleanup__Body"
                 height={measuredHeight}
-                innerRef={innerListRef}
                 itemCount={items.length}
                 itemData={itemData}
                 itemKey={itemKeyCallback}
-                itemSize={ROW_HEIGHT}
-                outerRef={outerListRef}
+                itemSize={60}
+                outerRef={setTabIndexOnRefElement}
                 overscanCount={15}
-                useIsScrolling
                 width="100%"
               >
                 {TableItemCleanupRowWrapper}

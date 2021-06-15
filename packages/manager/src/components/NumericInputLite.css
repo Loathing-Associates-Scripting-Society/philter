@@ -1,0 +1,4 @@
+/* Need specificity > (0, 2, 0) to override Blueprint's styling */
+input.NumericInputLite.bp3-input {
+  padding-right: 0px; /* Position browser-native up/down buttons */
+}
