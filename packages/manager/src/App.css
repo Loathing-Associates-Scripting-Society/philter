@@ -7,6 +7,7 @@
      to expand vertically using flex-grow.
      The "20px" prevents a scrollbar from appearing for whatever reason. */
   height: 100vh;
+  padding: 0.5em;
 }
 
 .App__Tabs,
