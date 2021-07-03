@@ -1,0 +1,14 @@
+diff --git a/node_modules/vite/dist/node/chunks/dep-bc228bbb.js b/node_modules/vite/dist/node/chunks/dep-bc228bbb.js
+index 9893551..fa7f533 100644
+--- a/node_modules/vite/dist/node/chunks/dep-bc228bbb.js
++++ b/node_modules/vite/dist/node/chunks/dep-bc228bbb.js
+@@ -29302,8 +29302,7 @@ function getName(id) {
+   if (name !== 'index') {
+     return name;
+   }
+-  const segments = path$v.dirname(id).split(path$v.sep);
+-  return makeLegalIdentifier(segments[segments.length - 1]);
++  return makeLegalIdentifier(path$v.basename(path$v.dirname(id)));
+ }
+ 
+ function normalizePathSlashes(path) {

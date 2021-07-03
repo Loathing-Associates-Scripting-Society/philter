@@ -6,7 +6,8 @@
   "scripts": {
     "build": "yarn run build:manager && yarn workspace @philter/e2e-tests build",
     "build:manager": "yarn workspace @philter/common build && yarn workspace @philter/api build && yarn workspace @philter/manager build",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "postinstall": "patch-package"
   },
   "eslintConfig": {
     "extends": "./node_modules/gts/",
@@ -24,5 +25,8 @@
         }
       ]
     }
+  },
+  "devDependencies": {
+    "postinstall-postinstall": "^2.1.0"
   }
 }
