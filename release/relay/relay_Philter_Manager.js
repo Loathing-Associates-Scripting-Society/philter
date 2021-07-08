@@ -1145,7 +1145,7 @@ function matchRoute(route, baseUrl, options, pathname, parentParams) {
           var _matchResult = matchResult,
               path = _matchResult.path;
           matchResult.path = !end && path.charAt(path.length - 1) === '/' ? path.substr(1) : path;
-          matchResult.params = Object.assign({}, parentParams, {}, matchResult.params);
+          matchResult.params = Object.assign({}, parentParams, matchResult.params);
           return {
             done: false,
             value: {
@@ -1233,7 +1233,7 @@ var UniversalRouterSync = function () {
   _proto.resolve = function resolve(pathnameOrContext) {
     var context = Object.assign({
       router: this
-    }, this.options.context, {}, typeof pathnameOrContext === 'string' ? {
+    }, this.options.context, typeof pathnameOrContext === 'string' ? {
       pathname: pathnameOrContext
     } : pathnameOrContext);
     var matchResult = matchRoute(this.root, this.baseUrl, this.options, context.pathname.substr(this.baseUrl.length));
@@ -1264,7 +1264,7 @@ var UniversalRouterSync = function () {
         throw error;
       }
 
-      currentContext = Object.assign({}, context, {}, matches.value);
+      currentContext = Object.assign({}, context, matches.value);
       var result = resolve(currentContext, matches.value.params);
 
       if (result !== null && result !== undefined) {
