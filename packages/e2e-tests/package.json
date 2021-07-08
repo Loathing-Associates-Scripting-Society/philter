@@ -1,12 +1,12 @@
 {
   "name": "@philter/e2e-tests",
   "version": "0.0.0",
-  "description": "End-to-end test scripts for Philter",
-  "main": "index.js",
-  "repository": "https://github.com/Loathing-Associates-Scripting-Society/Philter",
-  "author": "Yehyoung Kang",
-  "license": "MIT",
   "private": true,
+  "description": "End-to-end test scripts for Philter",
+  "repository": "https://github.com/Loathing-Associates-Scripting-Society/Philter",
+  "license": "MIT",
+  "author": "Yehyoung Kang",
+  "main": "index.js",
   "scripts": {
     "build": "rollup -c",
     "clean": "gts clean",

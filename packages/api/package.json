@@ -10,9 +10,6 @@
     "lint": "eslint .",
     "test": "yarn run lint"
   },
-  "engines": {
-    "node": "^12.17.0 || >=13.2.0"
-  },
   "eslintConfig": {
     "parserOptions": {
       "sourceType": "module"
@@ -32,5 +29,8 @@
     "rollup-plugin-copy": "^3.4.0",
     "tslib": "^2.3.0",
     "typescript": "^4.3.2"
+  },
+  "engines": {
+    "node": "^12.17.0 || >=13.2.0"
   }
 }

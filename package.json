@@ -11,10 +11,6 @@
   },
   "eslintConfig": {
     "extends": "./node_modules/gts/",
-    "ignorePatterns": [
-      "/packages/*/build/",
-      "/release/"
-    ],
     "rules": {
       "node/no-unpublished-import": [
         "error",
@@ -24,7 +20,11 @@
           ]
         }
       ]
-    }
+    },
+    "ignorePatterns": [
+      "/packages/*/build/",
+      "/release/"
+    ]
   },
   "devDependencies": {
     "postinstall-postinstall": "^2.1.0"
