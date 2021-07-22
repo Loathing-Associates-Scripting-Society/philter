@@ -2,6 +2,7 @@
  * @file Provides test case classes for each action type of OCD Cleanup.
  */
 
+import {toItemMap} from '@philter/common/kol';
 import {
   autosellPrice,
   canInteract,
@@ -21,7 +22,7 @@ import {
 } from 'kolmafia';
 import {assert} from 'kolmafia-util';
 import {getvar} from 'zlib.ash';
-import {error, InventoryState, loadOutboxKmail, toItemMap} from './util';
+import {error, InventoryState, loadOutboxKmail} from './util';
 
 /**
  * Interface for E2E test cases that verify a single action.

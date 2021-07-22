@@ -18,9 +18,13 @@
     ],
     // Emit ES modules and rely on the bundler to convert us to CommonJS
     "module": "ES2015",
+    "moduleResolution": "node",
     // Necessary to produce consistent output on different platforms
     "newLine": "LF",
     "outDir": "build",
+    "paths": {
+      "zlib.ash": ["../../node_modules/kolmafia/contrib/zlib.ash.d.ts"]
+    },
     "rootDir": ".",
     // Downstream packages should use transpilers to transpile our output to
     // Rhino-compatible ES5+

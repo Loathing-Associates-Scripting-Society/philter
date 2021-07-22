@@ -3,39 +3,39 @@
  */
 
 import {
+  CleanupAction,
+  CleanupRule,
   CLEANUP_TABLES_CATEGORIZED_ROUTE,
   CLEANUP_TABLES_UNCATEGORIZED_ROUTE,
   CONFIG_ROUTE,
   INVENTORY_ROUTE,
-  CleanupAction,
-  CleanupRule,
   RULESET_ROUTE,
   STATISTICS_ROUTE,
   StockingRule,
 } from '@philter/common';
-import {isOCDable} from 'ocd-cleanup.ash';
+import {
+  CONFIG_NAMES,
+  isCleanable,
+  loadCleanupConfig,
+  saveCleanupConfig,
+  saveCleanupRulesetFile,
+  saveStockingRulesetFile,
+} from '@philter/common/kol';
 import {getvar} from 'zlib.ash';
+import {
+  loadCleanupRulesetForCurrentPlayer,
+  saveCleanupRulesetForCurrentPlayer,
+} from './controllers/cleanup-ruleset';
 import {
   getInventoryState,
   getInventoryStateWithMaps,
 } from './controllers/inventory-state';
-import {
-  CONFIG_NAMES,
-  getFullDataFileName,
-  getFullStockFileName,
-  loadCleanupConfig,
-  saveCleanupConfig,
-} from './controllers/philter-config';
 import {toItemInfo} from './controllers/item-info';
 import {
-  loadCleanupRulesetForCurrentPlayer,
-  saveCleanupRulesetFile,
-  saveCleanupRulesetForCurrentPlayer,
-} from './controllers/cleanup-ruleset';
-import {
-  loadStockingRulesetForCurrentPlayer,
-  saveStockingRulesetFile,
-} from './controllers/stocking-ruleset';
+  getFullDataFileName,
+  getFullStockFileName,
+} from './controllers/philter-config';
+import {loadStockingRulesetForCurrentPlayer} from './controllers/stocking-ruleset';
 import {createRoute} from './typed-router';
 import {idMappingToItemMap, itemMapToIdMapping} from './util';
 
@@ -78,7 +78,7 @@ export const routes = [
       for (const key of Object.keys(inventoryMaps)) {
         const itemMap = inventoryMaps[key as keyof typeof inventoryMaps];
         for (const item of itemMap.keys()) {
-          if (!cleanupRulesMap.has(item) && isOCDable(item)) {
+          if (!cleanupRulesMap.has(item) && isCleanable(item)) {
             uncategorizedItems.add(item);
           }
         }
@@ -188,7 +188,7 @@ export const routes = [
       for (const key of Object.keys(inventoryMaps)) {
         const itemMap = inventoryMaps[key as keyof typeof inventoryMaps];
         for (const item of itemMap.keys()) {
-          if (!cleanupRulesMap.has(item) && isOCDable(item)) {
+          if (!cleanupRulesMap.has(item) && isCleanable(item)) {
             uncategorizedItems.add(item);
           }
         }

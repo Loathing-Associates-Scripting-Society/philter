@@ -7,6 +7,7 @@
  * Warning: This script spends ~3000 meat on purchasing items for testing.
  */
 
+import {toItemMap} from '@philter/common/kol';
 import {
   bufferToFile,
   cliExecute,
@@ -36,12 +37,7 @@ import {
   UntinkerTest,
   UseTest,
 } from './lib/action-tests';
-import {
-  captureInventoryState,
-  error,
-  InventoryState,
-  toItemMap,
-} from './lib/util';
+import {captureInventoryState, error, InventoryState} from './lib/util';
 
 const TEST_CONFIG_FILE_NAME = 'e2e-test-config';
 
