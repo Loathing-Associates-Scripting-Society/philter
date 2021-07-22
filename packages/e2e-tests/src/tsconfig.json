@@ -32,5 +32,6 @@
     // Don't include any @types/* packages, which may otherwise pull in unwanted
     // libs (e.g. "lib.es2017.object.d.ts")
     "types": []
-  }
+  },
+  "references": [{"path": "../../common"}]
 }
