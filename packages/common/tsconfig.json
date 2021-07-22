@@ -22,8 +22,9 @@
     "newLine": "LF",
     "outDir": "build",
     "rootDir": ".",
-    // Transpile ES2015 syntax unsupported by Rhino (e.g. template strings)
-    "target": "ES5",
+    // Downstream packages should use transpilers to transpile our output to
+    // Rhino-compatible ES5+
+    "target": "ES2018",
     // Don't include any @types/* packages, which may otherwise pull in unwanted
     // libs (e.g. "lib.es2017.object.d.ts")
     "types": []

@@ -21,8 +21,10 @@
     "universal-router": "^9.0.1"
   },
   "devDependencies": {
+    "@rollup/plugin-buble": "^0.21.3",
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@rollup/plugin-typescript": "^8.2.1",
+    "buble-config-rhino": "^0.1.0",
     "gts": "^3.1.0",
     "rimraf": "^3.0.2",
     "rollup": "^2.51.2",
