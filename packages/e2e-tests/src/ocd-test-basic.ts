@@ -15,6 +15,7 @@ import {
   printHtml,
   toInt,
 } from 'kolmafia';
+import {assert} from 'kolmafia-util';
 import minimist from 'minimist';
 import {parseArgsStringToArgv} from 'string-argv';
 import {getvar} from 'zlib.ash';
@@ -36,7 +37,6 @@ import {
   UseTest,
 } from './lib/action-tests';
 import {
-  assert,
   captureInventoryState,
   error,
   InventoryState,
@@ -79,7 +79,7 @@ function setup(testCases: Iterable<CleanupActionTest>): void {
     }
   }
 
-  assert(
+  assert.ok(
     bufferToFile(configRows.join('\n'), `OCDdata_${TEST_CONFIG_FILE_NAME}.txt`),
     'Failed to save config file'
   );

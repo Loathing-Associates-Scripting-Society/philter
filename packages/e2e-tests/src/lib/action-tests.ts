@@ -19,15 +19,9 @@ import {
   print,
   retrieveItem,
 } from 'kolmafia';
+import {assert} from 'kolmafia-util';
 import {getvar} from 'zlib.ash';
-
-import {
-  assert,
-  error,
-  InventoryState,
-  loadOutboxKmail,
-  toItemMap,
-} from './util';
+import {error, InventoryState, loadOutboxKmail, toItemMap} from './util';
 
 /**
  * Interface for E2E test cases that verify a single action.
@@ -116,8 +110,9 @@ function verifyKeepAmount(
   const actualKeepAmount = Math.max(keepAmount - beforeClosetAmount, 0);
   const expectedAfterAmount = Math.min(beforeAmount, actualKeepAmount);
 
-  assert(
-    afterAmount === expectedAfterAmount,
+  assert.equal(
+    afterAmount,
+    expectedAfterAmount,
     `${name} action failed; expected ${expectedAfterAmount} of ${item} to remain, but have ${afterAmount}`
   );
 }
@@ -146,7 +141,7 @@ export class AutosellTest implements CleanupActionTest {
   setup() {
     // Ensure that we have 1 more than keepAmount, so that at least 1 item is
     // always processed
-    assert(
+    assert.ok(
       retrieveItem(this.item, this.keepAmount + 1) &&
         itemAmount(this.item) >= this.keepAmount + 1,
       `Failed to obtain ${this.item}`
@@ -187,7 +182,7 @@ export class BrickoBreakTest implements CleanupActionTest {
   setup() {
     // Ensure that we have 1 more than keepAmount, so that at least 1 item is
     // always processed
-    assert(
+    assert.ok(
       retrieveItem(this.item, this.keepAmount + 1) &&
         itemAmount(this.item) >= this.keepAmount + 1,
       `Failed to obtain ${this.item}`
@@ -209,8 +204,9 @@ export class BrickoBreakTest implements CleanupActionTest {
       const item = Item.get(itemName);
       const beforeAmount = before.inventory.get(item) || 0;
       const afterAmount = after.inventory.get(item) || 0;
-      assert(
-        beforeAmount < afterAmount,
+      assert.isBelow(
+        beforeAmount,
+        afterAmount,
         `${this.name} action failed; amount of ingredient ${item} has not increased (${beforeAmount} >= ${afterAmount})`
       );
     }
@@ -243,7 +239,7 @@ export class ClosetTest implements CleanupActionTest {
   setup() {
     // Ensure that we have 1 more than keepAmount, so that at least 1 item is
     // always processed
-    assert(
+    assert.ok(
       retrieveItem(this.item, this.keepAmount + 1) &&
         itemAmount(this.item) >= this.keepAmount + 1,
       `Failed to obtain ${this.item}`
@@ -266,8 +262,9 @@ export class ClosetTest implements CleanupActionTest {
     const {item} = this;
     const closetBeforeAmount = before.closet.get(item) || 0;
     const closetAfterAmount = after.closet.get(item) || 0;
-    assert(
-      closetAfterAmount > closetBeforeAmount,
+    assert.isAbove(
+      closetAfterAmount,
+      closetBeforeAmount,
       `Number of ${item} in closet has not increased (${closetBeforeAmount} -> ${closetAfterAmount})`
     );
   }
@@ -307,7 +304,7 @@ export class DisplayTest implements CleanupActionTest {
   setup() {
     // Ensure that we have 1 more than keepAmount, so that at least 1 item is
     // always processed
-    assert(
+    assert.ok(
       retrieveItem(this.item, this.keepAmount + 1) &&
         itemAmount(this.item) >= this.keepAmount + 1,
       `Failed to obtain ${this.item}`
@@ -326,8 +323,9 @@ export class DisplayTest implements CleanupActionTest {
     const {item} = this;
     const displayBeforeAmount = before.display.get(item) || 0;
     const displayAfterAmount = after.display.get(item) || 0;
-    assert(
-      displayAfterAmount > displayBeforeAmount,
+    assert.isAbove(
+      displayAfterAmount,
+      displayBeforeAmount,
       `Number of ${item} in display case has not increased (${displayBeforeAmount} -> ${displayAfterAmount})`
     );
   }
@@ -346,8 +344,9 @@ export class DiscardTest implements CleanupActionTest {
    * @param keepAmount Amount to keep in inventory
    */
   constructor(item: Item, keepAmount = 0) {
-    assert(
-      autosellPrice(item) === 0,
+    assert.equal(
+      autosellPrice(item),
+      0,
       `${item} has nonzero autosell price of ${autosellPrice(item)}`
     );
     this.item = item;
@@ -361,7 +360,7 @@ export class DiscardTest implements CleanupActionTest {
   setup() {
     // Ensure that we have 1 more than keepAmount, so that at least 1 item is
     // always processed
-    assert(
+    assert.ok(
       retrieveItem(this.item, this.keepAmount + 1) &&
         itemAmount(this.item) >= this.keepAmount + 1,
       `Failed to obtain ${this.item}`
@@ -393,8 +392,8 @@ export class GiftTest implements CleanupActionTest {
    * @param keepAmount Amount to keep in inventory
    */
   constructor(player: string, item: Item, keepAmount = 0) {
-    assert(player, 'GiftTest requires a valid player');
-    assert(isGiftable(item), `${item} cannot be sent as a gift`);
+    assert.ok(player, 'GiftTest requires a valid player');
+    assert.ok(isGiftable(item), `${item} cannot be sent as a gift`);
     this.player = player;
     this.item = item;
     this.keepAmount = keepAmount;
@@ -407,7 +406,7 @@ export class GiftTest implements CleanupActionTest {
   setup() {
     // Ensure that we have 1 more than keepAmount, so that at least 1 item is
     // always processed
-    assert(
+    assert.ok(
       retrieveItem(this.item, this.keepAmount + 1) &&
         itemAmount(this.item) >= this.keepAmount + 1,
       `Failed to obtain ${this.item}`
@@ -428,13 +427,13 @@ export class GiftTest implements CleanupActionTest {
 
   verify(before: InventoryState, after: InventoryState) {
     const {setupTimestamp} = this;
-    assert(setupTimestamp !== 0, 'setupTimestamp is not set!');
+    assert.notEqual(setupTimestamp, 0, 'setupTimestamp is not set!');
 
     verifyKeepAmount(this, before, after);
 
     const currentTimestamp = Date.now();
     const kmails = loadOutboxKmail();
-    assert(
+    assert.ok(
       kmails.some(
         kmail =>
           setupTimestamp <= kmail.localTimestamp &&
@@ -486,7 +485,7 @@ export class MakeTest implements CleanupActionTest {
   setup() {
     // Ensure that we have 1 more than keepAmount, so that at least 1 item is
     // always processed
-    assert(
+    assert.ok(
       retrieveItem(this.item, this.retrieveAmount) &&
         itemAmount(this.item) >= this.retrieveAmount,
       `Failed to obtain ${this.item}`
@@ -513,15 +512,17 @@ export class MakeTest implements CleanupActionTest {
     // verifyKeepAmount() to verify the remaining item quantity.
     const beforeAmount = before.inventory.get(item) || 0;
     const afterAmount = after.inventory.get(item) || 0;
-    assert(
-      beforeAmount > afterAmount,
+    assert.isAbove(
+      beforeAmount,
+      afterAmount,
       `${this.name} action failed; amount of ${item} has not decreased (${beforeAmount} <= ${afterAmount})`
     );
 
     const targetBeforeAmount = before.inventory.get(targetItem) || 0;
     const targetAfterAmount = after.inventory.get(targetItem) || 0;
-    assert(
-      targetBeforeAmount < targetAfterAmount,
+    assert.isBelow(
+      targetBeforeAmount,
+      targetAfterAmount,
       `${this.name} action failed; amount of ingredient ${targetItem} has not increased (${targetBeforeAmount} >= ${targetAfterAmount})`
     );
   }
@@ -561,7 +562,7 @@ export class MallTest implements CleanupActionTest {
   setup() {
     // Ensure that we have 1 more than keepAmount, so that at least 1 item is
     // always processed
-    assert(
+    assert.ok(
       retrieveItem(this.item, this.keepAmount + 1) &&
         itemAmount(this.item) >= this.keepAmount + 1,
       `Failed to obtain ${this.item}`
@@ -578,8 +579,9 @@ export class MallTest implements CleanupActionTest {
     const {item} = this;
     const shopBeforeAmount = before.shop.get(item) || 0;
     const shopAfterAmount = after.shop.get(item) || 0;
-    assert(
-      shopAfterAmount > shopBeforeAmount,
+    assert.isAbove(
+      shopAfterAmount,
+      shopBeforeAmount,
       `Number of ${item} in shop has not increased (${shopBeforeAmount} -> ${shopAfterAmount})`
     );
   }
@@ -618,7 +620,7 @@ export class PulverizeTest implements CleanupActionTest {
   setup() {
     // Ensure that we have 1 more than keepAmount, so that at least 1 item is
     // always processed
-    assert(
+    assert.ok(
       retrieveItem(this.item, this.keepAmount + 1) &&
         itemAmount(this.item) >= this.keepAmount + 1,
       `Failed to obtain ${this.item}`
@@ -638,8 +640,9 @@ export class PulverizeTest implements CleanupActionTest {
     for (const expectedItem of this.expectedResults) {
       const beforeAmount = before.inventory.get(expectedItem) || 0;
       const afterAmount = after.inventory.get(expectedItem) || 0;
-      assert(
-        beforeAmount < afterAmount,
+      assert.isBelow(
+        beforeAmount,
+        afterAmount,
         `${this.name} action failed; amount of ingredient ${expectedItem} has not increased (${beforeAmount} >= ${afterAmount})`
       );
     }
@@ -680,7 +683,7 @@ export class StashTest implements CleanupActionTest {
   setup() {
     // Ensure that we have 1 more than keepAmount, so that at least 1 item is
     // always processed
-    assert(
+    assert.ok(
       retrieveItem(this.item, this.keepAmount + 1) &&
         itemAmount(this.item) >= this.keepAmount + 1,
       `Failed to obtain ${this.item}`
@@ -697,8 +700,9 @@ export class StashTest implements CleanupActionTest {
     const {item} = this;
     const stashBeforeAmount = before.stash.get(item) || 0;
     const stashAfterAmount = after.stash.get(item) || 0;
-    assert(
-      stashAfterAmount > stashBeforeAmount,
+    assert.isAbove(
+      stashAfterAmount,
+      stashBeforeAmount,
       `Number of ${item} in stash has not increased (${stashBeforeAmount} -> ${stashAfterAmount}).` +
         " It's possible that someone has taken items from your clan stash while the test script was running."
     );
@@ -725,7 +729,7 @@ export class TodoTest implements CleanupActionTest {
   }
 
   setup() {
-    assert(
+    assert.ok(
       retrieveItem(this.item) && itemAmount(this.item) > 0,
       `Failed to obtain ${this.item}`
     );
@@ -741,13 +745,15 @@ export class TodoTest implements CleanupActionTest {
     const beforeAmount = before.inventory.get(item) || 0;
     const afterAmount = after.inventory.get(item) || 0;
     if (!before)
-      assert(
-        beforeAmount > 0,
+      assert.isAbove(
+        beforeAmount,
+        0,
         `Cannot verify ${this.name} action because we didn't have ${item} before`
       );
 
-    assert(
-      beforeAmount === afterAmount,
+    assert.equal(
+      beforeAmount,
+      afterAmount,
       `${this.name} action failed, quantity of ${item} has changed: ${beforeAmount} -> ${afterAmount}`
     );
 
@@ -776,7 +782,7 @@ export class KeepTest implements CleanupActionTest {
   }
 
   setup() {
-    assert(
+    assert.ok(
       retrieveItem(this.item) && itemAmount(this.item) > 0,
       `Failed to obtain ${this.item}`
     );
@@ -792,13 +798,15 @@ export class KeepTest implements CleanupActionTest {
     const beforeAmount = before.inventory.get(item) || 0;
     const afterAmount = after.inventory.get(item) || 0;
     if (!before)
-      assert(
-        beforeAmount > 0,
+      assert.isAbove(
+        beforeAmount,
+        0,
         `Cannot verify ${this.name} action because we didn't have ${item} before`
       );
 
-    assert(
-      beforeAmount <= afterAmount,
+    assert.isAtMost(
+      beforeAmount,
+      afterAmount,
       `${this.name} action failed, quantity of ${item} has decreased: ${beforeAmount} -> ${afterAmount}`
     );
   }
@@ -828,7 +836,7 @@ export class UntinkerTest implements CleanupActionTest {
   setup() {
     // Ensure that we have 1 more than keepAmount, so that at least 1 item is
     // always processed
-    assert(
+    assert.ok(
       retrieveItem(this.item, this.keepAmount + 1) &&
         itemAmount(this.item) >= this.keepAmount + 1,
       `Failed to obtain ${this.item}`
@@ -850,8 +858,9 @@ export class UntinkerTest implements CleanupActionTest {
       const item = Item.get(itemName);
       const beforeAmount = before.inventory.get(item) || 0;
       const afterAmount = after.inventory.get(item) || 0;
-      assert(
-        beforeAmount < afterAmount,
+      assert.isBelow(
+        beforeAmount,
+        afterAmount,
         `${this.name} action failed; amount of ingredient ${item} has not increased (${beforeAmount} >= ${afterAmount})`
       );
     }
@@ -882,7 +891,7 @@ export class UseTest implements CleanupActionTest {
   setup() {
     // Ensure that we have 1 more than keepAmount, so that at least 1 item is
     // always processed
-    assert(
+    assert.ok(
       retrieveItem(this.item, this.keepAmount + 1) &&
         itemAmount(this.item) >= this.keepAmount + 1,
       `Failed to obtain ${this.item}`

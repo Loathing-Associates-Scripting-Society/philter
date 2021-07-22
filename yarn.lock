@@ -2153,6 +2153,11 @@ klaw-sync@^6.0.0:
   dependencies:
     graceful-fs "^4.1.11"
 
+kolmafia-util@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/kolmafia-util/-/kolmafia-util-0.3.0.tgz#187735520519bae43b6546207eff694e8ca6e413"
+  integrity sha512-kBIADmPTh5ZJyqh2pmvXGKQuPzbWYFf8lYXFH+DE+gcipSubzCnvX/03L60n8z6nsFSnceReg2XG8WInX77WJA==
+
 "kolmafia@npm:kolmafia-types":
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/kolmafia-types/-/kolmafia-types-0.2.0.tgz#c0c19ede8d5ed5859ed7a7ca167dd712416fa561"
