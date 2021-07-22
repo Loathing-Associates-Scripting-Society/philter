@@ -4,7 +4,6 @@
   "compilerOptions": {
     // Don't generate type definitions (Rhino doesn't need them anyway)
     "declaration": false,
-    "downlevelIteration": true,
     "incremental": true,
     // JavaScript APIs supported by Rhino 1.7.13
     // See https://mozilla.github.io/rhino/compat/engines.html for more info
@@ -30,8 +29,8 @@
     "rootDir": ".",
     // Don't generate source maps (Rhino doesn't support them anyway)
     "sourceMap": false,
-    // Transpile ES2015 syntax unsupported by Rhino (e.g. template strings)
-    "target": "ES5",
+    // Rely on Bublé to transpile the output to Rhino-compatible ES5+
+    "target": "ES2018",
     // Don't include any @types/* packages, which may otherwise pull in unwanted
     // libs (e.g. "lib.es2017.object.d.ts")
     "types": []

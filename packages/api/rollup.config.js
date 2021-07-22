@@ -36,11 +36,13 @@
 /* eslint-disable node/no-unsupported-features/es-syntax */
 // Import @philter/common using a relative path. This is a hack, btw.
 // File extension is required to make this work in Node.js v12 AND v14.
-// eslint-disable-next-line node/no-missing-import
-import {RELAY_SCRIPT_FILE} from '../common/build/src/index.js';
+import buble from '@rollup/plugin-buble';
 import {nodeResolve} from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
+import createPreset from 'buble-config-rhino';
 import copy from 'rollup-plugin-copy';
+// eslint-disable-next-line node/no-missing-import
+import {RELAY_SCRIPT_FILE} from '../common/build/src/index.js';
 
 /** @type {import('rollup').RollupOptions} */
 const config = {
@@ -61,6 +63,7 @@ const config = {
       sourceMap: false,
       tsconfig: 'src/tsconfig.json',
     }),
+    buble(createPreset()),
     copy({
       hook: 'writeBundle',
       targets: [

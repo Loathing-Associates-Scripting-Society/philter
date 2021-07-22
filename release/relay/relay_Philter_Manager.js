@@ -7,83 +7,6 @@ var zlib_ash = require('zlib.ash');
 var ocdCleanup_ash = require('ocd-cleanup.ash');
 var philter_util_ash = require('philter.util.ash');
 
-/*! *****************************************************************************
-Copyright (c) Microsoft Corporation.
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
-***************************************************************************** */
-
-var __assign = function() {
-    __assign = Object.assign || function __assign(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-
-function __rest(s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-}
-
-function __values(o) {
-    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
-    if (m) return m.call(o);
-    if (o && typeof o.length === "number") return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-}
-
-function __read(o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-}
-
-function __spreadArray(to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || from);
-}
-
 /**
  * @file Defines base types for API requests and responses.
  */
@@ -108,14 +31,13 @@ function unwrapDeserializedRequest(wrappedRequest) {
         throw new Error('Missing URL/form parameter: method');
     }
     else if (!isValidRequestMethod(uncheckedRequest.method)) {
-        throw new Error("Invalid URL/form parameter: method=" + uncheckedRequest.method);
+        throw new Error(("Invalid URL/form parameter: method=" + (uncheckedRequest.method)));
     }
     if (typeof uncheckedRequest.path !== 'string') {
         throw new Error('Missing URL/form parameter: path');
     }
     var request = {};
-    for (var _i = 0, _a = Object.keys(wrappedRequest); _i < _a.length; _i++) {
-        var key = _a[_i];
+    for (var key of Object.keys(wrappedRequest)) {
         // Known keys are passed as-is.
         // All other keys are deserialized.
         request[key] = isRequestBasePropertyName(key)
@@ -194,10 +116,8 @@ var _cleanupActions = Object.freeze({
 /**
  * Checks if the given value is a valid `CleanupAction` type.
  */
-var isCleanupAction = function (value) {
-    return typeof value === 'string' &&
-        Object.prototype.hasOwnProperty.call(_cleanupActions, value);
-};
+var isCleanupAction = (value) => typeof value === 'string' &&
+    Object.prototype.hasOwnProperty.call(_cleanupActions, value);
 
 /**
  * @file Utility methods for logging to the gCLI.
@@ -240,24 +160,15 @@ function error(message) {
  *    instead.
  */
 function createMapLoader(parse) {
-    return function (filename) {
-        var e_1, _a;
+    return (filename) => {
         var entries = new Map();
         var rawData = kolmafia.fileToArray(filename);
-        try {
-            for (var _b = __values(Object.keys(rawData)), _c = _b.next(); !_c.done; _c = _b.next()) {
-                var indexStr = _c.value;
-                var row = rawData[indexStr].split('\t');
-                var _d = __read(parse(row, Number(indexStr), filename), 2), key = _d[0], value = _d[1];
-                entries.set(key, value);
-            }
-        }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-            }
-            finally { if (e_1) throw e_1.error; }
+        for (var indexStr of Object.keys(rawData)) {
+            var row = rawData[indexStr].split('\t');
+            var ref = parse(row, Number(indexStr), filename);
+            var key = ref[0];
+            var value = ref[1];
+            entries.set(key, value);
         }
         return entries.size ? entries : null;
     };
@@ -266,7 +177,7 @@ function createMapLoader(parse) {
  * Encodes an item object as a string for saving to a data (TXT) file.
  */
 function encodeItem(item) {
-    return "[" + kolmafia.toInt(item) + "]" + item.name;
+    return ("[" + (kolmafia.toInt(item)) + "]" + (item.name));
 }
 var _MONTH_STR = [
     'Jan',
@@ -280,8 +191,7 @@ var _MONTH_STR = [
     'Sep',
     'Oct',
     'Nov',
-    'Dec',
-];
+    'Dec' ];
 /**
  * Converts a given date to Common Log Format string.
  */
@@ -298,37 +208,25 @@ function formatDateClf(date) {
     var tz_mm = String(Math.abs(tzOffset) % 60).padStart(2, '0');
     // Displayed time zone sign must be reversed
     var timezone = "" + (tzOffset >= 0 ? '-' : '+') + tz_hh + tz_mm;
-    return dd + "/" + mon + "/" + yyyy + ":" + hh + ":" + mm + ":" + ss + " " + timezone;
+    return (dd + "/" + mon + "/" + yyyy + ":" + hh + ":" + mm + ":" + ss + " " + timezone);
 }
 /**
  * Converts a regular JavaScript object keyed by item IDs to an ES6 Map keyed by
  * `Item` objects.
  */
 function idMappingToItemMap(itemMapping) {
-    return new Map(Object.keys(itemMapping).map(function (itemId) { return [
+    return new Map(Object.keys(itemMapping).map(itemId => [
         Item.get(Number(itemId)),
-        itemMapping[itemId],
-    ]; }));
+        itemMapping[itemId] ]));
 }
 /**
  * Converts an ES6 Map keyed by `Item` objects to a regular JavaScript object
  * keyed by item IDs.
  */
 function itemMapToIdMapping(itemMap) {
-    var e_2, _a;
     var itemMapping = {};
-    try {
-        for (var itemMap_1 = __values(itemMap), itemMap_1_1 = itemMap_1.next(); !itemMap_1_1.done; itemMap_1_1 = itemMap_1.next()) {
-            var _b = __read(itemMap_1_1.value, 2), item = _b[0], value = _b[1];
-            itemMapping[kolmafia.toInt(item)] = value;
-        }
-    }
-    catch (e_2_1) { e_2 = { error: e_2_1 }; }
-    finally {
-        try {
-            if (itemMap_1_1 && !itemMap_1_1.done && (_a = itemMap_1.return)) _a.call(itemMap_1);
-        }
-        finally { if (e_2) throw e_2.error; }
+    for (var [item, value] of itemMap) {
+        itemMapping[kolmafia.toInt(item)] = value;
     }
     return itemMapping;
 }
@@ -339,7 +237,7 @@ function itemMapToIdMapping(itemMap) {
  * @return Mapping of Item to amount
  */
 function toItemMap(items) {
-    return new Map(Object.keys(items).map(function (itemStr) { return [Item.get(itemStr), items[itemStr]]; }));
+    return new Map(Object.keys(items).map(itemStr => [Item.get(itemStr), items[itemStr]]));
 }
 
 /**
@@ -349,25 +247,14 @@ function toItemMap(items) {
  * Returns an ES6 Map of all items in the current player's display case.
  */
 function getDisplayCaseMap() {
-    var e_1, _a;
     // There is no equivalent of getInventory(), getCloset(), etc.
     var displayCaseMap = new Map();
     if (kolmafia.haveDisplay()) {
-        try {
-            for (var _b = __values(Item.all()), _c = _b.next(); !_c.done; _c = _b.next()) {
-                var item = _c.value;
-                var amount = kolmafia.displayAmount(item);
-                if (amount > 0) {
-                    displayCaseMap.set(item, amount);
-                }
+        for (var item of Item.all()) {
+            var amount = kolmafia.displayAmount(item);
+            if (amount > 0) {
+                displayCaseMap.set(item, amount);
             }
-        }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-            }
-            finally { if (e_1) throw e_1.error; }
         }
     }
     return displayCaseMap;
@@ -410,8 +297,7 @@ function getInventoryStateWithMaps() {
             inventory: itemMapToIdMapping(inventoryStateMap.inventory),
             storage: itemMapToIdMapping(inventoryStateMap.storage),
         },
-        inventoryStateMap,
-    ];
+        inventoryStateMap ];
 }
 
 /**
@@ -435,14 +321,14 @@ var CONFIG_NAMES = Object.freeze({
  * file extension.
  */
 function getFullDataFileName(fileNameComponent) {
-    return "OCDdata_" + fileNameComponent + ".txt";
+    return ("OCDdata_" + fileNameComponent + ".txt");
 }
 /**
  * Get the full file name of a cleanup stocking ruleset file, including the
  * prefix and file extension.
  */
 function getFullStockFileName(fileNameComponent) {
-    return "OCDstock_" + fileNameComponent + ".txt";
+    return ("OCDstock_" + fileNameComponent + ".txt");
 }
 function loadCleanupConfig() {
     var emptyClosetMode = parseInt(zlib_ash.getvar(CONFIG_NAMES.emptyClosetMode));
@@ -461,24 +347,13 @@ function loadCleanupConfig() {
     };
 }
 function saveCleanupConfig(config) {
-    var e_1, _a;
     var serializedConfig = {};
-    try {
-        for (var _b = __values(Object.keys(config)), _c = _b.next(); !_c.done; _c = _b.next()) {
-            var key = _c.value;
-            var varName = CONFIG_NAMES[key];
-            if (varName === undefined) {
-                throw new Error("Cannot find ZLib config name for config key '" + key + "'");
-            }
-            serializedConfig[varName] = String(config[key]);
+    for (var key of Object.keys(config)) {
+        var varName = CONFIG_NAMES[key];
+        if (varName === undefined) {
+            throw new Error(("Cannot find ZLib config name for config key '" + key + "'"));
         }
-    }
-    catch (e_1_1) { e_1 = { error: e_1_1 }; }
-    finally {
-        try {
-            if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-        }
-        finally { if (e_1) throw e_1.error; }
+        serializedConfig[varName] = String(config[key]);
     }
     philter_util_ash._updateZlibVars(serializedConfig);
 }
@@ -489,8 +364,7 @@ function saveCleanupConfig(config) {
 var BREAKABLE_ITEMS = Item.get([
     'BRICKO hat',
     'BRICKO sword',
-    'BRICKO pants',
-]);
+    'BRICKO pants' ]);
 function isBreakable(item) {
     return BREAKABLE_ITEMS.includes(item);
 }
@@ -502,59 +376,27 @@ var CRAFTABLES = new Set();
  * @return Whether `item` is an ingredient
  */
 function isCraftable(item) {
-    var e_1, _a, e_2, _b, e_3, _c;
     if (CRAFTABLES.size === 0) {
         // Populate the cache on first call
         var rawCrafty = kolmafia.fileToArray('data/concoctions.txt');
-        try {
-            for (var _d = __values(Object.keys(rawCrafty)), _e = _d.next(); !_e.done; _e = _d.next()) {
-                var key = _e.value;
-                var row = rawCrafty[key].split('\t');
-                // We assume that concoctions.txt looks like this:
-                //
-                //    <produced item> <TAB> <crafting method> <TAB> <tab-separated list of ingredients>
-                var _f = __read(row), ingredients = _f.slice(2);
-                try {
-                    for (var ingredients_1 = (e_2 = void 0, __values(ingredients)), ingredients_1_1 = ingredients_1.next(); !ingredients_1_1.done; ingredients_1_1 = ingredients_1.next()) {
-                        var ingredientName = ingredients_1_1.value;
-                        CRAFTABLES.add(kolmafia.toItem(ingredientName));
-                    }
-                }
-                catch (e_2_1) { e_2 = { error: e_2_1 }; }
-                finally {
-                    try {
-                        if (ingredients_1_1 && !ingredients_1_1.done && (_b = ingredients_1.return)) _b.call(ingredients_1);
-                    }
-                    finally { if (e_2) throw e_2.error; }
-                }
+        for (var key of Object.keys(rawCrafty)) {
+            var row = rawCrafty[key].split('\t');
+            // We assume that concoctions.txt looks like this:
+            //
+            //    <produced item> <TAB> <crafting method> <TAB> <tab-separated list of ingredients>
+            var ingredients = row.slice(2);
+            for (var ingredientName of ingredients) {
+                CRAFTABLES.add(kolmafia.toItem(ingredientName));
             }
         }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (_e && !_e.done && (_a = _d.return)) _a.call(_d);
-            }
-            finally { if (e_1) throw e_1.error; }
-        }
-        try {
-            for (var _g = __values(Item.get([
-                'hot nuggets',
-                'cold nuggets',
-                'spooky nuggets',
-                'stench nuggets',
-                'sleaze nuggets',
-                'titanium assault umbrella',
-            ])), _h = _g.next(); !_h.done; _h = _g.next()) {
-                var item_1 = _h.value;
-                CRAFTABLES.add(item_1);
-            }
-        }
-        catch (e_3_1) { e_3 = { error: e_3_1 }; }
-        finally {
-            try {
-                if (_h && !_h.done && (_c = _g.return)) _c.call(_g);
-            }
-            finally { if (e_3) throw e_3.error; }
+        for (var item$1 of Item.get([
+            'hot nuggets',
+            'cold nuggets',
+            'spooky nuggets',
+            'stench nuggets',
+            'sleaze nuggets',
+            'titanium assault umbrella' ])) {
+            CRAFTABLES.add(item$1);
         }
     }
     return CRAFTABLES.has(item);
@@ -576,8 +418,7 @@ var MALUSABLES = new Set(Item.get([
     'sewer nuggets',
     'floaty sand',
     'floaty pebbles',
-    'floaty gravel',
-]));
+    'floaty gravel' ]));
 function isPulverizable(item) {
     var pulvy = toItemMap(kolmafia.getRelated(item, 'pulverize'));
     return !pulvy.has(USELESS_POWDER) && (pulvy.size > 0 || MALUSABLES.has(item));
@@ -619,10 +460,15 @@ function toItemInfo(item) {
  *    file is empty or missing, returns `null`.
  * @throws {TypeError} If the file contains invalid data
  */
-var loadCleanupRulesetFile = createMapLoader(function (_a, _, filename) {
-    var _b = __read(_a, 5), itemName = _b[0], action = _b[1], keepAmountStr = _b[2], info = _b[3], message = _b[4];
+var loadCleanupRulesetFile = createMapLoader((ref, _, filename) => {
+    var itemName = ref[0];
+    var action = ref[1];
+    var keepAmountStr = ref[2];
+    var info = ref[3];
+    var message = ref[4];
+
     if (!isCleanupAction(action)) {
-        throw new TypeError(action + " is not a valid cleanup action (file: " + filename + ", entry: " + itemName + ")");
+        throw new TypeError((action + " is not a valid cleanup action (file: " + filename + ", entry: " + itemName + ")"));
     }
     var rule;
     if (action === 'GIFT') {
@@ -638,7 +484,7 @@ var loadCleanupRulesetFile = createMapLoader(function (_a, _, filename) {
     else if (action === 'MALL') {
         var minPrice = Number(info);
         if (!Number.isInteger(minPrice)) {
-            throw new TypeError("Invalid minimum price " + minPrice + " for MALL rule (file: " + filename + ", entry: " + itemName + ")");
+            throw new TypeError(("Invalid minimum price " + minPrice + " for MALL rule (file: " + filename + ", entry: " + itemName + ")"));
         }
         rule = { action: action, minPrice: minPrice };
     }
@@ -651,7 +497,7 @@ var loadCleanupRulesetFile = createMapLoader(function (_a, _, filename) {
     }
     var keepAmount = Number(keepAmountStr);
     if (!Number.isInteger(keepAmount)) {
-        throw new TypeError("Invalid keep amount " + keepAmountStr + " (file: " + filename + ", entry: " + itemName + ")");
+        throw new TypeError(("Invalid keep amount " + keepAmountStr + " (file: " + filename + ", entry: " + itemName + ")"));
     }
     if (keepAmount > 0) {
         rule.keepAmount = keepAmount;
@@ -666,13 +512,16 @@ var loadCleanupRulesetFile = createMapLoader(function (_a, _, filename) {
 function saveCleanupRulesetFile(filepath, cleanupRulesMap) {
     // Sort entries by item ID in ascending order when saving
     var buffer = Array.from(cleanupRulesMap.entries())
-        .sort(function (_a, _b) {
-        var _c = __read(_a, 1), itemA = _c[0];
-        var _d = __read(_b, 1), itemB = _d[0];
-        return kolmafia.toInt(itemA) - kolmafia.toInt(itemB);
+        .sort((ref, ref$1) => {
+            var itemA = ref[0];
+            var itemB = ref$1[0];
+
+            return kolmafia.toInt(itemA) - kolmafia.toInt(itemB);
     })
-        .map(function (_a) {
-        var _b = __read(_a, 2), item = _b[0], rule = _b[1];
+        .map((ref) => {
+        var item = ref[0];
+        var rule = ref[1];
+
         var info = '', message = '';
         if (rule.action === 'GIFT') {
             info = rule.recipent;
@@ -693,8 +542,7 @@ function saveCleanupRulesetFile(filepath, cleanupRulesMap) {
             rule.action,
             rule.keepAmount || 0,
             info,
-            message,
-        ].join('\t');
+            message ].join('\t');
     })
         .join('\n');
     return kolmafia.bufferToFile(buffer, filepath);
@@ -710,7 +558,7 @@ function loadCleanupRulesetForCurrentPlayer() {
         // Legacy file name
         // TODO: We inherited this from OCD Inventory Manager. Since nobody seems to
         // be using this anymore, we can probably remove it.
-        cleanupRulesMap = loadCleanupRulesetFile("OCD_" + kolmafia.myName() + ".txt");
+        cleanupRulesMap = loadCleanupRulesetFile(("OCD_" + (kolmafia.myName()) + ".txt"));
     }
     return cleanupRulesMap;
 }
@@ -732,11 +580,15 @@ function saveCleanupRulesetForCurrentPlayer(cleanupRulesMap) {
  *    file is empty or missing, returns `null`.
  * @throws {TypeError} If the file contains invalid data
  */
-var loadStockingRulesetFile = createMapLoader(function (_a, _, fileName) {
-    var _b = __read(_a, 4), itemName = _b[0], type = _b[1], amountStr = _b[2], _c = _b[3], category = _c === void 0 ? '' : _c;
+var loadStockingRulesetFile = createMapLoader((ref, _, fileName) => {
+    var itemName = ref[0];
+    var type = ref[1];
+    var amountStr = ref[2];
+    var category = ref[3]; if ( category === void 0 ) category = '';
+
     var amount = Number(amountStr);
     if (!Number.isInteger(amount)) {
-        throw new TypeError("Invalid stock-up amount (" + amount + ") for item '" + itemName + "' in file '" + fileName + "'");
+        throw new TypeError(("Invalid stock-up amount (" + amount + ") for item '" + itemName + "' in file '" + fileName + "'"));
     }
     return [kolmafia.toItem(itemName), { type: type, amount: amount, category: category }];
 });
@@ -748,18 +600,21 @@ var loadStockingRulesetFile = createMapLoader(function (_a, _, fileName) {
 function saveStockingRulesetFile(filepath, stockingRulesMap) {
     // Sort entries by item ID in ascending order when saving
     var buffer = Array.from(stockingRulesMap.entries())
-        .sort(function (_a, _b) {
-        var _c = __read(_a, 1), itemA = _c[0];
-        var _d = __read(_b, 1), itemB = _d[0];
-        return kolmafia.toInt(itemA) - kolmafia.toInt(itemB);
+        .sort((ref, ref$1) => {
+            var itemA = ref[0];
+            var itemB = ref$1[0];
+
+            return kolmafia.toInt(itemA) - kolmafia.toInt(itemB);
     })
-        .map(function (_a) {
-        var _b = __read(_a, 2), item = _b[0], rule = _b[1];
-        return [encodeItem(item), rule.type, rule.amount, rule.category].join('\t');
+        .map((ref) => {
+            var item = ref[0];
+            var rule = ref[1];
+
+            return [encodeItem(item), rule.type, rule.amount, rule.category].join('\t');
     })
         .join('\n');
     if (!kolmafia.bufferToFile(buffer, filepath)) {
-        throw new Error("Failed to save to " + filepath);
+        throw new Error(("Failed to save to " + filepath));
     }
 }
 /**
@@ -816,7 +671,7 @@ function lexer(str) {
                 break;
             }
             if (!name)
-                throw new TypeError("Missing parameter name at " + i);
+                { throw new TypeError("Missing parameter name at " + i); }
             tokens.push({ type: "NAME", index: i, value: name });
             i = j;
             continue;
@@ -849,9 +704,9 @@ function lexer(str) {
                 pattern += str[j++];
             }
             if (count)
-                throw new TypeError("Unbalanced pattern at " + i);
+                { throw new TypeError("Unbalanced pattern at " + i); }
             if (!pattern)
-                throw new TypeError("Missing pattern at " + i);
+                { throw new TypeError("Missing pattern at " + i); }
             tokens.push({ type: "PATTERN", index: i, value: pattern });
             i = j;
             continue;
@@ -875,12 +730,12 @@ function parse(str, options) {
     var path = "";
     var tryConsume = function (type) {
         if (i < tokens.length && tokens[i].type === type)
-            return tokens[i++].value;
+            { return tokens[i++].value; }
     };
     var mustConsume = function (type) {
         var value = tryConsume(type);
         if (value !== undefined)
-            return value;
+            { return value; }
         var _a = tokens[i], nextType = _a.type, index = _a.index;
         throw new TypeError("Unexpected " + nextType + " at " + index + ", expected " + type);
     };
@@ -962,13 +817,13 @@ function regexpToFunction(re, keys, options) {
     return function (pathname) {
         var m = re.exec(pathname);
         if (!m)
-            return false;
+            { return false; }
         var path = m[0], index = m.index;
         var params = Object.create(null);
         var _loop_1 = function (i) {
             // tslint:disable-next-line
             if (m[i] === undefined)
-                return "continue";
+                { return "continue"; }
             var key = keys[i - 1];
             if (key.modifier === "*" || key.modifier === "+") {
                 params[key.name] = m[i].split(key.prefix + key.suffix).map(function (value) {
@@ -1002,7 +857,7 @@ function flags(options) {
  */
 function regexpToRegexp(path, keys) {
     if (!keys)
-        return path;
+        { return path; }
     var groupsRegex = /\((?:\?<(.*?)>)?(?!\?)/g;
     var index = 0;
     var execResult = groupsRegex.exec(path.source);
@@ -1052,7 +907,7 @@ function tokensToRegexp(tokens, keys, options) {
             var suffix = escapeString(encode(token.suffix));
             if (token.pattern) {
                 if (keys)
-                    keys.push(token);
+                    { keys.push(token); }
                 if (prefix || suffix) {
                     if (token.modifier === "+" || token.modifier === "*") {
                         var mod = token.modifier === "*" ? "?" : "";
@@ -1073,7 +928,7 @@ function tokensToRegexp(tokens, keys, options) {
     }
     if (end) {
         if (!strict)
-            route += delimiter + "?";
+            { route += delimiter + "?"; }
         route += !options.endsWith ? "$" : "(?=" + endsWith + ")";
     }
     else {
@@ -1100,9 +955,9 @@ function tokensToRegexp(tokens, keys, options) {
  */
 function pathToRegexp(path, keys, options) {
     if (path instanceof RegExp)
-        return regexpToRegexp(path, keys);
+        { return regexpToRegexp(path, keys); }
     if (Array.isArray(path))
-        return arrayToRegexp(path, keys, options);
+        { return arrayToRegexp(path, keys, options); }
     return stringToRegexp(path, keys, options);
 }
 
@@ -1309,7 +1164,7 @@ function isValidContext(context) {
 function createRoute(path, handlers) {
     return {
         path: path,
-        action: function (context) {
+        action: function action(context) {
             if (!isValidContext(context)) {
                 throw new Error('Invalid context');
             }
@@ -1337,14 +1192,16 @@ function createRoute(path, handlers) {
  *    provides an error handler so you don't have to.
  */
 function createRouter() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    var _a = __read(args), routes = _a[0], options = _a[1], restArgs = _a.slice(2);
-    return new (UniversalRouterSync.bind.apply(UniversalRouterSync, __spreadArray([void 0, routes, __assign({ errorHandler: function (error) {
-                return { error: { code: error.status || 500, message: error.message } };
-            } }, options)], __read(restArgs))))();
+    var args = [], len = arguments.length;
+    while ( len-- ) args[ len ] = arguments[ len ];
+
+    var routes = args[0];
+    var options = args[1];
+    var restArgs = args.slice(2);
+    return new (Function.prototype.bind.apply( UniversalRouterSync, [ null ].concat( [routes], [Object.assign({}, {errorHandler: function errorHandler(error) {
+            return { error: { code: error.status || 500, message: error.message } };
+        }},
+        options)], restArgs) ));
 }
 
 /**
@@ -1352,119 +1209,70 @@ function createRouter() {
  */
 var routes = [
     createRoute(CLEANUP_TABLES_CATEGORIZED_ROUTE, {
-        get: function () {
-            var e_1, _a, e_2, _b;
+        get: function get() {
             var cleanupRulesMap = loadCleanupRulesetForCurrentPlayer();
             if (!cleanupRulesMap || cleanupRulesMap.size === 0) {
                 throw new Error('All item information is corrupted or missing. Either you have not yet saved any item data or you lost it.');
             }
-            var _c = __read(getInventoryStateWithMaps(), 2), inventory = _c[0], inventoryMaps = _c[1];
+            var ref = getInventoryStateWithMaps();
+            var inventory = ref[0];
+            var inventoryMaps = ref[1];
             var categorizedItems = new Set(cleanupRulesMap.keys());
-            try {
-                for (var _d = __values(Object.keys(inventoryMaps)), _e = _d.next(); !_e.done; _e = _d.next()) {
-                    var key = _e.value;
-                    var itemMap = inventoryMaps[key];
-                    try {
-                        for (var _f = (e_2 = void 0, __values(itemMap.keys())), _g = _f.next(); !_g.done; _g = _f.next()) {
-                            var item = _g.value;
-                            categorizedItems.add(item);
-                        }
-                    }
-                    catch (e_2_1) { e_2 = { error: e_2_1 }; }
-                    finally {
-                        try {
-                            if (_g && !_g.done && (_b = _f.return)) _b.call(_f);
-                        }
-                        finally { if (e_2) throw e_2.error; }
-                    }
+            for (var key of Object.keys(inventoryMaps)) {
+                var itemMap = inventoryMaps[key];
+                for (var item of itemMap.keys()) {
+                    categorizedItems.add(item);
                 }
-            }
-            catch (e_1_1) { e_1 = { error: e_1_1 }; }
-            finally {
-                try {
-                    if (_e && !_e.done && (_a = _d.return)) _a.call(_d);
-                }
-                finally { if (e_1) throw e_1.error; }
             }
             return {
                 result: {
                     cleanupRules: itemMapToIdMapping(cleanupRulesMap),
                     inventory: inventory,
-                    items: Array.from(categorizedItems, function (item) { return toItemInfo(item); }),
+                    items: Array.from(categorizedItems, item => toItemInfo(item)),
                 },
             };
         },
     }),
     createRoute(CLEANUP_TABLES_UNCATEGORIZED_ROUTE, {
-        get: function () {
-            var e_3, _a, e_4, _b;
+        get: () => {
             var cleanupRulesMap = loadCleanupRulesetForCurrentPlayer() || new Map();
-            var _c = __read(getInventoryStateWithMaps(), 2), inventory = _c[0], inventoryMaps = _c[1];
+            var ref = getInventoryStateWithMaps();
+            var inventory = ref[0];
+            var inventoryMaps = ref[1];
             var uncategorizedItems = new Set();
-            try {
-                for (var _d = __values(Object.keys(inventoryMaps)), _e = _d.next(); !_e.done; _e = _d.next()) {
-                    var key = _e.value;
-                    var itemMap = inventoryMaps[key];
-                    try {
-                        for (var _f = (e_4 = void 0, __values(itemMap.keys())), _g = _f.next(); !_g.done; _g = _f.next()) {
-                            var item = _g.value;
-                            if (!cleanupRulesMap.has(item) && ocdCleanup_ash.isOCDable(item)) {
-                                uncategorizedItems.add(item);
-                            }
-                        }
-                    }
-                    catch (e_4_1) { e_4 = { error: e_4_1 }; }
-                    finally {
-                        try {
-                            if (_g && !_g.done && (_b = _f.return)) _b.call(_f);
-                        }
-                        finally { if (e_4) throw e_4.error; }
+            for (var key of Object.keys(inventoryMaps)) {
+                var itemMap = inventoryMaps[key];
+                for (var item of itemMap.keys()) {
+                    if (!cleanupRulesMap.has(item) && ocdCleanup_ash.isOCDable(item)) {
+                        uncategorizedItems.add(item);
                     }
                 }
-            }
-            catch (e_3_1) { e_3 = { error: e_3_1 }; }
-            finally {
-                try {
-                    if (_e && !_e.done && (_a = _d.return)) _a.call(_d);
-                }
-                finally { if (e_3) throw e_3.error; }
             }
             return {
                 result: {
                     inventory: inventory,
-                    items: Array.from(uncategorizedItems, function (item) { return toItemInfo(item); }),
+                    items: Array.from(uncategorizedItems, item => toItemInfo(item)),
                 },
             };
         },
     }),
     createRoute(RULESET_ROUTE, {
-        post: function (params) {
+        post: function post(params) {
             var cleanupRulesMap = idMappingToItemMap(params.cleanupRules);
             var success = saveCleanupRulesetForCurrentPlayer(cleanupRulesMap);
             return success
                 ? { result: { success: success } }
                 : { error: { code: 500, message: 'Cannot save cleanup ruleset' } };
         },
-        patch: function (params) {
-            var e_5, _a;
+        patch: function patch(params) {
             var cleanupRulesMap = loadCleanupRulesetForCurrentPlayer() || new Map();
-            try {
-                for (var _b = __values(idMappingToItemMap(params.cleanupRulesPatch)), _c = _b.next(); !_c.done; _c = _b.next()) {
-                    var _d = __read(_c.value, 2), item = _d[0], patch = _d[1];
-                    if (patch === null) {
-                        cleanupRulesMap.delete(item);
-                    }
-                    else {
-                        cleanupRulesMap.set(item, patch);
-                    }
+            for (var [item, patch] of idMappingToItemMap(params.cleanupRulesPatch)) {
+                if (patch === null) {
+                    cleanupRulesMap.delete(item);
                 }
-            }
-            catch (e_5_1) { e_5 = { error: e_5_1 }; }
-            finally {
-                try {
-                    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+                else {
+                    cleanupRulesMap.set(item, patch);
                 }
-                finally { if (e_5) throw e_5.error; }
             }
             var success = saveCleanupRulesetForCurrentPlayer(cleanupRulesMap);
             return success
@@ -1473,15 +1281,15 @@ var routes = [
         },
     }),
     createRoute(CONFIG_ROUTE, {
-        get: function () { return ({ result: loadCleanupConfig() }); },
-        post: function (request) {
+        get: () => ({ result: loadCleanupConfig() }),
+        post: function post(request) {
             var config = request.config;
             if (request.shouldCopyDataFiles) {
                 if (config.dataFileName !== zlib_ash.getvar(CONFIG_NAMES.dataFileName)) {
                     // "Copy" file even if the original stocking file is missing or empty
                     if (!saveCleanupRulesetFile(getFullDataFileName(config.dataFileName), loadCleanupRulesetForCurrentPlayer() ||
                         new Map())) {
-                        throw new Error("Cannot copy cleanup ruleset from " + CONFIG_NAMES.dataFileName + " to " + config.dataFileName);
+                        throw new Error(("Cannot copy cleanup ruleset from " + (CONFIG_NAMES.dataFileName) + " to " + (config.dataFileName)));
                     }
                 }
                 if (config.stockFileName !== zlib_ash.getvar(CONFIG_NAMES.stockFileName)) {
@@ -1495,13 +1303,13 @@ var routes = [
         },
     }),
     createRoute(INVENTORY_ROUTE, {
-        get: function () { return ({ result: getInventoryState() }); },
+        get: () => ({ result: getInventoryState() }),
     }),
     createRoute(STATISTICS_ROUTE, {
-        get: function () {
-            var e_6, _a, e_7, _b, e_8, _c;
+        get: () => {
             var cleanupRulesMap = loadCleanupRulesetForCurrentPlayer() || new Map();
-            var _d = __read(getInventoryStateWithMaps(), 2), inventoryMaps = _d[1];
+            var ref = getInventoryStateWithMaps();
+            var inventoryMaps = ref[1];
             var categorizedItemCounts = {
                 AUTO: 0,
                 BREAK: 0,
@@ -1518,47 +1326,17 @@ var routes = [
                 UNTN: 0,
                 USE: 0,
             };
-            try {
-                for (var _e = __values(cleanupRulesMap.values()), _f = _e.next(); !_f.done; _f = _e.next()) {
-                    var rule = _f.value;
-                    ++categorizedItemCounts[rule.action];
-                }
-            }
-            catch (e_6_1) { e_6 = { error: e_6_1 }; }
-            finally {
-                try {
-                    if (_f && !_f.done && (_a = _e.return)) _a.call(_e);
-                }
-                finally { if (e_6) throw e_6.error; }
+            for (var rule of cleanupRulesMap.values()) {
+                ++categorizedItemCounts[rule.action];
             }
             var uncategorizedItems = new Set();
-            try {
-                for (var _g = __values(Object.keys(inventoryMaps)), _h = _g.next(); !_h.done; _h = _g.next()) {
-                    var key = _h.value;
-                    var itemMap = inventoryMaps[key];
-                    try {
-                        for (var _j = (e_8 = void 0, __values(itemMap.keys())), _k = _j.next(); !_k.done; _k = _j.next()) {
-                            var item = _k.value;
-                            if (!cleanupRulesMap.has(item) && ocdCleanup_ash.isOCDable(item)) {
-                                uncategorizedItems.add(item);
-                            }
-                        }
-                    }
-                    catch (e_8_1) { e_8 = { error: e_8_1 }; }
-                    finally {
-                        try {
-                            if (_k && !_k.done && (_c = _j.return)) _c.call(_j);
-                        }
-                        finally { if (e_8) throw e_8.error; }
+            for (var key of Object.keys(inventoryMaps)) {
+                var itemMap = inventoryMaps[key];
+                for (var item of itemMap.keys()) {
+                    if (!cleanupRulesMap.has(item) && ocdCleanup_ash.isOCDable(item)) {
+                        uncategorizedItems.add(item);
                     }
                 }
-            }
-            catch (e_7_1) { e_7 = { error: e_7_1 }; }
-            finally {
-                try {
-                    if (_h && !_h.done && (_b = _g.return)) _b.call(_g);
-                }
-                finally { if (e_7) throw e_7.error; }
             }
             return {
                 result: {
@@ -1567,9 +1345,9 @@ var routes = [
                 },
             };
         },
-    }),
-];
+    }) ];
 
+function objectWithoutProperties (obj, exclude) { var target = {}; for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k) && exclude.indexOf(k) === -1) target[k] = obj[k]; return target; }
 /**
  * Sends a response to the client. If the value is not a string, it is
  * serialized using `JSON.stringify()`.
@@ -1596,12 +1374,15 @@ function send(value) {
  *    returns `null` instead.
  */
 function parseRequestParameters() {
-    var _a = kolmafia.formFields(), relay = _a.relay, rest = __rest(_a, ["relay"]);
+    var ref = kolmafia.formFields();
+    var relay = ref.relay;
+    var rest$1 = objectWithoutProperties( ref, ["relay"] );
+    var rest = rest$1;
     if (relay !== 'true') {
         throw new Error("Missing expected 'relay' parameter. Has KoLmafia's relay script protocol changed?");
     }
     if (Object.keys(rest).length === 0)
-        return null;
+        { return null; }
     return unwrapDeserializedRequest(rest);
 }
 /**
@@ -1611,8 +1392,8 @@ function parseRequestParameters() {
 function generateRedirectPage(url) {
     return ('<!DOCTYPE html>' +
         '<html>' +
-        ("<head><meta http-equiv=\"refresh\" content=\"0;url=" + url + "\"></head>") +
-        ("<body>If your browser does not redirect you immediately, <a href=\"" + url + "\">click here</a></body>") +
+        "<head><meta http-equiv=\"refresh\" content=\"0;url=" + url + "\"></head>" +
+        "<body>If your browser does not redirect you immediately, <a href=\"" + url + "\">click here</a></body>" +
         '</html>');
 }
 function main() {
@@ -1620,7 +1401,7 @@ function main() {
     // @ts-expect-error No require()
     var __filename = require.main.id;
     var safeScriptPath = __filename.replace(/(.*?)(?=\/relay\/)/i, '');
-    debug("Started " + safeScriptPath + "...");
+    debug(("Started " + safeScriptPath + "..."));
     var startTime = kolmafia.gametimeToInt();
     var requestParameters;
     try {
@@ -1644,21 +1425,23 @@ function main() {
         // Interestingly, KoLmafia will still return a response if the script aborts
         // or throws after calling send(). Unfortunately, the stack trace is all but
         // lost at this point, so there's little point in re-throwing the exception.
-        error("[" + safeScriptPath + "] " + (e instanceof Error ? e : '[ERROR] ' + e));
+        error(("[" + safeScriptPath + "] " + (e instanceof Error ? e : '[ERROR] ' + e)));
     }
     var endTime = kolmafia.gametimeToInt();
     var clfDate = formatDateClf(new Date());
     var name = kolmafia.myName() || '-';
     var extraComment;
     if (requestParameters) {
-        var _a = requestParameters || {}, method = _a.method, path = _a.path;
+        var ref = requestParameters || {};
+        var method = ref.method;
+        var path = ref.path;
         extraComment = "simulated method: " + method + ", path: " + path;
     }
     else {
         extraComment = 'home page requested';
     }
-    debug(name + " [" + clfDate + "] \"" + safeScriptPath + " HTTP\" (" + extraComment + ")");
-    debug("Took " + (endTime - startTime) + "ms to generate response");
+    debug((name + " [" + clfDate + "] \"" + safeScriptPath + " HTTP\" (" + extraComment + ")"));
+    debug(("Took " + (endTime - startTime) + "ms to generate response"));
 }
 
 exports.main = main;
