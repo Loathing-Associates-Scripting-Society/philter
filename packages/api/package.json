@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@philter/common": "*",
-    "kolmafia": "npm:kolmafia-types@^0.1.1",
+    "kolmafia": "npm:kolmafia-types",
     "universal-router": "^9.0.1"
   },
   "devDependencies": {
