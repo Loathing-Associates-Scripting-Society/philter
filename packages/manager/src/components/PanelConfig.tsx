@@ -137,54 +137,58 @@ export const PanelConfig = (): JSX.Element => {
     execute: saveConfig,
     error: savingError,
   } = useAsyncCallback(
-    useCallback(
-      async (shouldCopyDataFiles?: boolean) => {
-        // These are logical errors and should never happen.
-        // If they do, we don't want to catch them
-        if (!config) {
-          throw new Error('Cannot save empty config');
-        }
-        if (!baseConfig) {
-          throw new Error('Cannot overwrite an empty config object');
-        }
+    async (config: PhilterConfig, shouldCopyDataFiles?: boolean) => {
+      const response = await fetchSavePhilterConfig(
+        config,
+        shouldCopyDataFiles
+      );
+      if (!response?.result?.success) {
+        throw new Error(`Unexpected response: ${JSON.stringify(response)}`);
+      }
+      mutate(config);
+    }
+  );
 
-        const changedFiles: ChangedFileEntry[] = [];
-        if (config.dataFileName !== baseConfig.dataFileName) {
-          changedFiles.push({
-            label: 'Ruleset file',
-            oldName:
-              CLEANUP_RULESET_PREFIX + baseConfig.dataFileName + TXT_SUFFIX,
-            newName: CLEANUP_RULESET_PREFIX + config.dataFileName + TXT_SUFFIX,
-          });
-        }
-        if (config.stockFileName !== baseConfig.stockFileName) {
-          changedFiles.push({
-            label: 'Stock file',
-            oldName:
-              STOCKING_RULESET_PREFIX + baseConfig.stockFileName + TXT_SUFFIX,
-            newName:
-              STOCKING_RULESET_PREFIX + config.stockFileName + TXT_SUFFIX,
-          });
-        }
+  /** Performs some checks before saving the config. */
+  const saveConfigWithCheck = useCallback(
+    async (shouldCopyDataFiles?: boolean) => {
+      // These are logical errors and should never happen.
+      // If they do, we don't want to catch them
+      if (!config) {
+        throw new Error('Cannot save empty config');
+      }
+      if (!baseConfig) {
+        throw new Error('Cannot overwrite an empty config object');
+      }
 
-        // If shouldCopyDataFiles is not explicitly given, display a dialog asking
-        // the user what to do
-        if (changedFiles.length && shouldCopyDataFiles === undefined) {
-          setDialogProps({isOpen: true, changedFiles});
-          return;
-        }
+      const changedFiles: ChangedFileEntry[] = [];
+      if (config.dataFileName !== baseConfig.dataFileName) {
+        changedFiles.push({
+          label: 'Ruleset file',
+          oldName:
+            CLEANUP_RULESET_PREFIX + baseConfig.dataFileName + TXT_SUFFIX,
+          newName: CLEANUP_RULESET_PREFIX + config.dataFileName + TXT_SUFFIX,
+        });
+      }
+      if (config.stockFileName !== baseConfig.stockFileName) {
+        changedFiles.push({
+          label: 'Stock file',
+          oldName:
+            STOCKING_RULESET_PREFIX + baseConfig.stockFileName + TXT_SUFFIX,
+          newName: STOCKING_RULESET_PREFIX + config.stockFileName + TXT_SUFFIX,
+        });
+      }
 
-        const response = await fetchSavePhilterConfig(
-          config,
-          shouldCopyDataFiles
-        );
-        if (!response?.result?.success) {
-          throw new Error(`Unexpected response: ${JSON.stringify(response)}`);
-        }
-        mutate(config);
-      },
-      [baseConfig, config, mutate]
-    )
+      // If shouldCopyDataFiles is not explicitly given, display a dialog asking
+      // the user what to do
+      if (changedFiles.length && shouldCopyDataFiles === undefined) {
+        setDialogProps({isOpen: true, changedFiles});
+        return;
+      }
+
+      await saveConfig(config, shouldCopyDataFiles);
+    },
+    [baseConfig, config, saveConfig]
   );
 
   const hasChanges = !dequal(config, baseConfig);
@@ -220,11 +224,11 @@ export const PanelConfig = (): JSX.Element => {
         onCancel={() => closeDialog()}
         onSaveWithCopy={() => {
           closeDialog();
-          saveConfig(true);
+          saveConfigWithCheck(true);
         }}
         onSaveWithoutCopy={() => {
           closeDialog();
-          saveConfig(false);
+          saveConfigWithCheck(false);
         }}
         {...dialogProps}
       />
@@ -413,7 +417,10 @@ export const PanelConfig = (): JSX.Element => {
         <Button
           disabled={isDisabled || !hasChanges}
           icon="floppy-disk"
-          onClick={useCallback(() => saveConfig(), [saveConfig])}
+          onClick={useCallback(
+            () => saveConfigWithCheck(),
+            [saveConfigWithCheck]
+          )}
           text="Save"
         />
         <Button
