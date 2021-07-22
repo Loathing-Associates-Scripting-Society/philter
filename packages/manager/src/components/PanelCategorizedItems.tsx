@@ -175,21 +175,23 @@ export const PanelCategorizedItems = (): JSX.Element => {
   const handleRuleChange: RuleChangeHandler = useCallback(
     (itemId, newRuleOrReducer) =>
       setActiveCleanupRules(prevCleanupRules => {
-        const prevRule = prevCleanupRules[itemId] as CleanupRule | undefined;
+        const prevRule: CleanupRule | undefined = prevCleanupRules[itemId];
         const newRule =
           typeof newRuleOrReducer === 'function'
             ? newRuleOrReducer(prevCleanupRules[itemId] || null)
             : newRuleOrReducer;
 
-        if (prevRule?.action !== newRule?.action) {
-          const itemName = data?.items[itemId]?.name;
-          showInfoToast(
-            newRule
-              ? `Changed action for ${itemName} to "${cleanupActionToString(
-                  newRule.action
-                )}"`
-              : `Removed action for ${itemName}`
-          );
+        if (prevRule && prevRule.action !== newRule?.action) {
+          const itemName = data?.items.find(item => item.id === itemId)?.name;
+          if (itemName !== undefined) {
+            showInfoToast(
+              newRule
+                ? `Changed action for ${itemName} to "${cleanupActionToString(
+                    newRule.action
+                  )}"`
+                : `Removed action for ${itemName}`
+            );
+          }
         }
 
         if (newRule) return {...prevCleanupRules, [itemId]: newRule};
