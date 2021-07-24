@@ -46,7 +46,7 @@ import {RELAY_SCRIPT_FILE} from '../common/build/src/index.js';
 
 /** @type {import('rollup').RollupOptions} */
 const config = {
-  external: ['kolmafia', 'ocd-cleanup.ash', 'philter.util.ash', 'zlib.ash'],
+  external: ['kolmafia', 'philter.util.ash', 'zlib.ash'],
   input: 'src/index.ts',
   output: {
     // To take advantage of TypeScript's incremental build mode, we must allow
@@ -75,6 +75,9 @@ const config = {
       ],
     }),
   ],
+  treeshake: {
+    moduleSideEffects: id => id !== 'philter.util.ash',
+  },
 };
 
 export default config;

@@ -1,0 +1,30 @@
+{
+  "name": "@philter/cli",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Inventory cleanup script for KoLmafia",
+  "license": "MIT",
+  "author": "Yehyoung Kang",
+  "main": "index.js",
+  "scripts": {
+    "build": "rollup --configPlugin typescript -c rollup.config.ts",
+    "fix": "eslint --fix .",
+    "lint": "eslint .",
+    "test": "yarn run lint"
+  },
+  "dependencies": {
+    "@philter/common": "*",
+    "kolmafia": "npm:kolmafia-types",
+    "kolmafia-util": "^0.3.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-buble": "^0.21.3",
+    "@rollup/plugin-node-resolve": "^13.0.2",
+    "@rollup/plugin-typescript": "^8.2.3",
+    "buble-config-rhino": "^0.1.0",
+    "gts": "^3.1.0",
+    "rollup": "^2.53.3",
+    "tslib": "^2.3.0",
+    "typescript": "^4.3.5"
+  }
+}

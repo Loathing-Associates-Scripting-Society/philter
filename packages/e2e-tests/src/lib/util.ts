@@ -2,6 +2,7 @@
  * @file Utility functions for writing E2E tests.
  */
 
+import {toItemMap} from '@philter/common/kol';
 import {
   displayAmount,
   getCloset,
@@ -9,7 +10,6 @@ import {
   getShop,
   getStash,
   print,
-  toItem,
   visitUrl,
   xpath,
 } from 'kolmafia';
@@ -159,16 +159,4 @@ export function loadOutboxKmail(): KolKmail[] {
   }
 
   return kmails;
-}
-
-/**
- * Converts a mapping of item strings to their amounts (returned by
- * `getInventory()`, `getCloset()`, etc.) to a Map.
- * @param items Mapping of item strings to their amounts
- * @return Mapping of Item to amount
- */
-export function toItemMap(items: {[itemStr: string]: number}) {
-  return new Map(
-    Object.keys(items).map(itemStr => [toItem(itemStr), items[itemStr]])
-  );
 }
