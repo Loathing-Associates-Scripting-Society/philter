@@ -1,4 +1,11 @@
-import {Button, ButtonGroup, Classes, UL} from '@blueprintjs/core';
+import {
+  Button,
+  ButtonGroup,
+  Classes,
+  ControlGroup,
+  InputGroup,
+  UL,
+} from '@blueprintjs/core';
 import {Classes as Popover2Classes, Popover2} from '@blueprintjs/popover2';
 import {
   CleanupRule,
@@ -8,7 +15,7 @@ import {
   ReadonlyInventoryState,
 } from '@philter/common';
 import classNames from 'classnames';
-import React, {memo, useCallback, useMemo} from 'react';
+import React, {memo, useCallback, useMemo, useState} from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import {areEqual, FixedSizeList} from 'react-window';
 import {CleanupRulePicker} from './CleanupRulePicker';
@@ -259,11 +266,11 @@ interface TableItemCleanupPropsBase {
 
 interface TableItemCleanupProps
   extends TableItemCleanupPropsBase,
-    Omit<React.ComponentProps<'div'>, keyof TableItemCleanupPropsBase> {}
+    Omit<React.ComponentProps<'section'>, keyof TableItemCleanupPropsBase> {}
 
 // eslint-disable-next-line prefer-arrow-callback
 export const TableItemCleanup = memo(function TableItemCleanup({
-  // className is already provided by React.ComponentProps<'div'>
+  // className is already provided by React.ComponentProps<'section'>
   // eslint-disable-next-line react/prop-types
   className,
   cleanupRules,
@@ -297,14 +304,30 @@ export const TableItemCleanup = memo(function TableItemCleanup({
     [onChange]
   );
 
+  // Filtering
+  const [filterText, setFilterText] = useState('');
+  const filteredItems = useMemo(() => {
+    if (!filterText) return items;
+    const filterTextLower = filterText.trim().toLowerCase();
+    return items.filter(item =>
+      item.name.toLowerCase().includes(filterTextLower)
+    );
+  }, [filterText, items]);
+
   const itemData = useMemo<TableItemCleanupRowData>(
     () => ({
       inventory,
-      items,
+      items: filteredItems,
       cleanupRules,
       onRuleChange: onRuleChange || defaultRuleChangeHandler,
     }),
-    [defaultRuleChangeHandler, inventory, items, cleanupRules, onRuleChange]
+    [
+      defaultRuleChangeHandler,
+      filteredItems,
+      inventory,
+      cleanupRules,
+      onRuleChange,
+    ]
   );
 
   const editorButtons = useMemo(
@@ -363,8 +386,31 @@ export const TableItemCleanup = memo(function TableItemCleanup({
   );
 
   return (
-    <div className={classNames('TableItemCleanup', className)} {...restProps}>
-      {editorButtons}
+    <section
+      className={classNames('TableItemCleanup', className)}
+      {...restProps}
+    >
+      <header className="TableItemCleanup__HeaderMenu">
+        {editorButtons}
+        <ControlGroup className="TableItemCleanup__ItemFilterControl">
+          <div>Filter by:</div>
+          <InputGroup
+            onChange={useCallback(
+              (event: React.ChangeEvent<HTMLInputElement>) =>
+                setFilterText(event.target.value),
+              []
+            )}
+            placeholder="Enter item name..."
+            value={filterText}
+          />
+          <div className="TableItemCleanup__ItemFilterBarHelperText">
+            {filterText &&
+              `${filteredItems.length} / ${items.length} match${
+                filteredItems.length > 1 ? 'es' : ''
+              }`}
+          </div>
+        </ControlGroup>
+      </header>
       <div className="TableItemCleanup__TableWrapper">
         <AutoSizer disableWidth>
           {({height: measuredHeight}) => (
@@ -395,7 +441,7 @@ export const TableItemCleanup = memo(function TableItemCleanup({
               <FixedSizeList
                 className="TableItemCleanup__Body"
                 height={measuredHeight}
-                itemCount={items.length}
+                itemCount={filteredItems.length}
                 itemData={itemData}
                 itemKey={itemKeyCallback}
                 itemSize={60}
@@ -409,7 +455,7 @@ export const TableItemCleanup = memo(function TableItemCleanup({
           )}
         </AutoSizer>
       </div>
-      {editorButtons}
-    </div>
+      <footer className="TableItemCleanup__FooterMenu">{editorButtons}</footer>
+    </section>
   );
 });

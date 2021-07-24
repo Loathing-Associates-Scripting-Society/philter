@@ -23,6 +23,28 @@
   flex-grow: 1;
 }
 
+.TableItemCleanup__HeaderMenu {
+  display: flex;
+}
+
+.TableItemCleanup__HeaderMenu > * + * {
+  margin-left: 1em;
+}
+
+/* Need specificity > (0, 1, 0) to override Blueprint's styling */
+.TableItemCleanup .TableItemCleanup__ItemFilterControl {
+  align-items: center;
+}
+
+.TableItemCleanup__ItemFilterControl > * + * {
+  margin-left: 0.5em;
+}
+
+.TableItemCleanup__ItemFilterBarHelperText {
+  color: #0e5a8a; /* @blue1 */
+  width: 10em;
+}
+
 /* Extra <div> that wraps <AutoSizer> to make flex functionality work.
    For an explanation of why this wrapper is needed, see:
    https://github.com/bvaughn/react-virtualized/blob/master/docs/usingAutoSizer.md
