@@ -1,10 +1,11 @@
 /*
 Blueprint stylesheets
 (see https://blueprintjs.com/docs/#blueprint/getting-started)
+
+Note: Don't add @bluprintjs/icons since we don't use icon fonts.
 */
 @import 'normalize.css';
 @import '@blueprintjs/core';
-@import '@blueprintjs/icons';
 @import '@blueprintjs/popover2';
 
 #root {

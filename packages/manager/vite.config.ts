@@ -1,6 +1,5 @@
 /* eslint-disable node/no-unpublished-import */
 import reactRefresh from '@vitejs/plugin-react-refresh';
-import del from 'rollup-plugin-delete';
 import {defineConfig} from 'vite';
 // Import @philter/common using a relative path. This is a hack, btw.
 // File extension is required to make this work in Node.js v12 AND v14.
@@ -32,15 +31,6 @@ export default defineConfig({
         chunkFileNames: 'assets/philter-manager.[name].js',
         entryFileNames: 'assets/[name].js',
       },
-      plugins: [
-        // Since Blueprint.js 3.0+ uses SVG icons exclusively, we can delete the
-        // font icon files
-        del({
-          force: true,
-          hook: 'writeBundle',
-          targets: `${OUT_DIR}/assets/icons-*.{woff,eot,ttf}`,
-        }),
-      ],
     },
     sourcemap: true,
   },
