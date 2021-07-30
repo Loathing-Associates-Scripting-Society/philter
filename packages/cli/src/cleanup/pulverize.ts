@@ -137,11 +137,13 @@ function malus(
  * some malus products may not be processed.
  * @param cleanupRules Cleanup rules to use
  * @param stockingRules Stocking rules to use
+ * @param simulateOnly Whether to print messages without actually sending items
  * @return Whether any item was actually sent
  */
 function sendToPulverizingBot(
   cleanupRules: ReadonlyCleanupRules,
-  stockingRules: ReadonlyStockingRules
+  stockingRules: ReadonlyStockingRules,
+  simulateOnly: boolean
 ): boolean {
   // TODO: Fix bug that sends items to smashbot during a simulation (dry run)
   const itemsToSend = new Map<Item, number>();
@@ -241,8 +243,20 @@ function sendToPulverizingBot(
       message += '\nrock';
     }
 
-    logger.info('Sending pulverizables to: Smashbot');
-    kmail({recipent: 'smashbot', message, items: itemsToSend});
+    for (const chunk of splitItemsSorted(itemsToSend, 11)) {
+      const tokensShown: string[] = [];
+
+      for (const [item, amount] of chunk) {
+        tokensShown.push(`${amount} ${item.name}`);
+      }
+
+      logger.info(`sending to Smashbot: ${tokensShown.join(', ')}`);
+      logger.info(' ');
+    }
+
+    if (!simulateOnly) {
+      kmail({recipent: 'smashbot', message, items: itemsToSend});
+    }
     return true;
   }
 }
@@ -275,7 +289,11 @@ export const cleanupPulverize: CleanupActionFunction = (plan, config) => {
 
   if (!haveSkill(Skill.get('Pulverize'))) {
     return {
-      shouldReplan: sendToPulverizingBot(plan.cleanupRules, plan.stockingRules),
+      shouldReplan: sendToPulverizingBot(
+        plan.cleanupRules,
+        plan.stockingRules,
+        config.simulateOnly
+      ),
       profit: 0,
     };
   }
@@ -305,7 +323,13 @@ export const cleanupPulverize: CleanupActionFunction = (plan, config) => {
       shouldReplan = true;
     }
   } else {
-    if (sendToPulverizingBot(plan.cleanupRules, plan.stockingRules)) {
+    if (
+      sendToPulverizingBot(
+        plan.cleanupRules,
+        plan.stockingRules,
+        config.simulateOnly
+      )
+    ) {
       shouldReplan = true;
     }
   }

@@ -726,8 +726,9 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 		}
 
 		if (!can_interact()) {
-			// Because Smashbot cannot return items to characters in
-			// Ronin/Hardcore, any items
+			// Smashbot cannot return items to characters in Ronin/Hardcore; any
+			// items sent will be lost. To prevent this, simply refuse to send
+			// items.
 			vprint(
 				"You cannot send items to Smashbot while in Ronin/Hardcore.",
 				_ocd_color_info(),
@@ -810,8 +811,21 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 				message += '\nrock';
 			}
 
-			vprint("Sending pulverizables to: Smashbot", _ocd_color_info(), 3);
-			kmail("smashbot", message, 0, items_to_send);
+			item [int, int] chunks = split_items_sorted(items_to_smash, 11);
+			foreach chunk_index in chunks {
+				string [int] tokens_shown;
+				foreach _, it in chunks[chunk_index] {
+					int amount = items_to_smash[it];
+					tokens_shown[tokens_shown.count()] = `{amount} {it.name}`;
+				}
+
+				vprint(`sending to Smashbot: {tokens_shown.join(", ")}`, _ocd_color_info(), 3);
+				vprint(" ", 3);
+			}
+
+			if (!getvar("BaleOCD_Sim").to_boolean()) {
+				kmail("smashbot", message, 0, items_to_send);
+			}
 			return true;
 		}
 	}

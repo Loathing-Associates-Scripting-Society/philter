@@ -1467,9 +1467,10 @@ function malus(cleanupRules, stockingRules, simulateOnly) {
  * some malus products may not be processed.
  * @param cleanupRules Cleanup rules to use
  * @param stockingRules Stocking rules to use
+ * @param simulateOnly Whether to print messages without actually sending items
  * @return Whether any item was actually sent
  */
-function sendToPulverizingBot(cleanupRules, stockingRules) {
+function sendToPulverizingBot(cleanupRules, stockingRules, simulateOnly) {
     var _a, _b, _c;
     // TODO: Fix bug that sends items to smashbot during a simulation (dry run)
     var itemsToSend = new Map();
@@ -1560,8 +1561,17 @@ function sendToPulverizingBot(cleanupRules, stockingRules) {
         if (canUseRock) {
             message += '\nrock';
         }
-        info('Sending pulverizables to: Smashbot');
-        kmail({ recipent: 'smashbot', message: message, items: itemsToSend });
+        for (var chunk of splitItemsSorted(itemsToSend, 11)) {
+            var tokensShown = [];
+            for (var [item, amount$1] of chunk) {
+                tokensShown.push((amount$1 + " " + (item.name)));
+            }
+            info(("sending to Smashbot: " + (tokensShown.join(', '))));
+            info(' ');
+        }
+        if (!simulateOnly) {
+            kmail({ recipent: 'smashbot', message: message, items: itemsToSend });
+        }
         return true;
     }
 }
@@ -1590,7 +1600,7 @@ var cleanupPulverize = (plan, config) => {
     // We should print a warning about this.
     if (!kolmafia.haveSkill(Skill.get('Pulverize'))) {
         return {
-            shouldReplan: sendToPulverizingBot(plan.cleanupRules, plan.stockingRules),
+            shouldReplan: sendToPulverizingBot(plan.cleanupRules, plan.stockingRules, config.simulateOnly),
             profit: 0,
         };
     }
@@ -1617,7 +1627,7 @@ var cleanupPulverize = (plan, config) => {
         }
     }
     else {
-        if (sendToPulverizingBot(plan.cleanupRules, plan.stockingRules)) {
+        if (sendToPulverizingBot(plan.cleanupRules, plan.stockingRules, config.simulateOnly)) {
             shouldReplan = true;
         }
     }
