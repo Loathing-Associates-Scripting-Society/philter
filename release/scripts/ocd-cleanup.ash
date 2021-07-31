@@ -811,11 +811,11 @@ int ocd_control(boolean StopForMissingItems, string extraData) {
 				message += '\nrock';
 			}
 
-			item [int, int] chunks = split_items_sorted(items_to_smash, 11);
+			item [int, int] chunks = split_items_sorted(items_to_send, 11);
 			foreach chunk_index in chunks {
 				string [int] tokens_shown;
 				foreach _, it in chunks[chunk_index] {
-					int amount = items_to_smash[it];
+					int amount = items_to_send[it];
 					tokens_shown[tokens_shown.count()] = `{amount} {it.name}`;
 				}
 
