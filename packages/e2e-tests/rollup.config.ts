@@ -1,13 +1,12 @@
 /* eslint-disable node/no-unpublished-import */
-/* eslint-disable node/no-unsupported-features/es-syntax */
+import buble from '@rollup/plugin-buble';
 import commonjs from '@rollup/plugin-commonjs';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
-import buble from '@rollup/plugin-buble';
 import createPreset from 'buble-config-rhino';
+import type {RollupOptions} from 'rollup';
 
-/** @type {import("rollup").RollupOptions} */
-const config = {
+const config: RollupOptions = {
   external: ['kolmafia', 'philter.util.ash', 'zlib.ash'],
   input: 'src/ocd-test-basic.ts',
   output: {
