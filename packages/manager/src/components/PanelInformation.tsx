@@ -73,84 +73,86 @@ export const PanelInformation = (): JSX.Element => {
             className="PanelInformation__VerticalTable"
             condensed
           >
-            <tr>
-              <th
-                style={
-                  data.uncategorizedItemCount > 0
-                    ? {color: Colors.ORANGE1}
-                    : undefined
-                }
-              >
-                Uncategorized (in inventory)
-              </th>
-              <td
-                style={
-                  data.uncategorizedItemCount > 0
-                    ? {color: Colors.ORANGE1}
-                    : undefined
-                }
-              >
-                {data.uncategorizedItemCount}
-              </td>
-            </tr>
-            <tr>
-              <th>Items in Ruleset</th>
-              <td>{categorizedCount}</td>
-            </tr>
-            <tr>
-              <th>{BULLET} Keep All</th>
-              <td>{data.categorizedItemCounts.KEEP}</td>
-            </tr>
-            <tr>
-              <th>{BULLET} Mallsell</th>
-              <td>{data.categorizedItemCounts.MALL}</td>
-            </tr>
-            <tr>
-              <th>{BULLET} Autosell/Discard</th>
-              <td>
-                {data.categorizedItemCounts.AUTO +
-                  data.categorizedItemCounts.DISC}
-              </td>
-            </tr>
-            <tr>
-              <th>{BULLET} Pulverize</th>
-              <td>{data.categorizedItemCounts.PULV}</td>
-            </tr>
-            <tr>
-              <th>{BULLET} Use or break</th>
-              <td>
-                {data.categorizedItemCounts.BREAK +
-                  data.categorizedItemCounts.USE}
-              </td>
-            </tr>
-            <tr>
-              <th>{BULLET} Put in closet</th>
-              <td>{data.categorizedItemCounts.CLST}</td>
-            </tr>
-            <tr>
-              <th>{BULLET} Put in clan stash</th>
-              <td>{data.categorizedItemCounts.CLAN}</td>
-            </tr>
-            <tr>
-              <th>{BULLET} Crafting</th>
-              <td>{data.categorizedItemCounts.MAKE}</td>
-            </tr>
-            <tr>
-              <th>{BULLET} Untinker</th>
-              <td>{data.categorizedItemCounts.UNTN}</td>
-            </tr>
-            <tr>
-              <th>{BULLET} Send as gift</th>
-              <td>{data.categorizedItemCounts.GIFT}</td>
-            </tr>
-            <tr>
-              <th>{BULLET} Put in display case</th>
-              <td>{data.categorizedItemCounts.DISP}</td>
-            </tr>
-            <tr>
-              <th>{BULLET} Remind me later</th>
-              <td>{data.categorizedItemCounts.TODO}</td>
-            </tr>
+            <tbody>
+              <tr>
+                <th
+                  style={
+                    data.uncategorizedItemCount > 0
+                      ? {color: Colors.ORANGE1}
+                      : undefined
+                  }
+                >
+                  Uncategorized (in inventory)
+                </th>
+                <td
+                  style={
+                    data.uncategorizedItemCount > 0
+                      ? {color: Colors.ORANGE1}
+                      : undefined
+                  }
+                >
+                  {data.uncategorizedItemCount}
+                </td>
+              </tr>
+              <tr>
+                <th>Items in Ruleset</th>
+                <td>{categorizedCount}</td>
+              </tr>
+              <tr>
+                <th>{BULLET} Keep All</th>
+                <td>{data.categorizedItemCounts.KEEP}</td>
+              </tr>
+              <tr>
+                <th>{BULLET} Mallsell</th>
+                <td>{data.categorizedItemCounts.MALL}</td>
+              </tr>
+              <tr>
+                <th>{BULLET} Autosell/Discard</th>
+                <td>
+                  {data.categorizedItemCounts.AUTO +
+                    data.categorizedItemCounts.DISC}
+                </td>
+              </tr>
+              <tr>
+                <th>{BULLET} Pulverize</th>
+                <td>{data.categorizedItemCounts.PULV}</td>
+              </tr>
+              <tr>
+                <th>{BULLET} Use or break</th>
+                <td>
+                  {data.categorizedItemCounts.BREAK +
+                    data.categorizedItemCounts.USE}
+                </td>
+              </tr>
+              <tr>
+                <th>{BULLET} Put in closet</th>
+                <td>{data.categorizedItemCounts.CLST}</td>
+              </tr>
+              <tr>
+                <th>{BULLET} Put in clan stash</th>
+                <td>{data.categorizedItemCounts.CLAN}</td>
+              </tr>
+              <tr>
+                <th>{BULLET} Crafting</th>
+                <td>{data.categorizedItemCounts.MAKE}</td>
+              </tr>
+              <tr>
+                <th>{BULLET} Untinker</th>
+                <td>{data.categorizedItemCounts.UNTN}</td>
+              </tr>
+              <tr>
+                <th>{BULLET} Send as gift</th>
+                <td>{data.categorizedItemCounts.GIFT}</td>
+              </tr>
+              <tr>
+                <th>{BULLET} Put in display case</th>
+                <td>{data.categorizedItemCounts.DISP}</td>
+              </tr>
+              <tr>
+                <th>{BULLET} Remind me later</th>
+                <td>{data.categorizedItemCounts.TODO}</td>
+              </tr>
+            </tbody>
           </HTMLTable>
         ) : (
           <NonIdealState

@@ -1,6 +1,15 @@
-.PanelInformation__VerticalTable > tr:not(:first-child) > * {
+.PanelInformation__VerticalTable > tbody > tr:not(:first-child) > * {
   /* Based on Blueprint.js's <HTMLTable> component style */
   border-top: 1px solid rgb(16 22 16 / 15%);
+}
+
+/* Need specificity > (0, 3, 4) to override Blueprint's styling */
+/* (This is an ugly hack, I know) */
+.PanelInformation__VerticalTable.PanelInformation__VerticalTable.PanelInformation__VerticalTable.PanelInformation__VerticalTable
+  > tbody
+  > tr
+  > * {
+  box-shadow: none;
 }
 
 .PanelInformation__Bullet {
