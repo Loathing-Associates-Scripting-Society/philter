@@ -66,6 +66,10 @@ export interface CleanupTableUncategorizedGetResponse
     items: ItemInfo[];
     /** Inventory state needed to render the table. */
     inventory: InventoryState;
+    /**
+     * The entire cleanup ruleset.
+     */
+    cleanupRules: CleanupRuleset;
   };
 }
 

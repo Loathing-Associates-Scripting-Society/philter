@@ -1351,6 +1351,7 @@ var routes = [
             }
             return {
                 result: {
+                    cleanupRules: itemMapToIdMapping(cleanupRulesMap),
                     inventory: inventory,
                     items: Array.from(uncategorizedItems, item => toItemInfo(item)),
                 },

@@ -86,6 +86,7 @@ export const routes = [
 
       return {
         result: {
+          cleanupRules: itemMapToIdMapping(cleanupRulesMap),
           inventory,
           items: Array.from(uncategorizedItems, item => toItemInfo(item)),
         },
