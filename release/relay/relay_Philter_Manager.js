@@ -1366,21 +1366,6 @@ var routes = [
                 ? { result: { success: success } }
                 : { error: { code: 500, message: 'Cannot save cleanup ruleset' } };
         },
-        patch: function patch(params) {
-            var cleanupRulesMap = loadCleanupRulesetForCurrentPlayer() || new Map();
-            for (var [item, patch] of idMappingToItemMap(params.cleanupRulesPatch)) {
-                if (patch === null) {
-                    cleanupRulesMap.delete(item);
-                }
-                else {
-                    cleanupRulesMap.set(item, patch);
-                }
-            }
-            var success = saveCleanupRulesetForCurrentPlayer(cleanupRulesMap);
-            return success
-                ? { result: { success: success } }
-                : { error: { code: 500, message: 'Cannot update cleanup ruleset' } };
-        },
     }),
     createRoute(CONFIG_ROUTE, {
         get: () => ({ result: loadCleanupConfig() }),
