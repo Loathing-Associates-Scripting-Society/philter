@@ -1,11 +1,11 @@
 import {H3, NonIdealState, Spinner, Tab, Tabs} from '@blueprintjs/core';
 import {
   CleanupRule,
-  CleanupRuleset,
   CLEANUP_TABLES_CATEGORIZED_ROUTE,
   ItemInfo,
   ReadonlyCleanupRuleset,
 } from '@philter/common';
+import {dequal} from 'dequal/lite';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useAsyncCallback} from 'react-async-hook';
 import useSWR from 'swr';
@@ -112,13 +112,23 @@ const categorizeItemsForTabs = (
     }
   );
 
-/** Empty object used as placeholder for the cleanup ruleset being edited. */
-const EMPTY_CLEANUP_RULES = Object.freeze({});
-
 /**
  * Panel for editing the player's Philter ruleset.
  */
-export const PanelCategorizedItems = (): JSX.Element => {
+export const PanelCategorizedItems = ({
+  cleanupRules,
+  onChange,
+}: {
+  /**
+   * Active cleanup ruleset being edited, or `undefined` if the base cleanup
+   * ruleset has not been loaded yet.
+   */
+  cleanupRules: ReadonlyCleanupRuleset | undefined;
+  /** Callback invoked when the active cleanup ruleset is changed */
+  onChange: (
+    newStateOrReducer: React.SetStateAction<ReadonlyCleanupRuleset | undefined>
+  ) => void;
+}): JSX.Element => {
   const {
     data,
     error: loadingError,
@@ -131,20 +141,22 @@ export const PanelCategorizedItems = (): JSX.Element => {
     return response.result;
   });
 
-  const [activeCleanupRules, setActiveCleanupRules] =
-    useState<CleanupRuleset>(EMPTY_CLEANUP_RULES);
-
+  // When the data is loaded for the first time, sync the active cleanup ruleset
+  // with the base cleanup ruleset
   useEffect(() => {
-    // When the data is loaded for the first time, populate activeCleanupRules
-    // with the server-sent ruleset
-    if (data?.cleanupRules && activeCleanupRules === EMPTY_CLEANUP_RULES) {
-      setActiveCleanupRules(data.cleanupRules);
+    if (data?.cleanupRules) {
+      onChange(prevCleanupRules => prevCleanupRules ?? data.cleanupRules);
     }
-  }, [activeCleanupRules, data?.cleanupRules]);
+  }, [data?.cleanupRules, onChange]);
+
+  const hasChanges = useMemo(
+    () => Boolean(cleanupRules) && !dequal(cleanupRules, data?.cleanupRules),
+    [cleanupRules, data?.cleanupRules]
+  );
 
   const handleReset = useCallback(
-    () => data?.cleanupRules && setActiveCleanupRules(data.cleanupRules),
-    [data?.cleanupRules]
+    () => data?.cleanupRules && onChange(data.cleanupRules),
+    [data?.cleanupRules, onChange]
   );
 
   const {
@@ -156,13 +168,20 @@ export const PanelCategorizedItems = (): JSX.Element => {
       if (!data) {
         throw new Error("Cannot save ruleset when we don't have any data yet");
       }
-      const response = await fetchSaveCleanupRuleset(activeCleanupRules);
+      if (!cleanupRules) {
+        throw new Error(
+          'Cannot save active ruleset because it has not been initialized yet'
+        );
+      }
+
+      const response = await fetchSaveCleanupRuleset(cleanupRules);
       if (!response?.result?.success) {
         throw new Error(`Unexpected response: ${JSON.stringify(response)}`);
       }
-      return {...data, cleanupRules: activeCleanupRules};
+      return {...data, cleanupRules};
     }, false)
   );
+
   useEffect(
     () => setErrorToast('savingError', savingError, 'Cannot save cleanup rule'),
     [savingError]
@@ -174,7 +193,9 @@ export const PanelCategorizedItems = (): JSX.Element => {
 
   const handleRuleChange: RuleChangeHandler = useCallback(
     (itemId, newRuleOrReducer) =>
-      setActiveCleanupRules(prevCleanupRules => {
+      onChange(prevCleanupRules => {
+        if (prevCleanupRules === undefined) return prevCleanupRules;
+
         const prevRule: CleanupRule | undefined = prevCleanupRules[itemId];
         const newRule =
           typeof newRuleOrReducer === 'function'
@@ -201,7 +222,7 @@ export const PanelCategorizedItems = (): JSX.Element => {
           return restCleanupRules;
         }
       }),
-    [data?.items]
+    [data?.items, onChange]
   );
 
   const [tabId, setTabId] = useState<CleanupTabType>('all');
@@ -210,8 +231,8 @@ export const PanelCategorizedItems = (): JSX.Element => {
   // rather than the base copy. This allows the tabs to be updated in real time
   // when the user edits the ruleset.
   const itemsForTabs = useMemo(
-    () => categorizeItemsForTabs(data?.items ?? [], activeCleanupRules || {}),
-    [data?.items, activeCleanupRules]
+    () => categorizeItemsForTabs(data?.items ?? [], cleanupRules || {}),
+    [cleanupRules, data?.items]
   );
 
   const isTabAvailable = Object.prototype.hasOwnProperty.call(
@@ -222,9 +243,8 @@ export const PanelCategorizedItems = (): JSX.Element => {
     : true;
   const actualTabId = isTabAvailable ? tabId : 'all';
 
-  const hasChanges = Boolean(data && data.cleanupRules !== activeCleanupRules);
-
   const makeItemTable = (items: ItemInfo[]) =>
+    cleanupRules &&
     data && (
       <TableItemCleanup
         className="PanelCategorizedItems__Table"
@@ -232,7 +252,7 @@ export const PanelCategorizedItems = (): JSX.Element => {
         disableSave={!hasChanges}
         inventory={data.inventory}
         items={items}
-        cleanupRules={activeCleanupRules}
+        cleanupRules={cleanupRules}
         onRuleChange={handleRuleChange}
         onReset={handleReset}
         onSave={handleSave}

@@ -7,31 +7,40 @@ import {
   Spinner,
 } from '@blueprintjs/core';
 import {
-  CLEANUP_TABLES_UNCATEGORIZED_ROUTE,
   CleanupRuleset,
+  CLEANUP_TABLES_UNCATEGORIZED_ROUTE,
+  ReadonlyCleanupRuleset,
 } from '@philter/common';
 import {dequal} from 'dequal/lite';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
 import {useAsyncCallback} from 'react-async-hook';
 import useSWR from 'swr';
 import {
   fetchGetCleanupTableUncategorized,
-  fetchPatchCleanupRuleset,
+  fetchSaveCleanupRuleset,
 } from '../api';
 import {setErrorToast, setSavingToast} from '../toaster';
-import {TableItemCleanup} from './TableItemCleanup';
 import './PanelUncategorizedItems.css';
+import {TableItemCleanup} from './TableItemCleanup';
 
-const EMPTY_CLEANUP_RULES = {};
-
-export const PanelUncategorizedItems = (): JSX.Element => {
+export const PanelUncategorizedItems = ({
+  cleanupRules,
+  onChange,
+}: {
+  /**
+   * Active cleanup ruleset being edited, or `undefined` if the base cleanup
+   * ruleset has not been loaded yet.
+   */
+  cleanupRules: ReadonlyCleanupRuleset | undefined;
+  /** Callback invoked when the active cleanup ruleset is changed */
+  onChange: (
+    newStateOrReducer: React.SetStateAction<ReadonlyCleanupRuleset | undefined>
+  ) => void;
+}): JSX.Element => {
   // Major assumptions:
   //
   // - data.items contains _only_ items that are uncategorized, i.e. the server
   //   performs the filtering for us.
-  // - cleanupRules always starts as an empty ruleset. Since data.items has
-  //   already been curated, there is no need to retrieve the entire ruleset
-  //   from the server.
   const {
     data,
     error: loadingError,
@@ -44,30 +53,50 @@ export const PanelUncategorizedItems = (): JSX.Element => {
     return response.result;
   });
 
-  const [cleanupRules, setCleanupRules] =
-    useState<CleanupRuleset>(EMPTY_CLEANUP_RULES);
-  const resetCleanupRules = useCallback(
-    () => setCleanupRules(EMPTY_CLEANUP_RULES),
-    []
-  );
+  // When the data is loaded for the first time, sync the active cleanup ruleset
+  // with the base cleanup ruleset
+  useEffect(() => {
+    if (data?.cleanupRules) {
+      onChange(prevCleanupRules => prevCleanupRules ?? data.cleanupRules);
+    }
+  }, [data?.cleanupRules, onChange]);
 
   const hasChanges = useMemo(
-    () => !dequal(cleanupRules, EMPTY_CLEANUP_RULES),
-    [cleanupRules]
+    () => Boolean(cleanupRules) && !dequal(cleanupRules, data?.cleanupRules),
+    [cleanupRules, data?.cleanupRules]
+  );
+
+  const handleReset = useCallback(
+    () => data?.cleanupRules && onChange(data.cleanupRules),
+    [data?.cleanupRules, onChange]
   );
 
   const {
     error: savingError,
-    execute: doSave,
+    execute: handleSave,
     loading: isSaving,
-  } = useAsyncCallback(async () => {
-    const response = await fetchPatchCleanupRuleset(cleanupRules);
-    if (!response?.result?.success) {
-      throw new Error(`Unexpected response: ${JSON.stringify(response)}`);
-    }
-    mutate();
-    resetCleanupRules();
-  });
+  } = useAsyncCallback(() =>
+    mutate(async data => {
+      if (!data) {
+        throw new Error("Cannot save ruleset when we don't have any data yet");
+      }
+      if (!cleanupRules) {
+        throw new Error(
+          'Cannot save active ruleset because it has not been initialized yet'
+        );
+      }
+
+      const response = await fetchSaveCleanupRuleset(cleanupRules);
+      if (!response?.result?.success) {
+        throw new Error(`Unexpected response: ${JSON.stringify(response)}`);
+      }
+      return {
+        ...data,
+        items: data.items.filter(item => !(item.id in cleanupRules)),
+        cleanupRules,
+      };
+    }, false)
+  );
 
   useEffect(
     () => setErrorToast('savingError', savingError, 'Cannot save cleanup rule'),
@@ -81,7 +110,10 @@ export const PanelUncategorizedItems = (): JSX.Element => {
   const setAllItemsToMall = useCallback(
     () =>
       data &&
-      setCleanupRules(({...cleanupRules}) => {
+      onChange(prevCleanupRules => {
+        if (prevCleanupRules === undefined) return prevCleanupRules;
+
+        const {...cleanupRules}: CleanupRuleset = prevCleanupRules;
         for (const item of data.items) {
           if (item.canMall) {
             cleanupRules[item.id] = {action: 'MALL', minPrice: 0};
@@ -89,12 +121,15 @@ export const PanelUncategorizedItems = (): JSX.Element => {
         }
         return cleanupRules;
       }),
-    [data]
+    [data, onChange]
   );
   const setAllItemsToCloset = useCallback(
     () =>
       data &&
-      setCleanupRules(({...cleanupRules}) => {
+      onChange(prevCleanupRules => {
+        if (prevCleanupRules === undefined) return prevCleanupRules;
+
+        const {...cleanupRules}: CleanupRuleset = prevCleanupRules;
         for (const item of data.items) {
           if (item.canCloset) {
             cleanupRules[item.id] = {action: 'CLST'};
@@ -102,24 +137,39 @@ export const PanelUncategorizedItems = (): JSX.Element => {
         }
         return cleanupRules;
       }),
-    [data]
+    [data, onChange]
   );
   const setAllItemsToKeep = useCallback(
     () =>
       data &&
-      setCleanupRules(({...cleanupRules}) => {
+      onChange(prevCleanupRules => {
+        if (prevCleanupRules === undefined) return prevCleanupRules;
+
+        const {...cleanupRules}: CleanupRuleset = prevCleanupRules;
         for (const item of data.items) {
           cleanupRules[item.id] = {action: 'KEEP'};
         }
         return cleanupRules;
       }),
-    [data]
+    [data, onChange]
+  );
+
+  const handleCleanupRulesetChange = useCallback(
+    (newRulesOrReducer: React.SetStateAction<CleanupRuleset>) =>
+      onChange(prevCleanupRules =>
+        prevCleanupRules
+          ? typeof newRulesOrReducer === 'function'
+            ? newRulesOrReducer(prevCleanupRules)
+            : newRulesOrReducer
+          : prevCleanupRules
+      ),
+    [onChange]
   );
 
   return (
     <>
       <H3>Uncategorized Items in Your Inventory</H3>
-      {data ? (
+      {cleanupRules && data ? (
         data.items.length > 0 ? (
           <>
             <FormGroup inline label="Categorize all items as...">
@@ -166,9 +216,9 @@ export const PanelUncategorizedItems = (): JSX.Element => {
               inventory={data.inventory}
               items={data.items}
               cleanupRules={cleanupRules}
-              onChange={setCleanupRules}
-              onReset={resetCleanupRules}
-              onSave={doSave}
+              onChange={handleCleanupRulesetChange}
+              onReset={handleReset}
+              onSave={handleSave}
             />
           </>
         ) : (

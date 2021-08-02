@@ -1,4 +1,5 @@
 import {Tab, Tabs} from '@blueprintjs/core';
+import {CleanupRuleset} from '@philter/common';
 import React, {useState} from 'react';
 import './App.css';
 import {PanelCategorizedItems} from './components/PanelCategorizedItems';
@@ -30,6 +31,11 @@ const ensureValidTabType = (tabId: number | string): MainTabType =>
 export const App = (): JSX.Element => {
   const [tabId, setTabId] = useState<MainTabType>(DEFAULT_TAB);
 
+  // Global edit state persisted across categorized and uncategorized item tabs
+  const [activeCleanupRules, setActiveCleanupRules] = useState<
+    CleanupRuleset | undefined
+  >();
+
   return (
     <div className="App">
       <Tabs
@@ -47,13 +53,23 @@ export const App = (): JSX.Element => {
         />
         <Tab
           id={typeCheck<MainTabType>('uncategorized')}
-          panel={<PanelUncategorizedItems />}
+          panel={
+            <PanelUncategorizedItems
+              cleanupRules={activeCleanupRules}
+              onChange={setActiveCleanupRules}
+            />
+          }
           panelClassName="App__TabItem"
           title="Add Items"
         />
         <Tab
           id={typeCheck<MainTabType>('categorized')}
-          panel={<PanelCategorizedItems />}
+          panel={
+            <PanelCategorizedItems
+              cleanupRules={activeCleanupRules}
+              onChange={setActiveCleanupRules}
+            />
+          }
           panelClassName="App__TabItem"
           title="Edit Rules"
         />
