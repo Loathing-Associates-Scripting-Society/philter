@@ -86,6 +86,7 @@ export const routes = [
 
       return {
         result: {
+          cleanupRules: itemMapToIdMapping(cleanupRulesMap),
           inventory,
           items: Array.from(uncategorizedItems, item => toItemInfo(item)),
         },
@@ -100,24 +101,6 @@ export const routes = [
       return success
         ? {result: {success}}
         : {error: {code: 500, message: 'Cannot save cleanup ruleset'}};
-    },
-    patch(params) {
-      const cleanupRulesMap =
-        loadCleanupRulesetForCurrentPlayer() || new Map<Item, CleanupRule>();
-      for (const [item, patch] of idMappingToItemMap(
-        params.cleanupRulesPatch
-      )) {
-        if (patch === null) {
-          cleanupRulesMap.delete(item);
-        } else {
-          cleanupRulesMap.set(item, patch);
-        }
-      }
-      const success = saveCleanupRulesetForCurrentPlayer(cleanupRulesMap);
-
-      return success
-        ? {result: {success}}
-        : {error: {code: 500, message: 'Cannot update cleanup ruleset'}};
     },
   }),
   createRoute(CONFIG_ROUTE, {

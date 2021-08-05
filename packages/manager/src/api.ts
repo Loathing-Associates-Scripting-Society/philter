@@ -11,7 +11,6 @@ import {
   PhilterConfig,
   prepareRequestForSerialization,
   ReadonlyCleanupRuleset,
-  ReadonlyCleanupRulesetPatch,
   RELAY_SCRIPT_FILE,
   Request,
   RequestMethodFor,
@@ -109,10 +108,6 @@ export const fetchGetCleanupTableUncategorized = () =>
 
 export const fetchSaveCleanupRuleset = (cleanupRules: ReadonlyCleanupRuleset) =>
   fetchFromApi(RULESET_ROUTE, 'post', {cleanupRules});
-
-export const fetchPatchCleanupRuleset = (
-  cleanupRulesPatch: ReadonlyCleanupRulesetPatch
-) => fetchFromApi(RULESET_ROUTE, 'patch', {cleanupRulesPatch});
 
 export const fetchInventoryState = () =>
   fetchFromApi(INVENTORY_ROUTE, 'get', {});
