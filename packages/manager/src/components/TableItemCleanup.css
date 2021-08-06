@@ -1,22 +1,5 @@
 .TableItemCleanup {
-  --TableItemCleanup-Col-ItemName-Width: 15em;
-  --TableItemCleanup-Col-ClosetAmount-Width: 3em;
-  --TableItemCleanup-Col-MallPrice-Width: 5em;
-  --TableItemCleanup-Col-KeepAmount-Width: 6em;
-  --TableItemCleanup-Col-Action-Width: 31em;
-  /* Accounts for horizontal space occupied by vertical scrollbars */
-  --TableItemCleanup-Scrollbar-Width-Hack: 20px;
-
-  --TableItemCleanup-Total-Width: calc(
-    var(--TableItemCleanup-Col-ItemName-Width) +
-      var(--TableItemCleanup-Col-ClosetAmount-Width) +
-      var(--TableItemCleanup-Col-ClosetAmount-Width) +
-      var(--TableItemCleanup-Col-ClosetAmount-Width) +
-      var(--TableItemCleanup-Col-MallPrice-Width) +
-      var(--TableItemCleanup-Col-KeepAmount-Width) +
-      var(--TableItemCleanup-Col-Action-Width) +
-      var(--TableItemCleanup-Scrollbar-Width-Hack)
-  );
+  --TableItemCleanup-border-color: rgb(0 0 0 / 15%);
 
   display: flex;
   flex-direction: column;
@@ -50,60 +33,39 @@
    https://github.com/bvaughn/react-virtualized/blob/master/docs/usingAutoSizer.md
  */
 .TableItemCleanup__TableWrapper {
-  /* For some reason, <AutoSizer> tries to eat the component below this one.
-     Add a bigger bottom margin to prevent this. */
-  margin-bottom: 2.5em;
+  border: 1px solid var(--TableItemCleanup-border-color);
+  margin-bottom: 0.5em;
   margin-top: 0.5em;
+  /* Prevent table from shrinking too much. If the viewport becomes too narrow,
+     a horizontal scrollbar should appear on the viewport, not here. */
+  min-width: 900px;
   flex-grow: 1;
 }
 
 .TableItemCleanup__Inner {
-  /* Instead of letting or header row and/or body to gain their own horizontal
-   * scrollbars, we prevent them from shrinking, and let the parent container
-   * gain its own scrollbar.
-   * This way, we "synchronize" the header and body rows when the user scrolls
-   * horizontally.
-   */
-  overflow-x: auto;
+  /* Always show vertical scrollbar in virtualized table, in order to make the
+     layout more consistent. */
+  overflow-y: scroll !important;
 }
 
 .TableItemCleanup__HeaderRow,
 .TableItemCleanup__Row {
+  border-bottom: 1px solid var(--TableItemCleanup-border-color);
   display: flex;
 }
 
-.TableItemCleanup__HeaderRow {
-  /* Based on Blueprint.js's <HTMLTable> component style */
-  box-shadow: inset -1px -1px 0 0 rgb(0 0 0 / 15%);
+.TableItemCleanup__HeaderCell {
   font-weight: 600;
-  /* We _never_ want this component to shrink by itself. */
-  min-width: var(--TableItemCleanup-Total-Width);
-  /* Always show a vertical scrollbar.
-   * This prevents column mis-alignment glitches that occur when the main row
-   * region has a scroll bar, but the header row does not (or vice versa).
-   */
-  overflow-y: scroll;
-}
-
-.TableItemCleanup__Body {
-  /* We _never_ want this component to shrink by itself. */
-  min-width: var(--TableItemCleanup-Total-Width);
-  /* Always show a vertical scrollbar.
-   * This prevents column mis-alignment glitches that occur when the main row
-   * region has a scroll bar, but the header row does not (or vice versa).
-   * The "!important" is needed to override the style attribute injected by
-   * react-window.
-   */
-  overflow-y: scroll !important;
 }
 
 .TableItemCleanup__Cell,
 .TableItemCleanup__HeaderCell {
-  /* Copied from Blueprint.js's <HTMLTable> component style */
-  box-shadow: inset 1px 1px 0 0 rgb(0 0 0 / 15%);
-  /* Columns should never try to shrink, even if the viewport becomes narrow. */
-  flex-shrink: 0;
   padding: 5px;
+}
+
+* + .TableItemCleanup__Cell,
+* + .TableItemCleanup__HeaderCell {
+  border-left: 1px solid var(--TableItemCleanup-border-color);
 }
 
 .TableItemCleanup__ColumnItemName {
@@ -112,16 +74,11 @@
   /* Use flexbox to ensure that the item name always appears to the right of the
      icon, even if the item name is very long */
   display: flex;
-  flex-basis: var(--TableItemCleanup-Col-ItemName-Width);
-  flex-grow: 5;
-  min-width: var(--TableItemCleanup-Col-ItemName-Width);
 }
 
 .TableItemCleanup__ColumnClosetAmount,
 .TableItemCleanup__ColumnStorageAmount,
 .TableItemCleanup__ColumnDisplayCaseAmount {
-  flex-basis: var(--TableItemCleanup-Col-ClosetAmount-Width);
-  min-width: var(--TableItemCleanup-Col-ClosetAmount-Width);
   text-align: right;
 }
 
@@ -131,28 +88,13 @@
    */
   align-items: flex-end;
   display: flex;
-  flex-basis: var(--TableItemCleanup-Col-MallPrice-Width);
   /* Ensure that the "min" tag appears below the price */
   flex-direction: column;
-  flex-grow: 1;
-  max-width: calc(2 * var(--TableItemCleanup-Col-MallPrice-Width));
-  min-width: var(--TableItemCleanup-Col-MallPrice-Width);
   /* Break long price numbers across multiple lines */
   overflow-wrap: break-word;
   /* When long price numbers are broken across multiple lines, ensure that they
      are right-aligned as well. */
   text-align: right;
-}
-
-.TableItemCleanup__ColumnKeepAmount {
-  flex-basis: var(--TableItemCleanup-Col-KeepAmount-Width);
-  min-width: var(--TableItemCleanup-Col-KeepAmount-Width);
-}
-
-.TableItemCleanup__ColumnAction {
-  flex-basis: var(--TableItemCleanup-Col-Action-Width);
-  flex-grow: 1;
-  min-width: var(--TableItemCleanup-Col-Action-Width);
 }
 
 /* Need specificity > (0, 2, 0) to override Blueprint's styling */
@@ -176,7 +118,7 @@
   text-align: start;
 }
 
-.TableItemCleanup__InputKeepAmount input {
+.TableItemCleanup__InputKeepAmount {
   text-align: right;
 }
 

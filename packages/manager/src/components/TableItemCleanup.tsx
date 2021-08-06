@@ -16,8 +16,7 @@ import {
 } from '@philter/common';
 import classNames from 'classnames';
 import React, {memo, useCallback, useMemo, useState} from 'react';
-import AutoSizer from 'react-virtualized-auto-sizer';
-import {areEqual, FixedSizeList} from 'react-window';
+import {AutoSizer, Column, Table} from 'react-virtualized';
 import {CleanupRulePicker} from './CleanupRulePicker';
 import {NumericInputLite} from './NumericInputLite';
 import './TableItemCleanup.css';
@@ -65,159 +64,117 @@ export type RuleChangeHandler = (
   newRuleOrReducer: React.SetStateAction<CleanupRule | null>
 ) => void;
 
-interface TableItemCleanupRowProps extends React.ComponentProps<'div'> {
+// eslint-disable-next-line prefer-arrow-callback
+const CellItemName = memo(function CellItemName({
+  inventory,
+  item,
+}: {
   inventory: ReadonlyInventoryState;
   item: Readonly<ItemInfo>;
-  onRuleChange: RuleChangeHandler;
-  rule: Readonly<CleanupRule | null>;
-}
+}) {
+  return (
+    <>
+      <a
+        className={classNames(
+          Classes.BUTTON,
+          Classes.MINIMAL,
+          'TableItemCleanup__ItemImageLink'
+        )}
+        onClick={() => itemDescriptionPopup(item.descid)}
+        tabIndex={0}
+        title="View item description"
+      >
+        <img
+          className="TableItemCleanup__ItemImage"
+          alt={item.name}
+          src={`/images/itemimages/${item.image}`}
+        />
+      </a>
+      <a
+        className={classNames(
+          Classes.BUTTON,
+          Classes.MINIMAL,
+          'TableItemCleanup__ItemNameLink'
+        )}
+        href={`https://kol.coldfront.net/thekolwiki/index.php/Special:Search?search=${item.name}&go=Go`}
+        rel="noopener noreferrer"
+        target="_blank"
+        tabIndex={0}
+        title="Visit KoL wiki page"
+      >
+        <span dangerouslySetInnerHTML={{__html: item.name}}></span>
+        {inventory.inventory[item.id] > 0 && (
+          <>
+            {' '}
+            <i>({inventory.inventory[item.id]})</i>
+          </>
+        )}
+      </a>
+    </>
+  );
+});
 
-/**
- * Row component for `<TableItemCleanup/>`.
- */
 // eslint-disable-next-line prefer-arrow-callback
-const TableItemCleanupRow = memo(function TableItemCleanupRow({
-  className,
-  inventory,
+const CellMallPrice = memo(function CellMallPrice({
+  item,
+}: {
+  item: Readonly<ItemInfo>;
+}) {
+  return (
+    <>
+      {item.mallPrice && addZwspAfterComma(item.mallPrice.toLocaleString())}
+      {item.mallPrice !== null && item.isMallPriceAtMinimum && (
+        <MinMallPriceTag />
+      )}
+    </>
+  );
+});
+
+// eslint-disable-next-line prefer-arrow-callback
+const CellKeepAmount = memo(function CellKeepAmount({
   item,
   onRuleChange,
   rule,
-  ...restProps
-}: TableItemCleanupRowProps) {
-  return (
-    <div className={`TableItemCleanup__Row ${className || ''}`} {...restProps}>
-      <div className="TableItemCleanup__Cell TableItemCleanup__ColumnItemName">
-        <a
-          className={classNames(
-            Classes.BUTTON,
-            Classes.MINIMAL,
-            'TableItemCleanup__ItemImageLink'
-          )}
-          onClick={() => itemDescriptionPopup(item.descid)}
-          tabIndex={0}
-          title="View item description"
-        >
-          <img
-            className="TableItemCleanup__ItemImage"
-            alt={item.name}
-            src={`/images/itemimages/${item.image}`}
-          />
-        </a>
-        <a
-          className={classNames(
-            Classes.BUTTON,
-            Classes.MINIMAL,
-            'TableItemCleanup__ItemNameLink'
-          )}
-          href={`https://kol.coldfront.net/thekolwiki/index.php/Special:Search?search=${item.name}&go=Go`}
-          rel="noopener noreferrer"
-          target="_blank"
-          tabIndex={0}
-          title="Visit KoL wiki page"
-        >
-          <span dangerouslySetInnerHTML={{__html: item.name}}></span>
-          {inventory.inventory[item.id] > 0 && (
-            <>
-              {' '}
-              <i>({inventory.inventory[item.id]})</i>
-            </>
-          )}
-        </a>
-      </div>
-      <div className="TableItemCleanup__Cell TableItemCleanup__ColumnClosetAmount">
-        {inventory.closet[item.id] || 0}
-      </div>
-      <div className="TableItemCleanup__Cell TableItemCleanup__ColumnStorageAmount">
-        {inventory.storage[item.id] || 0}
-      </div>
-      <div className="TableItemCleanup__Cell TableItemCleanup__ColumnDisplayCaseAmount">
-        {inventory.displayCase[item.id] || 0}
-      </div>
-      <div className="TableItemCleanup__Cell TableItemCleanup__ColumnMallPrice">
-        {item.mallPrice && addZwspAfterComma(item.mallPrice.toLocaleString())}
-        {item.mallPrice !== null && item.isMallPriceAtMinimum && (
-          <MinMallPriceTag />
-        )}
-      </div>
-      <div className="TableItemCleanup__Cell TableItemCleanup__ColumnKeepAmount">
-        <NumericInputLite
-          className="TableItemCleanup__InputKeepAmount"
-          disabled={!rule || rule.action === 'KEEP'}
-          fill
-          min={0}
-          onChange={event => {
-            const value = Number(event.target.value);
-            if (Number.isInteger(value)) {
-              onRuleChange(
-                item.id,
-                rule => rule && {...rule, keepAmount: value}
-              );
-            }
-          }}
-          value={rule?.keepAmount || 0}
-        />
-      </div>
-      <div className="TableItemCleanup__Cell TableItemCleanup__ColumnAction">
-        <CleanupRulePicker
-          item={item}
-          onChange={useCallback(
-            newRuleOrReducer => onRuleChange(item.id, newRuleOrReducer),
-            [item.id, onRuleChange]
-          )}
-          rule={rule}
-        />
-      </div>
-    </div>
-  );
-},
-areEqual);
-
-interface TableItemCleanupRowData {
-  inventory: ReadonlyInventoryState;
-  items: readonly Readonly<ItemInfo>[];
-  cleanupRules: ReadonlyCleanupRuleset;
-  onRuleChange: RuleChangeHandler;
-}
-
-/**
- * Callback that returns the item key for react-window.
- */
-const itemKeyCallback = (index: number, data: TableItemCleanupRowData) =>
-  data.items[index].id;
-
-// This function must be a stable value for React to properly use memoization.
-// Since the data prop changes whenever the cleanup ruleset is modified, this
-// component itself does not benefit from `React.memo()`. However, the
-// underlying component _does_ benefit from `React.memo()`.
-const TableItemCleanupRowWrapper = ({
-  data: {cleanupRules, onRuleChange, inventory, items},
-  index,
-  style,
 }: {
-  data: TableItemCleanupRowData;
-  index: number;
-  style?: React.CSSProperties;
-  isScrolling?: boolean;
-}) => (
-  <TableItemCleanupRow
-    inventory={inventory}
-    item={items[index]}
-    onRuleChange={onRuleChange}
-    rule={cleanupRules[items[index].id]}
-    style={style}
-  />
-);
+  item: Readonly<ItemInfo>;
+  onRuleChange: RuleChangeHandler;
+  rule: Readonly<CleanupRule> | undefined;
+}) {
+  return (
+    <NumericInputLite
+      className="TableItemCleanup__InputKeepAmount"
+      disabled={!rule || rule.action === 'KEEP'}
+      fill
+      min={0}
+      onChange={event => {
+        const value = Number(event.target.value);
+        if (Number.isInteger(value)) {
+          onRuleChange(item.id, rule => rule && {...rule, keepAmount: value});
+        }
+      }}
+      value={rule?.keepAmount || 0}
+    />
+  );
+});
 
-/**
- * Sets the `tabIndex` of a HTML element to -1.
- * This enables keyboard-based scrolling on the react-window container.
- * (Page Up/Down, Arrow Up/Down, Home/End)
- */
-const setTabIndexOnRefElement = (refElement: HTMLElement | null) => {
-  if (refElement) {
-    refElement.tabIndex = -1;
-  }
-};
+// eslint-disable-next-line prefer-arrow-callback
+const CellItemAction = memo(function CellItemAction({
+  item,
+  onRuleChange,
+  rule,
+}: {
+  item: Readonly<ItemInfo>;
+  onRuleChange: RuleChangeHandler;
+  rule: Readonly<CleanupRule> | undefined;
+}) {
+  return (
+    <CleanupRulePicker
+      item={item}
+      onChange={newRuleOrReducer => onRuleChange(item.id, newRuleOrReducer)}
+      rule={rule || null}
+    />
+  );
+});
 
 interface TableItemCleanupPropsBase {
   /**
@@ -314,21 +271,105 @@ export const TableItemCleanup = memo(function TableItemCleanup({
     );
   }, [filterText, items]);
 
-  const itemData = useMemo<TableItemCleanupRowData>(
-    () => ({
-      inventory,
-      items: filteredItems,
-      cleanupRules,
-      onRuleChange: onRuleChange || defaultRuleChangeHandler,
-    }),
-    [
-      defaultRuleChangeHandler,
-      filteredItems,
-      inventory,
-      cleanupRules,
-      onRuleChange,
-    ]
+  const rowGetter = useCallback(
+    ({index}: {index: number}) => filteredItems[index],
+    [filteredItems]
   );
+
+  const rowClassNameGetter = useCallback(
+    ({index}: {index: number}) =>
+      index === -1 ? 'TableItemCleanup__HeaderRow' : 'TableItemCleanup__Row',
+    []
+  );
+
+  /* eslint-disable react/jsx-key */
+  const columns = useMemo(
+    () => [
+      <Column
+        cellRenderer={({rowData: item}: {rowData: Readonly<ItemInfo>}) => (
+          <CellItemName inventory={inventory} item={item} />
+        )}
+        className="TableItemCleanup__Cell TableItemCleanup__ColumnItemName"
+        dataKey="nameAndImage"
+        flexGrow={5}
+        flexShrink={0}
+        label="Item (Amount)"
+        width={200}
+      />,
+      <Column
+        cellDataGetter={({rowData: item}: {rowData: Readonly<ItemInfo>}) =>
+          inventory.closet[item.id] || 0
+        }
+        className="TableItemCleanup__Cell TableItemCleanup__ColumnClosetAmount"
+        dataKey="closetAmount"
+        flexShrink={0}
+        label={<abbr title="Amount in Closet">C</abbr>}
+        width={35}
+      />,
+      <Column
+        cellDataGetter={({rowData: item}: {rowData: Readonly<ItemInfo>}) =>
+          inventory.storage[item.id] || 0
+        }
+        className="TableItemCleanup__Cell TableItemCleanup__ColumnStorageAmount"
+        dataKey="storageAmount"
+        flexShrink={0}
+        label={<abbr title="Amount in Storage">S</abbr>}
+        width={35}
+      />,
+      <Column
+        cellDataGetter={({rowData: item}: {rowData: Readonly<ItemInfo>}) =>
+          inventory.displayCase[item.id] || 0
+        }
+        className="TableItemCleanup__Cell TableItemCleanup__ColumnDisplayCaseAmount"
+        dataKey="displayCaseAmount"
+        flexShrink={0}
+        label={<abbr title="Amount in Display Case">D</abbr>}
+        width={35}
+      />,
+      <Column
+        cellRenderer={({rowData: item}: {rowData: Readonly<ItemInfo>}) => (
+          <CellMallPrice item={item} />
+        )}
+        className="TableItemCleanup__Cell TableItemCleanup__ColumnMallPrice"
+        dataKey="mallPrice"
+        flexGrow={1}
+        flexShrink={0}
+        label={<abbr title="5th lowest mall price">Price</abbr>}
+        width={80}
+      />,
+      <Column
+        cellRenderer={({rowData: item}: {rowData: Readonly<ItemInfo>}) => (
+          <CellKeepAmount
+            item={item}
+            onRuleChange={onRuleChange || defaultRuleChangeHandler}
+            rule={cleanupRules[item.id]}
+          />
+        )}
+        className="TableItemCleanup__Cell TableItemCleanup__ColumnKeepAmount"
+        dataKey="keepAmount"
+        flexShrink={0}
+        label="Keep"
+        width={70}
+      />,
+      <Column
+        cellRenderer={({rowData: item}: {rowData: Readonly<ItemInfo>}) => (
+          <CellItemAction
+            item={item}
+            onRuleChange={onRuleChange || defaultRuleChangeHandler}
+            rule={cleanupRules[item.id]}
+          />
+        )}
+        className="TableItemCleanup__Cell TableItemCleanup__ColumnAction"
+        dataKey="action"
+        flexGrow={1}
+        flexShrink={0}
+        label="Action"
+        width={440}
+      />,
+    ],
+    [cleanupRules, defaultRuleChangeHandler, inventory, onRuleChange]
+  );
+  /* eslint-enable react/jsx-key */
 
   const editorButtons = useMemo(
     () => (
@@ -412,46 +453,21 @@ export const TableItemCleanup = memo(function TableItemCleanup({
         </ControlGroup>
       </header>
       <div className="TableItemCleanup__TableWrapper">
-        <AutoSizer disableWidth>
-          {({height: measuredHeight}) => (
-            <div className="TableItemCleanup__Inner">
-              <div className="TableItemCleanup__HeaderRow">
-                <div className="TableItemCleanup__HeaderCell TableItemCleanup__ColumnItemName">
-                  Item (Amount)
-                </div>
-                <div className="TableItemCleanup__HeaderCell TableItemCleanup__ColumnClosetAmount">
-                  <abbr title="Amount in Closet">C</abbr>
-                </div>
-                <div className="TableItemCleanup__HeaderCell TableItemCleanup__ColumnStorageAmount">
-                  <abbr title="Amount in Storage">S</abbr>
-                </div>
-                <div className="TableItemCleanup__HeaderCell TableItemCleanup__ColumnDisplayCaseAmount">
-                  <abbr title="Amount in Display Case">D</abbr>
-                </div>
-                <div className="TableItemCleanup__HeaderCell TableItemCleanup__ColumnMallPrice">
-                  <abbr title="5th lowest mall price">Price</abbr>
-                </div>
-                <div className="TableItemCleanup__HeaderCell TableItemCleanup__ColumnKeepAmount">
-                  Keep
-                </div>
-                <div className="TableItemCleanup__HeaderCell TableItemCleanup__ColumnAction">
-                  Action
-                </div>
-              </div>
-              <FixedSizeList
-                className="TableItemCleanup__Body"
-                height={measuredHeight}
-                itemCount={filteredItems.length}
-                itemData={itemData}
-                itemKey={itemKeyCallback}
-                itemSize={60}
-                outerRef={setTabIndexOnRefElement}
-                overscanCount={15}
-                width="100%"
-              >
-                {TableItemCleanupRowWrapper}
-              </FixedSizeList>
-            </div>
+        <AutoSizer>
+          {({height: measuredHeight, width: measuredWidth}) => (
+            <Table
+              gridClassName="TableItemCleanup__Inner"
+              headerClassName="TableItemCleanup__HeaderCell"
+              headerHeight={30}
+              height={measuredHeight}
+              rowClassName={rowClassNameGetter}
+              rowCount={filteredItems.length}
+              rowGetter={rowGetter}
+              rowHeight={60}
+              width={measuredWidth}
+            >
+              {columns}
+            </Table>
           )}
         </AutoSizer>
       </div>
