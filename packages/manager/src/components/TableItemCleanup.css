@@ -60,12 +60,42 @@
 
 .TableItemCleanup__Cell,
 .TableItemCleanup__HeaderCell {
-  padding: 5px;
+  padding: 3px;
 }
 
 * + .TableItemCleanup__Cell,
 * + .TableItemCleanup__HeaderCell {
   border-left: 1px solid var(--TableItemCleanup-border-color);
+}
+
+.TableItemCleanup__HeaderCell[aria-sort] {
+  cursor: pointer;
+  user-select: none;
+}
+
+.TableItemCleanup__HeaderCell[aria-sort]:hover {
+  background-color: #eee;
+}
+
+.TableItemCleanup__HeaderCell[aria-sort]:active {
+  background-color: #ccc;
+}
+
+.TableItemCleanup__HeaderCell > * + * {
+  margin-left: 3px;
+}
+
+.TableItemCleanup__Cell.TableItemCleanup__Cell--Sorted,
+.TableItemCleanup__HeaderCell[aria-sort]:not([aria-sort='none']) {
+  background-color: #f4fcdb;
+}
+
+.TableItemCleanup__HeaderCell[aria-sort]:not([aria-sort='none']):hover {
+  background-color: #d1f26d; /* @lime5 */
+}
+
+.TableItemCleanup__HeaderCell[aria-sort]:not([aria-sort='none']):active {
+  background-color: #b6d94c; /* @lime4 */
 }
 
 .TableItemCleanup__ColumnItemName {
