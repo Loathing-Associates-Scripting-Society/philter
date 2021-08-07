@@ -11,5 +11,7 @@ Note: Don't add @bluprintjs/icons since we don't use icon fonts.
 #root {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  /* Dirty hack to avoid creating a vertical scrollbar in the viewport if the
+     horizontal scrollbar appears. */
+  height: calc(100vh - 20px);
 }

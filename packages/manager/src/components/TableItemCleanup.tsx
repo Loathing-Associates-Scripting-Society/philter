@@ -2,8 +2,12 @@ import {
   Button,
   ButtonGroup,
   Classes,
+  Colors,
   ControlGroup,
+  Icon,
+  IconName,
   InputGroup,
+  Intent,
   UL,
 } from '@blueprintjs/core';
 import {Classes as Popover2Classes, Popover2} from '@blueprintjs/popover2';
@@ -16,13 +20,174 @@ import {
 } from '@philter/common';
 import classNames from 'classnames';
 import React, {memo, useCallback, useMemo, useState} from 'react';
-import AutoSizer from 'react-virtualized-auto-sizer';
-import {areEqual, FixedSizeList} from 'react-window';
+import {
+  AutoSizer,
+  Column,
+  SortDirection,
+  SortDirectionType,
+  Table,
+  TableHeaderRenderer,
+} from 'react-virtualized';
 import {CleanupRulePicker} from './CleanupRulePicker';
 import {NumericInputLite} from './NumericInputLite';
 import './TableItemCleanup.css';
 
 /* eslint-disable react/no-unescaped-entities */
+
+/** Name keys of sortable columns in `<TableItemCleanup/>`. */
+const enum SortableColumnKey {
+  ITEM_NAME = 'ITEM_NAME',
+  CLOSET_AMOUNT = 'CLOSET_AMOUNT',
+  STORAGE_AMOUNT = 'STORAGE_AMOUNT',
+  DISPLAY_CASE_AMOUNT = 'DISPLAY_CASE_AMOUNT',
+  MALL_PRICE = 'MALL_PRICE',
+}
+
+/** Assertion function for checking the exhaustiveness of switch statements. */
+const assertInvalidSortableColumnKey = (key: never) => {
+  throw new Error(`${key} is not a key for a sortable column`);
+};
+
+/**
+ * Sorts an array of `ItemInfo` objects in-place for the given column key.
+ * @param items Array of items
+ * @param inventory Current inventory state
+ * @param dataKey Column key
+ * @return Sorted array of items
+ */
+const sortItemsByColumn = (
+  items: Readonly<ItemInfo>[],
+  inventory: ReadonlyInventoryState,
+  dataKey: SortableColumnKey
+) => {
+  switch (dataKey) {
+    case SortableColumnKey.ITEM_NAME:
+      return items.sort((itemA, itemB) => itemA.name.localeCompare(itemB.name));
+    case SortableColumnKey.CLOSET_AMOUNT:
+      return items.sort(
+        (itemA, itemB) =>
+          (inventory.closet[itemA.id] || 0) - (inventory.closet[itemB.id] || 0)
+      );
+    case SortableColumnKey.STORAGE_AMOUNT:
+      return items.sort(
+        (itemA, itemB) =>
+          (inventory.storage[itemA.id] || 0) -
+          (inventory.storage[itemB.id] || 0)
+      );
+    case SortableColumnKey.DISPLAY_CASE_AMOUNT:
+      return items.sort(
+        (itemA, itemB) =>
+          (inventory.displayCase[itemA.id] || 0) -
+          (inventory.displayCase[itemB.id] || 0)
+      );
+    case SortableColumnKey.MALL_PRICE:
+      return items.sort(
+        (itemA, itemB) => (itemA.mallPrice || 0) - (itemB.mallPrice || 0)
+      );
+    default:
+      assertInvalidSortableColumnKey(dataKey);
+  }
+};
+
+interface SortState {
+  sortBy: SortableColumnKey | undefined;
+  sortDirection: SortDirectionType;
+}
+
+/**
+ * @param prevState Previous sort state
+ * @return State reducer for `SortState`
+ */
+const makeSortStateReducer =
+  (activatedColumnKey: SortableColumnKey) =>
+  (prevState: SortState): SortState => {
+    // Was either unsorted, or was sorted by another column
+    if (!prevState.sortBy || prevState.sortBy !== activatedColumnKey) {
+      return {sortBy: activatedColumnKey, sortDirection: SortDirection.ASC};
+    }
+
+    // User re-seleced a column that is already active
+    // Cycle between ASC -> DESC -> (unsorted)
+    return prevState.sortDirection === SortDirection.ASC
+      ? {sortBy: prevState.sortBy, sortDirection: SortDirection.DESC}
+      : {sortBy: undefined, sortDirection: SortDirection.ASC};
+  };
+
+/** Custom hook for managing the sort state of `<TableItemCleanup/>` */
+const useSortState = () => {
+  const [sortState, setSortState] = useState<SortState>({
+    sortBy: undefined,
+    sortDirection: SortDirection.ASC,
+  });
+
+  return {
+    ...sortState,
+    updateSortState: useCallback(
+      ({sortBy}: {sortBy: string}) =>
+        setSortState(makeSortStateReducer(sortBy as SortableColumnKey)),
+      []
+    ),
+  };
+};
+
+/**
+ * Returns the names of sorting indicator icons to be used for each sortable column.
+ * @param dataKey Name keys of sortable columns
+ * @return Object with two properties, `asc` and `desc`, which specify icon
+ *    names to use for the column associated with the `key`
+ */
+const getSortingIconNames = (
+  dataKey: SortableColumnKey
+): {
+  /** Icon to use if the column is sorted in ascending order */
+  asc: IconName;
+  /** Icon to use if the column is sorted in descending order */
+  desc: IconName;
+} => {
+  switch (dataKey) {
+    case SortableColumnKey.ITEM_NAME:
+      return {asc: 'sort-alphabetical', desc: 'sort-alphabetical-desc'};
+    case SortableColumnKey.CLOSET_AMOUNT:
+    case SortableColumnKey.STORAGE_AMOUNT:
+    case SortableColumnKey.DISPLAY_CASE_AMOUNT:
+    case SortableColumnKey.MALL_PRICE:
+      return {asc: 'sort-numerical', desc: 'sort-numerical-desc'};
+  }
+  assertInvalidSortableColumnKey(dataKey);
+};
+
+const sortableHeaderRenderer: TableHeaderRenderer = ({
+  dataKey,
+  disableSort,
+  label,
+  sortBy,
+  sortDirection,
+}) => {
+  const labelNode = (
+    <span className="TableItemCleanup__HeaderCellLabel">{label}</span>
+  );
+  if (disableSort) return labelNode;
+
+  let iconType: IconName;
+  let iconIntent: Intent | undefined;
+  let iconColor;
+  if (sortBy === dataKey) {
+    iconIntent = 'primary';
+    iconType = getSortingIconNames(dataKey as SortableColumnKey)[
+      sortDirection === SortDirection.ASC ? 'asc' : 'desc'
+    ];
+  } else {
+    iconColor = Colors.GRAY4;
+    iconType = 'double-caret-vertical';
+  }
+
+  return (
+    <>
+      {labelNode}
+      <Icon color={iconColor} icon={iconType} intent={iconIntent} />
+    </>
+  );
+};
 
 /**
  * Adds a zero-width space (ZWSP) after each comma (`,`) in the given string.
@@ -65,159 +230,117 @@ export type RuleChangeHandler = (
   newRuleOrReducer: React.SetStateAction<CleanupRule | null>
 ) => void;
 
-interface TableItemCleanupRowProps extends React.ComponentProps<'div'> {
+// eslint-disable-next-line prefer-arrow-callback
+const CellItemName = memo(function CellItemName({
+  inventory,
+  item,
+}: {
   inventory: ReadonlyInventoryState;
   item: Readonly<ItemInfo>;
-  onRuleChange: RuleChangeHandler;
-  rule: Readonly<CleanupRule | null>;
-}
+}) {
+  return (
+    <>
+      <a
+        className={classNames(
+          Classes.BUTTON,
+          Classes.MINIMAL,
+          'TableItemCleanup__ItemImageLink'
+        )}
+        onClick={() => itemDescriptionPopup(item.descid)}
+        tabIndex={0}
+        title="View item description"
+      >
+        <img
+          className="TableItemCleanup__ItemImage"
+          alt={item.name}
+          src={`/images/itemimages/${item.image}`}
+        />
+      </a>
+      <a
+        className={classNames(
+          Classes.BUTTON,
+          Classes.MINIMAL,
+          'TableItemCleanup__ItemNameLink'
+        )}
+        href={`https://kol.coldfront.net/thekolwiki/index.php/Special:Search?search=${item.name}&go=Go`}
+        rel="noopener noreferrer"
+        target="_blank"
+        tabIndex={0}
+        title="Visit KoL wiki page"
+      >
+        <span dangerouslySetInnerHTML={{__html: item.name}}></span>
+        {inventory.inventory[item.id] > 0 && (
+          <>
+            {' '}
+            <i>({inventory.inventory[item.id]})</i>
+          </>
+        )}
+      </a>
+    </>
+  );
+});
 
-/**
- * Row component for `<TableItemCleanup/>`.
- */
 // eslint-disable-next-line prefer-arrow-callback
-const TableItemCleanupRow = memo(function TableItemCleanupRow({
-  className,
-  inventory,
+const CellMallPrice = memo(function CellMallPrice({
+  item,
+}: {
+  item: Readonly<ItemInfo>;
+}) {
+  return (
+    <>
+      {item.mallPrice && addZwspAfterComma(item.mallPrice.toLocaleString())}
+      {item.mallPrice !== null && item.isMallPriceAtMinimum && (
+        <MinMallPriceTag />
+      )}
+    </>
+  );
+});
+
+// eslint-disable-next-line prefer-arrow-callback
+const CellKeepAmount = memo(function CellKeepAmount({
   item,
   onRuleChange,
   rule,
-  ...restProps
-}: TableItemCleanupRowProps) {
-  return (
-    <div className={`TableItemCleanup__Row ${className || ''}`} {...restProps}>
-      <div className="TableItemCleanup__Cell TableItemCleanup__ColumnItemName">
-        <a
-          className={classNames(
-            Classes.BUTTON,
-            Classes.MINIMAL,
-            'TableItemCleanup__ItemImageLink'
-          )}
-          onClick={() => itemDescriptionPopup(item.descid)}
-          tabIndex={0}
-          title="View item description"
-        >
-          <img
-            className="TableItemCleanup__ItemImage"
-            alt={item.name}
-            src={`/images/itemimages/${item.image}`}
-          />
-        </a>
-        <a
-          className={classNames(
-            Classes.BUTTON,
-            Classes.MINIMAL,
-            'TableItemCleanup__ItemNameLink'
-          )}
-          href={`https://kol.coldfront.net/thekolwiki/index.php/Special:Search?search=${item.name}&go=Go`}
-          rel="noopener noreferrer"
-          target="_blank"
-          tabIndex={0}
-          title="Visit KoL wiki page"
-        >
-          <span dangerouslySetInnerHTML={{__html: item.name}}></span>
-          {inventory.inventory[item.id] > 0 && (
-            <>
-              {' '}
-              <i>({inventory.inventory[item.id]})</i>
-            </>
-          )}
-        </a>
-      </div>
-      <div className="TableItemCleanup__Cell TableItemCleanup__ColumnClosetAmount">
-        {inventory.closet[item.id] || 0}
-      </div>
-      <div className="TableItemCleanup__Cell TableItemCleanup__ColumnStorageAmount">
-        {inventory.storage[item.id] || 0}
-      </div>
-      <div className="TableItemCleanup__Cell TableItemCleanup__ColumnDisplayCaseAmount">
-        {inventory.displayCase[item.id] || 0}
-      </div>
-      <div className="TableItemCleanup__Cell TableItemCleanup__ColumnMallPrice">
-        {item.mallPrice && addZwspAfterComma(item.mallPrice.toLocaleString())}
-        {item.mallPrice !== null && item.isMallPriceAtMinimum && (
-          <MinMallPriceTag />
-        )}
-      </div>
-      <div className="TableItemCleanup__Cell TableItemCleanup__ColumnKeepAmount">
-        <NumericInputLite
-          className="TableItemCleanup__InputKeepAmount"
-          disabled={!rule || rule.action === 'KEEP'}
-          fill
-          min={0}
-          onChange={event => {
-            const value = Number(event.target.value);
-            if (Number.isInteger(value)) {
-              onRuleChange(
-                item.id,
-                rule => rule && {...rule, keepAmount: value}
-              );
-            }
-          }}
-          value={rule?.keepAmount || 0}
-        />
-      </div>
-      <div className="TableItemCleanup__Cell TableItemCleanup__ColumnAction">
-        <CleanupRulePicker
-          item={item}
-          onChange={useCallback(
-            newRuleOrReducer => onRuleChange(item.id, newRuleOrReducer),
-            [item.id, onRuleChange]
-          )}
-          rule={rule}
-        />
-      </div>
-    </div>
-  );
-},
-areEqual);
-
-interface TableItemCleanupRowData {
-  inventory: ReadonlyInventoryState;
-  items: readonly Readonly<ItemInfo>[];
-  cleanupRules: ReadonlyCleanupRuleset;
-  onRuleChange: RuleChangeHandler;
-}
-
-/**
- * Callback that returns the item key for react-window.
- */
-const itemKeyCallback = (index: number, data: TableItemCleanupRowData) =>
-  data.items[index].id;
-
-// This function must be a stable value for React to properly use memoization.
-// Since the data prop changes whenever the cleanup ruleset is modified, this
-// component itself does not benefit from `React.memo()`. However, the
-// underlying component _does_ benefit from `React.memo()`.
-const TableItemCleanupRowWrapper = ({
-  data: {cleanupRules, onRuleChange, inventory, items},
-  index,
-  style,
 }: {
-  data: TableItemCleanupRowData;
-  index: number;
-  style?: React.CSSProperties;
-  isScrolling?: boolean;
-}) => (
-  <TableItemCleanupRow
-    inventory={inventory}
-    item={items[index]}
-    onRuleChange={onRuleChange}
-    rule={cleanupRules[items[index].id]}
-    style={style}
-  />
-);
+  item: Readonly<ItemInfo>;
+  onRuleChange: RuleChangeHandler;
+  rule: Readonly<CleanupRule> | undefined;
+}) {
+  return (
+    <NumericInputLite
+      className="TableItemCleanup__InputKeepAmount"
+      disabled={!rule || rule.action === 'KEEP'}
+      fill
+      min={0}
+      onChange={event => {
+        const value = Number(event.target.value);
+        if (Number.isInteger(value)) {
+          onRuleChange(item.id, rule => rule && {...rule, keepAmount: value});
+        }
+      }}
+      value={rule?.keepAmount || 0}
+    />
+  );
+});
 
-/**
- * Sets the `tabIndex` of a HTML element to -1.
- * This enables keyboard-based scrolling on the react-window container.
- * (Page Up/Down, Arrow Up/Down, Home/End)
- */
-const setTabIndexOnRefElement = (refElement: HTMLElement | null) => {
-  if (refElement) {
-    refElement.tabIndex = -1;
-  }
-};
+// eslint-disable-next-line prefer-arrow-callback
+const CellItemAction = memo(function CellItemAction({
+  item,
+  onRuleChange,
+  rule,
+}: {
+  item: Readonly<ItemInfo>;
+  onRuleChange: RuleChangeHandler;
+  rule: Readonly<CleanupRule> | undefined;
+}) {
+  return (
+    <CleanupRulePicker
+      item={item}
+      onChange={newRuleOrReducer => onRuleChange(item.id, newRuleOrReducer)}
+      rule={rule || null}
+    />
+  );
+});
 
 interface TableItemCleanupPropsBase {
   /**
@@ -303,31 +426,165 @@ export const TableItemCleanup = memo(function TableItemCleanup({
       }),
     [onChange]
   );
+  const handleRuleChange = onRuleChange || defaultRuleChangeHandler;
 
-  // Filtering
+  // Sorting and filtering
+  const {sortBy, sortDirection, updateSortState} = useSortState();
+
   const [filterText, setFilterText] = useState('');
-  const filteredItems = useMemo(() => {
-    if (!filterText) return items;
-    const filterTextLower = filterText.trim().toLowerCase();
-    return items.filter(item =>
-      item.name.toLowerCase().includes(filterTextLower)
-    );
-  }, [filterText, items]);
+  const finalItems = useMemo(() => {
+    let finalItems;
 
-  const itemData = useMemo<TableItemCleanupRowData>(
-    () => ({
-      inventory,
-      items: filteredItems,
-      cleanupRules,
-      onRuleChange: onRuleChange || defaultRuleChangeHandler,
-    }),
-    [
-      defaultRuleChangeHandler,
-      filteredItems,
-      inventory,
-      cleanupRules,
-      onRuleChange,
-    ]
+    // Filter first, sort later. Since our filter code is simple, this is likely
+    // faster than the other way around.
+    if (filterText) {
+      const filterTextLower = filterText.trim().toLowerCase();
+      finalItems = items.filter(item =>
+        item.name.toLowerCase().includes(filterTextLower)
+      );
+    } else {
+      finalItems = [...items];
+    }
+
+    if (sortBy) {
+      sortItemsByColumn(finalItems, inventory, sortBy);
+      if (sortDirection === SortDirection.DESC) {
+        finalItems.reverse();
+      }
+    }
+
+    return finalItems;
+  }, [filterText, inventory, items, sortBy, sortDirection]);
+
+  const rowGetter = useCallback(
+    ({index}: {index: number}) => finalItems[index],
+    [finalItems]
+  );
+
+  const rowClassNameGetter = useCallback(
+    ({index}: {index: number}) =>
+      index === -1 ? 'TableItemCleanup__HeaderRow' : 'TableItemCleanup__Row',
+    []
+  );
+
+  /** Helper function for making `<Column/>` elements. */
+  const makeColumn = useCallback(
+    ({
+      className,
+      getData,
+      renderCell,
+      ...restProps
+    }: Omit<
+      React.ComponentProps<typeof Column>,
+      'cellDataGetter' | 'cellRenderer' | 'flexShrink'
+    > & {
+      /** Optional callback to be used by the `cellDataGetter` */
+      getData?: (item: Readonly<ItemInfo>) => number;
+      /** Optional callback to be used by the `cellRenderer` */
+      renderCell?: (item: Readonly<ItemInfo>) => React.ReactNode;
+    }) => (
+      <Column
+        cellDataGetter={getData && (props => getData(props.rowData))}
+        cellRenderer={renderCell && (props => renderCell(props.rowData))}
+        className={classNames('TableItemCleanup__Cell', className)}
+        flexShrink={0}
+        {...restProps}
+      />
+    ),
+    []
+  );
+
+  /** Helper function for making sortable `<Column/>` elements. */
+  const makeSortableColumn = useCallback(
+    ({
+      className,
+      ...restProps
+    }: Omit<Parameters<typeof makeColumn>[0], 'headerRenderer'>) =>
+      makeColumn({
+        className: classNames(
+          sortBy === restProps.dataKey && 'TableItemCleanup__Cell--Sorted',
+          className
+        ),
+        headerRenderer: sortableHeaderRenderer,
+        ...restProps,
+      }),
+    [makeColumn, sortBy]
+  );
+
+  const columns = useMemo(
+    () => [
+      makeSortableColumn({
+        className: 'TableItemCleanup__ColumnItemName',
+        dataKey: SortableColumnKey.ITEM_NAME,
+        flexGrow: 5,
+        label: 'Item (Amount)',
+        // eslint-disable-next-line react/display-name
+        renderCell: item => <CellItemName inventory={inventory} item={item} />,
+        width: 200,
+      }),
+      makeSortableColumn({
+        className: 'TableItemCleanup__ColumnClosetAmount',
+        dataKey: SortableColumnKey.CLOSET_AMOUNT,
+        getData: item => inventory.closet[item.id] || 0,
+        label: <abbr title="Amount in Closet">C</abbr>,
+        width: 40,
+      }),
+      makeSortableColumn({
+        className: 'TableItemCleanup__ColumnStorageAmount',
+        dataKey: SortableColumnKey.STORAGE_AMOUNT,
+        getData: item => inventory.storage[item.id] || 0,
+        label: <abbr title="Amount in Storage">S</abbr>,
+        width: 40,
+      }),
+      makeSortableColumn({
+        className: 'TableItemCleanup__ColumnDisplayCaseAmount',
+        dataKey: SortableColumnKey.DISPLAY_CASE_AMOUNT,
+        getData: item => inventory.displayCase[item.id] || 0,
+        label: <abbr title="Amount in Display Case">D</abbr>,
+        width: 40,
+      }),
+      makeSortableColumn({
+        className: 'TableItemCleanup__ColumnMallPrice',
+        dataKey: SortableColumnKey.MALL_PRICE,
+        flexGrow: 1,
+        label: <abbr title="5th lowest mall price">Price</abbr>,
+        // eslint-disable-next-line react/display-name
+        renderCell: item => <CellMallPrice item={item} />,
+        width: 80,
+      }),
+      makeColumn({
+        // eslint-disable-next-line react/display-name
+        renderCell: item => (
+          <CellKeepAmount
+            item={item}
+            onRuleChange={handleRuleChange}
+            rule={cleanupRules[item.id]}
+          />
+        ),
+        className: 'TableItemCleanup__ColumnKeepAmount',
+        dataKey: 'keepAmount',
+        disableSort: true,
+        label: 'Keep',
+        width: 70,
+      }),
+      makeColumn({
+        // eslint-disable-next-line react/display-name
+        renderCell: item => (
+          <CellItemAction
+            item={item}
+            onRuleChange={handleRuleChange}
+            rule={cleanupRules[item.id]}
+          />
+        ),
+        className: 'TableItemCleanup__ColumnAction',
+        dataKey: 'action',
+        disableSort: true,
+        flexGrow: 1,
+        label: 'Action',
+        width: 440,
+      }),
+    ],
+    [cleanupRules, handleRuleChange, inventory, makeColumn, makeSortableColumn]
   );
 
   const editorButtons = useMemo(
@@ -405,53 +662,31 @@ export const TableItemCleanup = memo(function TableItemCleanup({
           />
           <div className="TableItemCleanup__ItemFilterBarHelperText">
             {filterText &&
-              `${filteredItems.length} / ${items.length} match${
-                filteredItems.length > 1 ? 'es' : ''
+              `${finalItems.length} / ${items.length} match${
+                finalItems.length > 1 ? 'es' : ''
               }`}
           </div>
         </ControlGroup>
       </header>
       <div className="TableItemCleanup__TableWrapper">
-        <AutoSizer disableWidth>
-          {({height: measuredHeight}) => (
-            <div className="TableItemCleanup__Inner">
-              <div className="TableItemCleanup__HeaderRow">
-                <div className="TableItemCleanup__HeaderCell TableItemCleanup__ColumnItemName">
-                  Item (Amount)
-                </div>
-                <div className="TableItemCleanup__HeaderCell TableItemCleanup__ColumnClosetAmount">
-                  <abbr title="Amount in Closet">C</abbr>
-                </div>
-                <div className="TableItemCleanup__HeaderCell TableItemCleanup__ColumnStorageAmount">
-                  <abbr title="Amount in Storage">S</abbr>
-                </div>
-                <div className="TableItemCleanup__HeaderCell TableItemCleanup__ColumnDisplayCaseAmount">
-                  <abbr title="Amount in Display Case">D</abbr>
-                </div>
-                <div className="TableItemCleanup__HeaderCell TableItemCleanup__ColumnMallPrice">
-                  <abbr title="5th lowest mall price">Price</abbr>
-                </div>
-                <div className="TableItemCleanup__HeaderCell TableItemCleanup__ColumnKeepAmount">
-                  Keep
-                </div>
-                <div className="TableItemCleanup__HeaderCell TableItemCleanup__ColumnAction">
-                  Action
-                </div>
-              </div>
-              <FixedSizeList
-                className="TableItemCleanup__Body"
-                height={measuredHeight}
-                itemCount={filteredItems.length}
-                itemData={itemData}
-                itemKey={itemKeyCallback}
-                itemSize={60}
-                outerRef={setTabIndexOnRefElement}
-                overscanCount={15}
-                width="100%"
-              >
-                {TableItemCleanupRowWrapper}
-              </FixedSizeList>
-            </div>
+        <AutoSizer>
+          {({height: measuredHeight, width: measuredWidth}) => (
+            <Table
+              gridClassName="TableItemCleanup__Inner"
+              headerClassName="TableItemCleanup__HeaderCell"
+              headerHeight={30}
+              height={measuredHeight}
+              rowClassName={rowClassNameGetter}
+              rowCount={finalItems.length}
+              rowGetter={rowGetter}
+              rowHeight={60}
+              sort={updateSortState}
+              sortBy={sortBy}
+              sortDirection={sortDirection}
+              width={measuredWidth}
+            >
+              {columns}
+            </Table>
           )}
         </AutoSizer>
       </div>
