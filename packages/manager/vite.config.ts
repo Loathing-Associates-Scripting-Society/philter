@@ -43,6 +43,7 @@ export default defineConfig({
   ),
   plugins: [reactRefresh()],
   server: {
+    open: '/philter-manager.index.html',
     proxy: {
       // Typical port for KoLmafia's relay browser
       '^/(relay_|images)': 'http://localhost:60080',
