@@ -106,6 +106,7 @@
   display: flex;
 }
 
+.TableItemCleanup__ColumnInventoryAmount,
 .TableItemCleanup__ColumnClosetAmount,
 .TableItemCleanup__ColumnStorageAmount,
 .TableItemCleanup__ColumnDisplayCaseAmount {

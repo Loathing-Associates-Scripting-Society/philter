@@ -37,6 +37,7 @@ import './TableItemCleanup.css';
 /** Name keys of sortable columns in `<TableItemCleanup/>`. */
 const enum SortableColumnKey {
   ITEM_NAME = 'ITEM_NAME',
+  INVENTORY_AMOUNT = 'INVENTORY_AMOUNT',
   CLOSET_AMOUNT = 'CLOSET_AMOUNT',
   STORAGE_AMOUNT = 'STORAGE_AMOUNT',
   DISPLAY_CASE_AMOUNT = 'DISPLAY_CASE_AMOUNT',
@@ -63,6 +64,12 @@ const sortItemsByColumn = (
   switch (dataKey) {
     case SortableColumnKey.ITEM_NAME:
       return items.sort((itemA, itemB) => itemA.name.localeCompare(itemB.name));
+    case SortableColumnKey.INVENTORY_AMOUNT:
+      return items.sort(
+        (itemA, itemB) =>
+          (inventory.inventory[itemA.id] || 0) -
+          (inventory.inventory[itemB.id] || 0)
+      );
     case SortableColumnKey.CLOSET_AMOUNT:
       return items.sort(
         (itemA, itemB) =>
@@ -147,6 +154,7 @@ const getSortingIconNames = (
   switch (dataKey) {
     case SortableColumnKey.ITEM_NAME:
       return {asc: 'sort-alphabetical', desc: 'sort-alphabetical-desc'};
+    case SortableColumnKey.INVENTORY_AMOUNT:
     case SortableColumnKey.CLOSET_AMOUNT:
     case SortableColumnKey.STORAGE_AMOUNT:
     case SortableColumnKey.DISPLAY_CASE_AMOUNT:
@@ -232,10 +240,8 @@ export type RuleChangeHandler = (
 
 // eslint-disable-next-line prefer-arrow-callback
 const CellItemName = memo(function CellItemName({
-  inventory,
   item,
 }: {
-  inventory: ReadonlyInventoryState;
   item: Readonly<ItemInfo>;
 }) {
   return (
@@ -262,20 +268,13 @@ const CellItemName = memo(function CellItemName({
           Classes.MINIMAL,
           'TableItemCleanup__ItemNameLink'
         )}
+        dangerouslySetInnerHTML={{__html: item.name}}
         href={`https://kol.coldfront.net/thekolwiki/index.php/Special:Search?search=${item.name}&go=Go`}
         rel="noopener noreferrer"
         target="_blank"
         tabIndex={0}
         title="Visit KoL wiki page"
-      >
-        <span dangerouslySetInnerHTML={{__html: item.name}}></span>
-        {inventory.inventory[item.id] > 0 && (
-          <>
-            {' '}
-            <i>({inventory.inventory[item.id]})</i>
-          </>
-        )}
-      </a>
+      ></a>
     </>
   );
 });
@@ -517,10 +516,17 @@ export const TableItemCleanup = memo(function TableItemCleanup({
         className: 'TableItemCleanup__ColumnItemName',
         dataKey: SortableColumnKey.ITEM_NAME,
         flexGrow: 5,
-        label: 'Item (Amount)',
+        label: 'Item',
         // eslint-disable-next-line react/display-name
-        renderCell: item => <CellItemName inventory={inventory} item={item} />,
+        renderCell: item => <CellItemName item={item} />,
         width: 200,
+      }),
+      makeSortableColumn({
+        className: 'TableItemCleanup__ColumnInventoryAmount',
+        dataKey: SortableColumnKey.INVENTORY_AMOUNT,
+        getData: item => inventory.inventory[item.id] || 0,
+        label: <abbr title="Amount in Inventory">I</abbr>,
+        width: 40,
       }),
       makeSortableColumn({
         className: 'TableItemCleanup__ColumnClosetAmount',
