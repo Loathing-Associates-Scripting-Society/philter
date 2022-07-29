@@ -15,7 +15,7 @@ Report bugs and suggest new features in our [KoLmafia forum thread](https://kolm
 To install Philter, enter the following into KoLmafia's graphical CLI ("gCLI"):
 
 ```
-svn checkout https://github.com/Loathing-Associates-Scripting-Society/philter/trunk/release
+git checkout https://github.com/Loathing-Associates-Scripting-Society/philter.git main
 ```
 
 ### Migrating from OCD-Cleanup
@@ -29,6 +29,16 @@ Philter can be installed together with OCD Inventory Control. Nevertheless, we r
 ```
 svn delete bale-ocd
 svn delete Loathing-Associates-Scripting-Society-OCD-Inventory-Control-trunk
+```
+
+Then install Philter as normal.
+
+### Migrating from SVN to Git
+
+With Mafia support now implemented for git you can now remove the old SVN repo and convert to git.
+
+```
+svn delete Loathing-Associates-Scripting-Society-philter-trunk-release
 ```
 
 Then install Philter as normal.
