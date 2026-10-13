@@ -269,7 +269,7 @@ const CellItemName = memo(function CellItemName({
           'TableItemCleanup__ItemNameLink'
         )}
         dangerouslySetInnerHTML={{__html: item.name}}
-        href={`https://kol.coldfront.net/thekolwiki/index.php/Special:Search?search=${item.name}&go=Go`}
+        href={`https://wiki.kingdomofloathing.com/index.php/Special:Search?search=${item.name}&go=Go`}
         rel="noopener noreferrer"
         target="_blank"
         tabIndex={0}
